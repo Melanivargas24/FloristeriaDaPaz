@@ -15,14 +15,14 @@
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/css/style.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\style.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Y1j1GBy1y7pEiIICp58uuYObZlgFUxrzVNHVd0w4Mqo="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"20707"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022Y1j1GBy1y7pEiIICp58uuYObZlgFUxrzVNHVd0w4Mqo=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 19:48:55 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-8vs3\u002BmLwP7ozI4OqZZWgzIxEuo\u002B2gdq3ZFccmXhh\u002BLY="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"21378"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00228vs3\u002BmLwP7ozI4OqZZWgzIxEuo\u002B2gdq3ZFccmXhh\u002BLY=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 06:13:50 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/css/style.fpdgfctvzy.css">
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/css/style.epq3y0r15l.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\style.css'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"fpdgfctvzy"},{"Name":"integrity","Value":"sha256-Y1j1GBy1y7pEiIICp58uuYObZlgFUxrzVNHVd0w4Mqo="},{"Name":"label","Value":"_content/FloristeriaDaPaz/css/style.css"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"20707"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u0022Y1j1GBy1y7pEiIICp58uuYObZlgFUxrzVNHVd0w4Mqo=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 19:48:55 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"epq3y0r15l"},{"Name":"integrity","Value":"sha256-8vs3\u002BmLwP7ozI4OqZZWgzIxEuo\u002B2gdq3ZFccmXhh\u002BLY="},{"Name":"label","Value":"_content/FloristeriaDaPaz/css/style.css"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"21378"},{"Name":"Content-Type","Value":"text/css"},{"Name":"ETag","Value":"\u00228vs3\u002BmLwP7ozI4OqZZWgzIxEuo\u002B2gdq3ZFccmXhh\u002BLY=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 06:13:50 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/css/tiny-slider.css">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\css\tiny-slider.css'))</AssetFile>
@@ -96,17 +96,17 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-4AGxN/nZB\u002BaMgBoMbbeTsG0HOUtr7ntY4Ap8j0Jy2i4="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"636662"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00224AGxN/nZB\u002BaMgBoMbbeTsG0HOUtr7ntY4Ap8j0Jy2i4=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/cart.eazv8mnek7.svg">
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/cart.4bav2m94q8.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cart.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"eazv8mnek7"},{"Name":"integrity","Value":"sha256-ZtTPNpErwG0VwUdEQ3IHR66dA/EbWISVqmp0fxHcbPU="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/cart.svg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"814"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022ZtTPNpErwG0VwUdEQ3IHR66dA/EbWISVqmp0fxHcbPU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"4bav2m94q8"},{"Name":"integrity","Value":"sha256-8C9eKn0pqTpVwWBJaVuE5g8YQnlkjMUz0awsNmJr2WI="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/cart.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"1096"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00228C9eKn0pqTpVwWBJaVuE5g8YQnlkjMUz0awsNmJr2WI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:19:56 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/cart.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\cart.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ZtTPNpErwG0VwUdEQ3IHR66dA/EbWISVqmp0fxHcbPU="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"814"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022ZtTPNpErwG0VwUdEQ3IHR66dA/EbWISVqmp0fxHcbPU=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-8C9eKn0pqTpVwWBJaVuE5g8YQnlkjMUz0awsNmJr2WI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1096"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u00228C9eKn0pqTpVwWBJaVuE5g8YQnlkjMUz0awsNmJr2WI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:19:56 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/couch.5i3fgkvkcw.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\couch.png'))</AssetFile>
@@ -144,17 +144,17 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-e\u002Blf3fTc4Zku8Bg8yHZAfc0vuJ6dmHRlCwPU/NsauAo="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"3982"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022e\u002Blf3fTc4Zku8Bg8yHZAfc0vuJ6dmHRlCwPU/NsauAo=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/dots-light.qr4hf46kom.svg">
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/dots-light.1heig4n0bw.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\dots-light.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"qr4hf46kom"},{"Name":"integrity","Value":"sha256-mm4hD0haJIPePH3/g72cTmsYdI5xG5RIEMaSeFgWGDE="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/dots-light.svg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"3862"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022mm4hD0haJIPePH3/g72cTmsYdI5xG5RIEMaSeFgWGDE=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"1heig4n0bw"},{"Name":"integrity","Value":"sha256-O9Z4WsksU/LD7ca1A1CsK4DY8HRgPx5kHya\u002BN8tzIA0="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/dots-light.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"6615"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022O9Z4WsksU/LD7ca1A1CsK4DY8HRgPx5kHya\u002BN8tzIA0=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:24:14 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/dots-light.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\dots-light.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-mm4hD0haJIPePH3/g72cTmsYdI5xG5RIEMaSeFgWGDE="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"3862"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022mm4hD0haJIPePH3/g72cTmsYdI5xG5RIEMaSeFgWGDE=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-O9Z4WsksU/LD7ca1A1CsK4DY8HRgPx5kHya\u002BN8tzIA0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"6615"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022O9Z4WsksU/LD7ca1A1CsK4DY8HRgPx5kHya\u002BN8tzIA0=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:24:14 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/dots-yellow.nabl7dxj9o.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\dots-yellow.svg'))</AssetFile>
@@ -179,6 +179,114 @@
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-yKiuGhfqPuf3nCOo5WxfUErwNRRrKi/Hg5CW\u002BBcvotg="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"890"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022yKiuGhfqPuf3nCOo5WxfUErwNRRrKi/Hg5CW\u002BBcvotg=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:00 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-1.lq8s1g8n5z.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-1.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"lq8s1g8n5z"},{"Name":"integrity","Value":"sha256-PTzZBIK5ybZ/F4iIGKZFAg7Sjonv6v27tg9PXIkKwo4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-1.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"70996"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022PTzZBIK5ybZ/F4iIGKZFAg7Sjonv6v27tg9PXIkKwo4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:07:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-1.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-1.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-PTzZBIK5ybZ/F4iIGKZFAg7Sjonv6v27tg9PXIkKwo4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"70996"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022PTzZBIK5ybZ/F4iIGKZFAg7Sjonv6v27tg9PXIkKwo4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:07:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-2.o81h7mixfr.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-2.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"o81h7mixfr"},{"Name":"integrity","Value":"sha256-eABG9uAuFHbSySll6EjcGJtxZ4GVCwOIEuq6LKNnEJE="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-2.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"58713"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022eABG9uAuFHbSySll6EjcGJtxZ4GVCwOIEuq6LKNnEJE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:11:11 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-2.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-2.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-eABG9uAuFHbSySll6EjcGJtxZ4GVCwOIEuq6LKNnEJE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"58713"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022eABG9uAuFHbSySll6EjcGJtxZ4GVCwOIEuq6LKNnEJE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:11:11 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-3.5cpvnaso6t.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-3.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"5cpvnaso6t"},{"Name":"integrity","Value":"sha256-\u002B857tTp9rHKSm5QvyInwbrC0dj9rjjhAdze7JCbfHz4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-3.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"103285"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022\u002B857tTp9rHKSm5QvyInwbrC0dj9rjjhAdze7JCbfHz4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:14:21 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-3.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-3.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-\u002B857tTp9rHKSm5QvyInwbrC0dj9rjjhAdze7JCbfHz4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"103285"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022\u002B857tTp9rHKSm5QvyInwbrC0dj9rjjhAdze7JCbfHz4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:14:21 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-4.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-4.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-5oQnP/S1gl03C8vv5KK22tTjiz\u002BdwxWaf9LQsislTR4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"796332"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00225oQnP/S1gl03C8vv5KK22tTjiz\u002BdwxWaf9LQsislTR4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:22:44 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-4.uelepm9r2e.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-4.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"uelepm9r2e"},{"Name":"integrity","Value":"sha256-5oQnP/S1gl03C8vv5KK22tTjiz\u002BdwxWaf9LQsislTR4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-4.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"796332"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00225oQnP/S1gl03C8vv5KK22tTjiz\u002BdwxWaf9LQsislTR4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:22:44 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-5.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-5.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-FBKtCRyodm9rF2nhg3nUHDlHVGi75rF6xgCJax0mijo="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"571423"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022FBKtCRyodm9rF2nhg3nUHDlHVGi75rF6xgCJax0mijo=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:27:32 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-5.wdighgeqah.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-5.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"wdighgeqah"},{"Name":"integrity","Value":"sha256-FBKtCRyodm9rF2nhg3nUHDlHVGi75rF6xgCJax0mijo="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-5.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"571423"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022FBKtCRyodm9rF2nhg3nUHDlHVGi75rF6xgCJax0mijo=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:27:32 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-6.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-6.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-HH\u002BWUTbP\u002BfbrlEEEihqmeVL9rEtXxVlUyxHy8yKC0r0="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"385820"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022HH\u002BWUTbP\u002BfbrlEEEihqmeVL9rEtXxVlUyxHy8yKC0r0=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:30:15 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-6.supsjvgtan.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-6.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"supsjvgtan"},{"Name":"integrity","Value":"sha256-HH\u002BWUTbP\u002BfbrlEEEihqmeVL9rEtXxVlUyxHy8yKC0r0="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-6.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"385820"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022HH\u002BWUTbP\u002BfbrlEEEihqmeVL9rEtXxVlUyxHy8yKC0r0=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:30:15 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-7.ml78whtvnq.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-7.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ml78whtvnq"},{"Name":"integrity","Value":"sha256-hpNTU1D0j2iqGurjLPB5jJDJeZco1/l7ShJEY5aOLR4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-7.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"101474"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022hpNTU1D0j2iqGurjLPB5jJDJeZco1/l7ShJEY5aOLR4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:31:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-7.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-7.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-hpNTU1D0j2iqGurjLPB5jJDJeZco1/l7ShJEY5aOLR4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"101474"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022hpNTU1D0j2iqGurjLPB5jJDJeZco1/l7ShJEY5aOLR4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:31:41 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-8.15b8xk870o.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-8.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"15b8xk870o"},{"Name":"integrity","Value":"sha256-m0Q7uduTva7BeKCCBqNBhcv7omlAZ96hyNtbawKywaA="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-8.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"143930"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022m0Q7uduTva7BeKCCBqNBhcv7omlAZ96hyNtbawKywaA=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:38:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-8.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-8.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-m0Q7uduTva7BeKCCBqNBhcv7omlAZ96hyNtbawKywaA="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"143930"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022m0Q7uduTva7BeKCCBqNBhcv7omlAZ96hyNtbawKywaA=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:38:42 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-9.gmw3afgsb1.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-9.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"gmw3afgsb1"},{"Name":"integrity","Value":"sha256-6K3BKsHYJsVbMSbiwXVguBLBvRGFbpioblfhSb0GDlA="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/flowers-9.png"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"2605045"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00226K3BKsHYJsVbMSbiwXVguBLBvRGFbpioblfhSb0GDlA=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:47:29 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/flowers-9.png">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\flowers-9.png'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-6K3BKsHYJsVbMSbiwXVguBLBvRGFbpioblfhSb0GDlA="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"2605045"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00226K3BKsHYJsVbMSbiwXVguBLBvRGFbpioblfhSb0GDlA=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 03:47:29 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/img-grid-1.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\img-grid-1.jpg'))</AssetFile>
@@ -324,11 +432,35 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"u64hrf3unr"},{"Name":"integrity","Value":"sha256-dnY743XdKnlUoxvuqdtCC5UeeEM3x8TA4yJTj0zGFN0="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/post-3.jpg"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"280168"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022dnY743XdKnlUoxvuqdtCC5UeeEM3x8TA4yJTj0zGFN0=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-01.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-01.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-leBZuuxjDox\u002Bj\u002BI34v5geTpci7NUZjUoRMHNi7Ya9UM="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"541467"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022leBZuuxjDox\u002Bj\u002BI34v5geTpci7NUZjUoRMHNi7Ya9UM=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:14:48 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-01.x11teerfle.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-01.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"x11teerfle"},{"Name":"integrity","Value":"sha256-leBZuuxjDox\u002Bj\u002BI34v5geTpci7NUZjUoRMHNi7Ya9UM="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-01.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"541467"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022leBZuuxjDox\u002Bj\u002BI34v5geTpci7NUZjUoRMHNi7Ya9UM=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:14:48 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-1.amlruee6f7.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-1.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"amlruee6f7"},{"Name":"integrity","Value":"sha256-ziNjkBDnp8Cw8NIUE9CmHhAcYLnvuiA/DKhCfxIHnFc="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-1.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"372572"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022ziNjkBDnp8Cw8NIUE9CmHhAcYLnvuiA/DKhCfxIHnFc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:08:00 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-1.eju5sh650i.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-1.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"eju5sh650i"},{"Name":"integrity","Value":"sha256-2klQBYCqj3kwng3rYWE38yzZrkiyEfWkS2RrN65sXXk="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-1.png"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"102349"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u00222klQBYCqj3kwng3rYWE38yzZrkiyEfWkS2RrN65sXXk=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-1.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-1.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-ziNjkBDnp8Cw8NIUE9CmHhAcYLnvuiA/DKhCfxIHnFc="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"372572"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022ziNjkBDnp8Cw8NIUE9CmHhAcYLnvuiA/DKhCfxIHnFc=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:08:00 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-1.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-1.png'))</AssetFile>
@@ -342,11 +474,29 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"3r2qshzv7o"},{"Name":"integrity","Value":"sha256-kf9KPQ1GR/2OP0NupYtW7SzC\u002BBokkkCTUmvgkK\u002BbRvw="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-2.png"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"155825"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022kf9KPQ1GR/2OP0NupYtW7SzC\u002BBokkkCTUmvgkK\u002BbRvw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-2.ikq80ynkmo.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-2.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ikq80ynkmo"},{"Name":"integrity","Value":"sha256-fo9CusfkURGPpl5VOsUdlUkxdp3fuI\u002B4Bw7x8bn3OXE="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-2.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"318702"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022fo9CusfkURGPpl5VOsUdlUkxdp3fuI\u002B4Bw7x8bn3OXE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:09:44 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-2.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-2.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-fo9CusfkURGPpl5VOsUdlUkxdp3fuI\u002B4Bw7x8bn3OXE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"318702"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022fo9CusfkURGPpl5VOsUdlUkxdp3fuI\u002B4Bw7x8bn3OXE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:09:44 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-2.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-2.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-kf9KPQ1GR/2OP0NupYtW7SzC\u002BBokkkCTUmvgkK\u002BbRvw="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"155825"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022kf9KPQ1GR/2OP0NupYtW7SzC\u002BBokkkCTUmvgkK\u002BbRvw=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-3.6eaadfcalx.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-3.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"6eaadfcalx"},{"Name":"integrity","Value":"sha256-Hlwg1gY67n4v8wz4vlw6oWLpQYAz1Ge6zaqEf70jqwU="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-3.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"477304"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Hlwg1gY67n4v8wz4vlw6oWLpQYAz1Ge6zaqEf70jqwU=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:27:29 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-3.ivkh6bcc18.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-3.png'))</AssetFile>
@@ -354,11 +504,77 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ivkh6bcc18"},{"Name":"integrity","Value":"sha256-EuoDOUDOF7//7FgK2mEDFtcxUkmmU8\u002B4huycB5stySE="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-3.png"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"119385"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022EuoDOUDOF7//7FgK2mEDFtcxUkmmU8\u002B4huycB5stySE=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-3.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-3.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-Hlwg1gY67n4v8wz4vlw6oWLpQYAz1Ge6zaqEf70jqwU="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"477304"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022Hlwg1gY67n4v8wz4vlw6oWLpQYAz1Ge6zaqEf70jqwU=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:27:29 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-3.png">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-3.png'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-EuoDOUDOF7//7FgK2mEDFtcxUkmmU8\u002B4huycB5stySE="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"119385"},{"Name":"Content-Type","Value":"image/png"},{"Name":"ETag","Value":"\u0022EuoDOUDOF7//7FgK2mEDFtcxUkmmU8\u002B4huycB5stySE=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-4.9vyippiva0.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-4.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"9vyippiva0"},{"Name":"integrity","Value":"sha256-BR4bBTWSEjEhqO2M0K9JakohzhDZLeCn\u002B2S583dKuNw="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-4.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"431181"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022BR4bBTWSEjEhqO2M0K9JakohzhDZLeCn\u002B2S583dKuNw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:18 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-4.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-4.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-BR4bBTWSEjEhqO2M0K9JakohzhDZLeCn\u002B2S583dKuNw="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"431181"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022BR4bBTWSEjEhqO2M0K9JakohzhDZLeCn\u002B2S583dKuNw=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:18 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-5.c7y4vrebvw.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-5.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"c7y4vrebvw"},{"Name":"integrity","Value":"sha256-KPH7SlerRpMvuO0n2QQBWXVlsel0ek1\u002BZGxos7\u002Bu39M="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-5.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"558630"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022KPH7SlerRpMvuO0n2QQBWXVlsel0ek1\u002BZGxos7\u002Bu39M=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:06 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-5.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-5.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-KPH7SlerRpMvuO0n2QQBWXVlsel0ek1\u002BZGxos7\u002Bu39M="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"558630"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022KPH7SlerRpMvuO0n2QQBWXVlsel0ek1\u002BZGxos7\u002Bu39M=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:06 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-6.h2vlry723a.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-6.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"h2vlry723a"},{"Name":"integrity","Value":"sha256-d7yB32PXJLu0GC3sDswkSnEwLx35mHIQj93ZhTHKuDI="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-6.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"210869"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022d7yB32PXJLu0GC3sDswkSnEwLx35mHIQj93ZhTHKuDI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:36:46 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-6.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-6.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-d7yB32PXJLu0GC3sDswkSnEwLx35mHIQj93ZhTHKuDI="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"210869"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022d7yB32PXJLu0GC3sDswkSnEwLx35mHIQj93ZhTHKuDI=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:36:46 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-7.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-7.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-9AJzYiEBvBJc5ONrYsvmjfNmIuiLhrE03iX4wwjH1S4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"604790"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u00229AJzYiEBvBJc5ONrYsvmjfNmIuiLhrE03iX4wwjH1S4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:31 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-7.k02zugfwt2.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-7.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"k02zugfwt2"},{"Name":"integrity","Value":"sha256-9AJzYiEBvBJc5ONrYsvmjfNmIuiLhrE03iX4wwjH1S4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-7.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"604790"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u00229AJzYiEBvBJc5ONrYsvmjfNmIuiLhrE03iX4wwjH1S4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:37:31 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-8.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-8.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-eW2RKk9YZ8rqAhMjxXMfiuGmoxzP0jQNuDyNIngf4vE="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"564851"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022eW2RKk9YZ8rqAhMjxXMfiuGmoxzP0jQNuDyNIngf4vE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:40:30 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/product-8.r7zd3vqtlh.jpg">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\product-8.jpg'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"r7zd3vqtlh"},{"Name":"integrity","Value":"sha256-eW2RKk9YZ8rqAhMjxXMfiuGmoxzP0jQNuDyNIngf4vE="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/product-8.jpg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"564851"},{"Name":"Content-Type","Value":"image/jpeg"},{"Name":"ETag","Value":"\u0022eW2RKk9YZ8rqAhMjxXMfiuGmoxzP0jQNuDyNIngf4vE=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 05:40:30 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/return.ge0lftueo5.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\return.svg'))</AssetFile>
@@ -408,17 +624,17 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-QCF9yLnZxXf/jTK4kaTX\u002BV0pIn8cfumNULtanlqtQFQ="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"1002"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022QCF9yLnZxXf/jTK4kaTX\u002BV0pIn8cfumNULtanlqtQFQ=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/user.mu99ps1q87.svg">
+    <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/user.refuvqlnq3.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\user.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"mu99ps1q87"},{"Name":"integrity","Value":"sha256-HtPm4RkbN1picgfOtPXfEudkIZW8BicoZU7iP9AQhfg="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/user.svg"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"555"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022HtPm4RkbN1picgfOtPXfEudkIZW8BicoZU7iP9AQhfg=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"refuvqlnq3"},{"Name":"integrity","Value":"sha256-fR\u002BxPBZjoJiHPlZ1dtBPeIOjyw4dz5qC7SF\u002B/m37OZ4="},{"Name":"label","Value":"_content/FloristeriaDaPaz/images/user.svg"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"741"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022fR\u002BxPBZjoJiHPlZ1dtBPeIOjyw4dz5qC7SF\u002B/m37OZ4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:19:36 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/user.svg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\user.svg'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-HtPm4RkbN1picgfOtPXfEudkIZW8BicoZU7iP9AQhfg="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"555"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022HtPm4RkbN1picgfOtPXfEudkIZW8BicoZU7iP9AQhfg=\u0022"},{"Name":"Last-Modified","Value":"Fri, 11 Apr 2025 18:36:01 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-fR\u002BxPBZjoJiHPlZ1dtBPeIOjyw4dz5qC7SF\u002B/m37OZ4="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=3600, must-revalidate"},{"Name":"Content-Length","Value":"741"},{"Name":"Content-Type","Value":"image/svg\u002Bxml"},{"Name":"ETag","Value":"\u0022fR\u002BxPBZjoJiHPlZ1dtBPeIOjyw4dz5qC7SF\u002B/m37OZ4=\u0022"},{"Name":"Last-Modified","Value":"Sat, 12 Apr 2025 04:19:36 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/FloristeriaDaPaz/images/why-choose-us-img.da0xfq9qmh.jpg">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\images\why-choose-us-img.jpg'))</AssetFile>

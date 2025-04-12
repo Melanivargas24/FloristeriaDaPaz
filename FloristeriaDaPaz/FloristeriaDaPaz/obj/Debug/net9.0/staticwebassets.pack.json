@@ -61,6 +61,42 @@
       "PackagePath": "staticwebassets\\images\\envelope-outline.svg"
     },
     {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-1.png",
+      "PackagePath": "staticwebassets\\images\\flowers-1.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-2.png",
+      "PackagePath": "staticwebassets\\images\\flowers-2.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-3.png",
+      "PackagePath": "staticwebassets\\images\\flowers-3.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-4.png",
+      "PackagePath": "staticwebassets\\images\\flowers-4.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-5.png",
+      "PackagePath": "staticwebassets\\images\\flowers-5.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-6.png",
+      "PackagePath": "staticwebassets\\images\\flowers-6.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-7.png",
+      "PackagePath": "staticwebassets\\images\\flowers-7.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-8.png",
+      "PackagePath": "staticwebassets\\images\\flowers-8.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\flowers-9.png",
+      "PackagePath": "staticwebassets\\images\\flowers-9.png"
+    },
+    {
       "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\img-grid-1.jpg",
       "PackagePath": "staticwebassets\\images\\img-grid-1.jpg"
     },
@@ -109,16 +145,52 @@
       "PackagePath": "staticwebassets\\images\\post-3.jpg"
     },
     {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-01.jpg",
+      "PackagePath": "staticwebassets\\images\\product-01.jpg"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-1.jpg",
+      "PackagePath": "staticwebassets\\images\\product-1.jpg"
+    },
+    {
       "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-1.png",
       "PackagePath": "staticwebassets\\images\\product-1.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-2.jpg",
+      "PackagePath": "staticwebassets\\images\\product-2.jpg"
     },
     {
       "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-2.png",
       "PackagePath": "staticwebassets\\images\\product-2.png"
     },
     {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-3.jpg",
+      "PackagePath": "staticwebassets\\images\\product-3.jpg"
+    },
+    {
       "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-3.png",
       "PackagePath": "staticwebassets\\images\\product-3.png"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-4.jpg",
+      "PackagePath": "staticwebassets\\images\\product-4.jpg"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-5.jpg",
+      "PackagePath": "staticwebassets\\images\\product-5.jpg"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-6.jpg",
+      "PackagePath": "staticwebassets\\images\\product-6.jpg"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-7.jpg",
+      "PackagePath": "staticwebassets\\images\\product-7.jpg"
+    },
+    {
+      "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\product-8.jpg",
+      "PackagePath": "staticwebassets\\images\\product-8.jpg"
     },
     {
       "Id": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\wwwroot\\images\\return.svg",

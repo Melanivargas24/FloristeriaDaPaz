@@ -22,7 +22,7 @@
 		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
-				<a class="navbar-brand brand-home" asp-page="/Index">Furni<span>.</span></a>
+				<a class="navbar-brand brand-home" asp-page="/Index">Floristería Da'Paz</a>
 
 
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
@@ -32,9 +32,9 @@
 				<div class="collapse navbar-collapse" id="navbarsFurni">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li>
-							<a class="nav-link" asp-page="/Index">Home</a>
+							<a class="nav-link" asp-page="/Index">Inicio</a>
 						</li>
-						<li><a class="nav-link" asp-area="" asp-page="/Shop">Shop</a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/Shop">Catálogo</a></li>
 						<li><a class="nav-link" asp-area="" asp-page="/About">About us</a></li>
 						<li><a class="nav-link" asp-area="" asp-page="/Services">Services</a></li>
 						<li><a class="nav-link" asp-area="" asp-page="/Blog">Blog</a></li>
@@ -42,18 +42,17 @@
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" asp-area="" asp-page="/User"><img src="images/user.svg" /></a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/Cart"><img src="images/cart.svg" /></a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/User"><img src="images/user.svg" width="20" height="20" /></a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/Cart"><img src="images/cart.svg" width="20" height="20" /></a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
     </header>
-    <div class="container">
+
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-    </div>
 
 	<!-- Start Footer Section -->
 	<footer class="footer-section">
