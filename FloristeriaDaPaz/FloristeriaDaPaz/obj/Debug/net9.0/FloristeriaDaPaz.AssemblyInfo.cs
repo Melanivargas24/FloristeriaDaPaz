@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FloristeriaDaPaz")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+957a338df6baa4564031e9732cfe47a8117697f7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82b5f97df63d29b54899f984a81c1e97135a8363")]
 [assembly: System.Reflection.AssemblyProductAttribute("FloristeriaDaPaz")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FloristeriaDaPaz")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

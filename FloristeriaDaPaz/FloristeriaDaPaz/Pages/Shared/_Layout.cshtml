@@ -35,11 +35,20 @@
 							<a class="nav-link" asp-area="" asp-page="/Index">Inicio</a>
 						</li>
 						<li><a class="nav-link" asp-area="" asp-page="/Shop">Catálogo</a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/About">About us</a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/Services">Services</a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/Blog">Blog</a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/Contact">Contact us</a></li>
-						<li><a class="nav-link" asp-area="" asp-page="/Dashboard">Dashboard</a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/About">Nosotros</a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/Services">Servicios</a></li>
+						<li><a class="nav-link" asp-area="" asp-page="/Contact">Contactenos</a></li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+								Administrador
+							</a>
+							<ul class="dropdown-menu" aria-labelledby="adminDropdown">
+								<li><a class="dropdown-item" href="#" data-value="dashboard">Dashboards</a></li>
+								<li><a class="dropdown-item" href="#" data-value="inventario">Inventario</a></li>
+								<li><a class="dropdown-item" href="#" data-value="promocion">Promociones</a></li>
+								<li><a class="dropdown-item" href="#" data-value="proveedor">Proveedores</a></li>
+							</ul>
+						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="planillaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								Planilla
