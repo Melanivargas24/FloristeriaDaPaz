@@ -170,12 +170,13 @@ a {
   padding: 12px 30px;
   border-radius: 30px;
   color: black;
-  background: #2f2f2f;
+  background: transparent;
   border-color: black; }
-  .btn:hover {
-    color: black;
-    background: #222222;
-    border-color: black; }
+    .btn:hover {
+        color: black;
+        background: #9D8189;
+        border-color: #9D8189;
+    }
   .btn:active, .btn:focus {
     outline: none !important;
     -webkit-box-shadow: none;

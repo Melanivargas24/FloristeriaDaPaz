@@ -224,7 +224,6 @@ C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\
 C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\ej4jwciy5l-4bav2m94q8.gz
 C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\wmi0ibcsom-refuvqlnq3.gz
 C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\pfat1pkiz4-1heig4n0bw.gz
-C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\0jt0j0ycnz-epq3y0r15l.gz
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\bin\Debug\net9.0\appsettings.Development.json
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\bin\Debug\net9.0\appsettings.json
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\bin\Debug\net9.0\FloristeriaDaPaz.staticwebassets.runtime.json
@@ -339,3 +338,4 @@ C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\FloristeriaDaPaz.pdb
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\FloristeriaDaPaz.genruntimeconfig.cache
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\ref\FloristeriaDaPaz.dll
+C:\Projects\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\0jt0j0ycnz-gp0gpwrnuq.gz
