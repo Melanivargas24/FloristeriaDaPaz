@@ -1,0 +1,121 @@
+﻿@model DaPazWebApp.Models.UsersModel
+
+@{
+    ViewData["Title"] = "Crear Cuenta";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-4">
+                <div class="card-header text-center bg-success text-white rounded-top-4">
+                    <h3 class="mb-0">Floristería Da Paz</h3>
+                    <p class="mb-0">Crear una nueva cuenta</p>
+                </div>
+                <div class="card-body">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    <form asp-action="Signin" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="nombre" class="form-label">Nombre</label>
+                                <input asp-for="nombre" class="form-control" placeholder="Juan" />
+                                <span asp-validation-for="nombre" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="apellido" class="form-label">Apellido</label>
+                                <input asp-for="apellido" class="form-control" placeholder="Pérez" />
+                                <span asp-validation-for="apellido" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="correo" class="form-label">Correo</label>
+                                <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" />
+                                <span asp-validation-for="correo" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="telefono" class="form-label">Teléfono</label>
+                                <input asp-for="telefono" class="form-control" placeholder="8888-9999" />
+                                <span asp-validation-for="telefono" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="contrasena" class="form-label">Contraseña</label>
+                                <input asp-for="contrasena" type="password" class="form-control" placeholder="******" />
+                                <span asp-validation-for="contrasena" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="direccionExacta" class="form-label">Dirección</label>
+                                <input asp-for="direccionExacta" class="form-control" placeholder="Dirección exacta" />
+                                <span asp-validation-for="direccionExacta" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center mb-4" style="max-width: 900px; margin: 0 auto;">
+                            <div class="col-md-4">
+                                <label asp-for="idProvincia" class="form-label">Provincia</label>
+                                <select asp-for="idProvincia" class="form-select">
+                                    <option value="">Seleccione una provincia</option>
+                                    <option value="1">San José</option>
+                                    <option value="2">Alajuela</option>
+                                    <option value="3">Cartago</option>
+                                    <!-- Agrega más provincias si quieres -->
+                                </select>
+                                <span asp-validation-for="idProvincia" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="idCanton" class="form-label">Cantón</label>
+                                <select asp-for="idCanton" class="form-select">
+                                    <option value="">Seleccione un cantón</option>
+                                    <option value="1">Cantón 1</option>
+                                    <option value="2">Cantón 2</option>
+                                    <!-- Más cantones -->
+                                </select>
+                                <span asp-validation-for="idCanton" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label asp-for="idDistrito" class="form-label">Distrito</label>
+                                <select asp-for="idDistrito" class="form-select">
+                                    <option value="">Seleccione un distrito</option>
+                                    <option value="1">Distrito 1</option>
+                                    <option value="2">Distrito 2</option>
+                                    <!-- Más distritos -->
+                                </select>
+                                <span asp-validation-for="idDistrito" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div style="max-width: 300px; margin: 0 auto;">
+                            <button type="submit" class="btn btn-success w-100">Crear Cuenta</button>
+                        </div>
+
+
+
+                    </form>
+                </div>
+                <div class="card-footer text-center">
+                    ¿Ya tienes cuenta? <a asp-action="Login" class="text-decoration-none">Inicia sesión</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

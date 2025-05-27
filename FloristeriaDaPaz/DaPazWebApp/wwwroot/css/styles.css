@@ -1,0 +1,21 @@
+/* Establecer la imagen como fondo para la página de inicio (index) */
+.index-background {
+    background-image: url('https://media.revistagq.com/photos/65b12cd1df908a3c3a4d7373/16:9/w_2560%2Cc_limit/fitness%2520portada.jpg');
+    background-size: cover; /* Asegura que la imagen cubra toda la pantalla */
+    background-position: center; /* Centra la imagen */
+    background-attachment: fixed; /* Hace que el fondo no se desplace con el contenido */
+    background-repeat: no-repeat;
+    height: 100vh; /* La altura ocupará toda la ventana */
+}
+
+    /* Filtro oscuro solo en la página de inicio */
+    .index-background::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Capa oscura con 50% de opacidad */
+        z-index: -1; /* Asegura que el filtro esté detrás del contenido */
+    }

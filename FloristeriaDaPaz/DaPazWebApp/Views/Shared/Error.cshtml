@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Error";
+    Layout = "~/Views/Shared/_LayoutExterno.cshtml";
+}
+
+<div class="container d-flex align-items-center justify-content-center" style="min-height: 100vh">
+    <div class="d-flex flex-column justify-content-between">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-10">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <div class="app-brand w-100 d-flex justify-content-center border-bottom-0">
+                            <a class="w-auto pl-0" href="/index.html">
+                                <img src="~/img/logo.png" alt="Mono">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="card-body p-5 text-center">
+
+                        <h4 class="text-dark mb-5">Se presentó un problema en el sistema.</h4>
+                        <p>
+                            Ir a la página de Inicio de Sesión<br />
+                            <a class="text-blue" href="@Url.Action("IniciarSesion","Login")">Inicia Sesión</a>
+                        </p>
+                        <br />
+                        <img class="d-block m-auto" src="~/img/maintanace.jpg" alt="Image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
