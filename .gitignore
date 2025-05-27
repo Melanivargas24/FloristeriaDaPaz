@@ -1,0 +1,36 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files
+
+*.user
+*.suo
+*.sdf
+*.cache
+*.pdb
+*.log
+*.vspscc
+*.vssscc
+*.dbmdl
+
+# Build results
+bin/
+obj/
+Debug/
+Release/
+
+# Visual Studio Code
+.vscode/
+
+# User-specific files
+.vs/
+.idea/
+*.swp
+*.bak
+
+# Others
+*.DS_Store
+*.class
+*.psess
+*.vsp
+*.pidb
+*.svclog
+*.scc
