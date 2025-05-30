@@ -245,7 +245,6 @@ C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\scopedcss\bundle\FloristeriaDaPaz.styles.css
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\scopedcss\projectbundle\FloristeriaDaPaz.bundle.scp.css
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\pn4bgrjq8g-n2igjycs4t.gz
-C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\0jt0j0ycnz-miidrvk9ol.gz
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\8nqju36l6p-rygvbujoae.gz
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\gu7qpaqrsh-61n19gt1b8.gz
 C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\79ybjxb7co-el7is6keb4.gz
@@ -453,3 +452,4 @@ C:\Users\cesar\Source\Repos\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\o
 C:\Users\cesar\Source\Repos\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\FloristeriaDaPaz.pdb
 C:\Users\cesar\Source\Repos\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\FloristeriaDaPaz.genruntimeconfig.cache
 C:\Users\cesar\Source\Repos\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\ref\FloristeriaDaPaz.dll
+C:\progra avanzada clase\FloristeriaDaPaz\FloristeriaDaPaz\FloristeriaDaPaz\obj\Debug\net9.0\compressed\0jt0j0ycnz-hmctjolj9f.gz

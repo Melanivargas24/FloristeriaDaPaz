@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Crear Cuenta";
-    Layout = "_Layout";
 }
 
 <div class="container mt-5">
@@ -64,44 +63,49 @@
                             </div>
                         </div>
 
-                        <div class="row justify-content-center mb-4" style="max-width: 900px; margin: 0 auto;">
+
+                        <div class="row mb-3">
                             <div class="col-md-4">
-                                <label asp-for="idProvincia" class="form-label">Provincia</label>
-                                <select asp-for="idProvincia" class="form-select">
+                                <label asp-for="idProvincia" class="form-label mb-1">Provincia</label>
+                                <select asp-for="idProvincia" class="form-select" id="idProvincia">
                                     <option value="">Seleccione una provincia</option>
-                                    <option value="1">San José</option>
-                                    <option value="2">Alajuela</option>
-                                    <option value="3">Cartago</option>
-                                    <!-- Agrega más provincias si quieres -->
+                                    @foreach (var provincia in Model.Provincia)
+                                    {
+                                        <option value="@provincia.idProvincia">@provincia.nombreProvincia</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="idProvincia" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-4">
-                                <label asp-for="idCanton" class="form-label">Cantón</label>
-                                <select asp-for="idCanton" class="form-select">
+                                <label asp-for="idCanton" class="form-label mb-1">Cantón</label>
+                                <select asp-for="idCanton" class="form-select" id="idCanton">
                                     <option value="">Seleccione un cantón</option>
-                                    <option value="1">Cantón 1</option>
-                                    <option value="2">Cantón 2</option>
-                                    <!-- Más cantones -->
+                                    @foreach (var canton in Model.Canton)
+                                    {
+                                        <option value="@canton.idCanton">@canton.nombreCanton</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="idCanton" class="text-danger"></span>
                             </div>
 
                             <div class="col-md-4">
-                                <label asp-for="idDistrito" class="form-label">Distrito</label>
-                                <select asp-for="idDistrito" class="form-select">
+                                <label asp-for="idDistrito" class="form-label mb-1">Distrito</label>
+                                <select asp-for="idDistrito" class="form-select" id="idDistrito">
                                     <option value="">Seleccione un distrito</option>
-                                    <option value="1">Distrito 1</option>
-                                    <option value="2">Distrito 2</option>
-                                    <!-- Más distritos -->
+                                    @foreach (var distrito in Model.Distrito)
+                                    {
+                                        <option value="@distrito.idDistrito">@distrito.nombreDistrito</option>
+                                    }
                                 </select>
                                 <span asp-validation-for="idDistrito" class="text-danger"></span>
                             </div>
                         </div>
 
-                        <div style="max-width: 300px; margin: 0 auto;">
-                            <button type="submit" class="btn btn-success w-100">Crear Cuenta</button>
+                        <div class="row justify-content-center mt-4">
+                            <div class="col-md-4">
+                                <button type="submit" class="btn btn-success w-100">Crear Cuenta</button>
+                            </div>
                         </div>
 
 
@@ -118,4 +122,32 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(function () {
+            $('#idProvincia').change(function () {
+                var idProvincia = $(this).val();
+                $('#idCanton').empty().append('<option value="">Seleccione un cantón</option>');
+                $('#idDistrito').empty().append('<option value="">Seleccione un distrito</option>');
+                if (idProvincia) {
+                    $.getJSON('@Url.Action("GetCantones", "Login")', { idProvincia: idProvincia }, function (data) {
+                        $.each(data, function (i, item) {
+                            $('#idCanton').append($('<option>', { value: item.idCanton, text: item.nombreCanton }));
+                        });
+                    });
+                }
+            });
+
+            $('#idCanton').change(function () {
+                var idCanton = $(this).val();
+                $('#idDistrito').empty().append('<option value="">Seleccione un distrito</option>');
+                if (idCanton) {
+                    $.getJSON('@Url.Action("GetDistritos", "Login")', { idCanton: idCanton }, function (data) {
+                        $.each(data, function (i, item) {
+                            $('#idDistrito').append($('<option>', { value: item.idDistrito, text: item.nombreDistrito }));
+                        });
+                    });
+                }
+            });
+        });
+    </script>
 }

@@ -14,5 +14,8 @@
         public int? idDistrito { get; set; }
         public int? idCanton { get; set; }
         public int? idProvincia { get; set; }
+        public List<Provincia> Provincia { get; set; }
+        public List<Canton> Canton { get; set; }
+        public List<Distrito> Distrito { get; set; }
     }
 }

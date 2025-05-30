@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
-namespace CasoEstudio1_JN_CesarArce.Controllers
+namespace DaPazWebApp.Controllers
 {
     public class LoginController : Controller
     {
@@ -20,7 +20,20 @@ namespace CasoEstudio1_JN_CesarArce.Controllers
         [HttpGet]
         public IActionResult Signin()
         {
-            return View();
+            // Obtener provincias directamente desde la base de datos usando Dapper
+            List<Provincia> Provincia;
+            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                Provincia = context.Query<Provincia>("SELECT idProvincia, nombreProvincia FROM Provincia").ToList();
+            }
+
+            var model = new UsersModel
+            {
+                Provincia = Provincia,
+                Canton = new List<Canton>(), // Vacío hasta que se seleccione provincia
+                Distrito = new List<Distrito>() // Vacío hasta que se seleccione cantón
+            };
+            return View(model);
         }
 
         [HttpPost]
@@ -31,7 +44,6 @@ namespace CasoEstudio1_JN_CesarArce.Controllers
                 // Si el modelo no es válido, vuelve a la vista con los errores.
                 return View(model);
             }
-
 
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
@@ -84,5 +96,21 @@ namespace CasoEstudio1_JN_CesarArce.Controllers
         }
 
         #endregion
+
+        [HttpGet]
+        public JsonResult GetCantones(int idProvincia)
+        {
+            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+            var cantones = context.Query<Canton>("SELECT idCanton, nombreCanton, idProvincia FROM Canton WHERE idProvincia = @idProvincia", new { idProvincia }).ToList();
+            return Json(cantones);
+        }
+
+        [HttpGet]
+        public JsonResult GetDistritos(int idCanton)
+        {
+            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+            var distritos = context.Query<Distrito>("SELECT idDistrito, nombreDistrito, idCanton FROM Distrito WHERE idCanton = @idCanton", new { idCanton }).ToList();
+            return Json(distritos);
+        }
     }
 }

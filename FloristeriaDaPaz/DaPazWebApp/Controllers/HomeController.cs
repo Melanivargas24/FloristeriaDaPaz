@@ -2,7 +2,7 @@ using System.Diagnostics;
 using DaPazWebApp.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CasoEstudio1_JN_CesarArce.Controllers
+namespace DaPazWebApp.Controllers
 {
     public class HomeController : Controller
     {
@@ -16,5 +16,26 @@ namespace CasoEstudio1_JN_CesarArce.Controllers
             return View();
         }
 
+        public IActionResult Shop()
+        {
+            return View();
+        }
+
+        public IActionResult About()
+        {
+            return View();
+        }
+
+        public IActionResult Services()
+        {
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
     }
+
 }
+

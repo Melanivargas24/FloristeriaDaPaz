@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FloristeriaDaPaz.Pages
+namespace DaPazWebApp.Views.Home
 {
-    public class BlogModel : PageModel
+    public class AboutModel : PageModel
     {
         public void OnGet()
         {
