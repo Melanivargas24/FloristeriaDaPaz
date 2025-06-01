@@ -27,45 +27,35 @@
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-floating mb-3">
-                                    <input asp-for="nombre" class="form-control" placeholder="Nombre" />
-                                    <label asp-for="nombre">Nombre</label>
-                                    <span asp-validation-for="nombre" class="text-danger"></span>
-                                </div>
+                                <label asp-for="nombre" class="form-label">Nombre</label>
+                                <input asp-for="nombre" class="form-control" placeholder="Juan" />
+                                <span asp-validation-for="nombre" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="form-floating mb-3">
-                                    <input asp-for="apellido" class="form-control" placeholder="Apellido" />
-                                    <label asp-for="apellido">Apellido</label>
+                                    <label asp-for="apellido" class="form-label">Apellido</label>
+                                    <input asp-for="apellido" class="form-control" placeholder="Mora" />
                                     <span asp-validation-for="apellido" class="text-danger"></span>
-                                </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-floating mb-3">
-                                    <input asp-for="correo" class="form-control" placeholder="Correo" />
-                                    <label asp-for="correo">Correo</label>
+                                    <label asp-for="correo" class="form-label">Correo</label>
+                                    <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" />
                                     <span asp-validation-for="correo" class="text-danger"></span>
-                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <div class="form-floating mb-3">
-                                <input asp-for="telefono" class="form-control" placeholder="Telefono" />
-                                    <label asp-for="telefono">Teléfono</label>
+                                <label asp-for="telefono" class="form-label">Telefono</label>
+                                <input asp-for="telefono" class="form-control" placeholder="88884444" />
                                 <span asp-validation-for="telefono" class="text-danger"></span>
-                                </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <div class="form-floating mb-3">
-                                <input asp-for="contrasena" type="password" class="form-control" placeholder="Contraseña" />
-                                <label asp-for="contrasena">Contraseña</label>
+                                <label asp-for="contrasena" class="form-label">Contraseña</label>
+                                <input asp-for="contrasena" type="password" class="form-control" placeholder="******" />
                                 <span asp-validation-for="contrasena" class="text-danger"></span>
-                                </div>
                             </div>
                         </div>
 

@@ -61,13 +61,54 @@ namespace DaPazWebApp.Controllers
         {
             using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             var empleados = context.Query<EmpleadoModel>(
-                @"SELECT e.idEmpleado, e.salario, e.fechaIngreso, e.fechaSalida, e.idUsuario, 
-                         u.nombre, u.apellido, u.correo
-                  FROM Empleado e
-                  INNER JOIN Usuario u ON e.idUsuario = u.idUsuario"
+                "SP_ConsultarEmpleados",
+                commandType: CommandType.StoredProcedure
             ).ToList();
 
             return View(empleados);
+        }
+
+        [HttpGet]
+        public IActionResult EditarE(int id)
+        {
+            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+            var empleado = context.QuerySingleOrDefault<EmpleadoModel>(
+                "SP_ObtenerEmpleadoPorId",
+                new { idEmpleado = id },
+                commandType: CommandType.StoredProcedure
+            );
+
+            if (empleado == null)
+                return NotFound();
+
+            return View(empleado);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditarE(EmpleadoModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+            context.Execute(
+                "SP_ActualizarEmpleado",
+                new
+                {
+                    model.idEmpleado,
+                    model.salario,
+                    model.fechaIngreso,
+                    model.idUsuario,
+                    model.nombre,
+                    model.apellido,
+                    model.correo,
+                    model.telefono,
+                },
+                commandType: CommandType.StoredProcedure
+            );
+
+            return RedirectToAction("ConsultarEmpleados", "Empleado");
         }
     }
 }
