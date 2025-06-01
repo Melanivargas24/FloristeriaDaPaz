@@ -21,7 +21,7 @@
 		<!-- Start Header/Navigation -->
 		<nav class="custom-navbar navbar navbar-expand-md navbar-dark bg-dark" aria-label="Furni navigation bar">
 			<div class="container">
-				<a class="navbar-brand brand-home" asp-page="/Index">Floristería Da'Paz</a>
+				<a class="navbar-brand brand-home" asp-controller="Home" asp-action="Index">Floristería Da'Paz</a>
 
 				<button class="navbar-toggler"
 						type="button"
@@ -53,7 +53,7 @@
 								<li><a class="dropdown-item" href="#" data-value="dashboard">Dashboards</a></li>
 								<li><a class="dropdown-item" href="#" data-value="inventario">Inventario</a></li>
 								<li><a class="dropdown-item" href="#" data-value="promocion">Promociones</a></li>
-								<li><a class="dropdown-item" href="#" data-value="proveedor">Proveedores</a></li>
+								<li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Index">Proveedores</a></li>
 							</ul>
 						</li>
 						<li class="nav-item dropdown">
@@ -66,8 +66,8 @@
 								Planilla
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="planillaDropdown">
-								<li><a class="nav-link" asp-controller="Empleado" asp-action="AgregarE">Agregar Empleado</a></li>
-								<li><a class="nav-link" asp-controller="Empleado" asp-action="ConsultarEmpleados">Consultar Empleados</a></li>
+								<li><a class="dropdown-item" asp-controller="Empleado" asp-action="AgregarE">Agregar Empleado</a></li>
+								<li><a class="dropdown-item" asp-controller="Empleado" asp-action="ConsultarEmpleados">Consultar Empleados</a></li>
 								<li><a class="dropdown-item" href="#" data-value="deduccion">Deducciones</a></li>
 								<li><a class="dropdown-item" href="#" data-value="horaextra">Horas extra</a></li>
 								<li><a class="dropdown-item" href="#" data-value="incapacidad">Incapacidades</a></li>

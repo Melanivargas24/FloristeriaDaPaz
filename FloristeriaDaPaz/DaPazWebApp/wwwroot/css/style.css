@@ -750,3 +750,53 @@ textarea {
     height: 50px;
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
+
+
+.encabezado-proveedores {
+    margin-bottom: 25px;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #ccc;
+}
+
+.btn-prov {
+    background-color: #28a745;
+    color: white;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    margin-left: 640px;
+}
+
+    .btn-prov:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+        color: white;
+    }
+
+
+
+.btn-edit {
+    background-color: #0d6efd;
+    color: white;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    text-decoration: none;
+    border: none;
+    border-radius: 0.25rem;
+    font-weight: 500;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+    .btn-edit:hover {
+        background-color: #0b5ed7;
+        transform: scale(1.05);
+        color: white;
+    }
+
+    
