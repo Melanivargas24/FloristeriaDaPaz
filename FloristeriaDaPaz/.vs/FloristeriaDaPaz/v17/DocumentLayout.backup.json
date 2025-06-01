@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\views\\empleado\\consultarempleados.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\views\\empleado\\consultarempleados.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\models\\empleadomodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\models\\empleadomodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\controllers\\empleadocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\controllers\\empleadocontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\views\\empleado\\agregare.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\views\\empleado\\agregare.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\views\\login\\signin.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -15,20 +31,8 @@
       "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\models\\canton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\models\\canton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\models\\usersmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\models\\usersmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\models\\distrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\models\\distrito.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|c:\\progra avanzada clase\\floristeriadapaz\\floristeriadapaz\\dapazwebapp\\models\\provincia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5FEB5D4D-ECA7-3CEB-3EB5-6159DBDAA61B}|DaPazWebApp\\DaPazWebApp.csproj|solutionrelative:dapazwebapp\\models\\provincia.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 58,
+          "SelectedChildIndex": 62,
           "Children": [
             {
               "$type": "Bookmark",
@@ -274,93 +278,106 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Controllers\\HomeController.cs",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "DaPazWebApp\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAQAAAAVAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T22:02:05.954Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "Distrito.cs",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Distrito.cs",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\Distrito.cs",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Distrito.cs",
-              "RelativeToolTip": "DaPazWebApp\\Models\\Distrito.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAMAAAATAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T21:55:18.882Z",
+              "DocumentIndex": 1,
+              "Title": "ConsultarEmpleados.cshtml",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Empleado\\ConsultarEmpleados.cshtml",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Views\\Empleado\\ConsultarEmpleados.cshtml",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Empleado\\ConsultarEmpleados.cshtml*",
+              "RelativeToolTip": "DaPazWebApp\\Views\\Empleado\\ConsultarEmpleados.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-01T03:23:41.553Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "Canton.cs",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Canton.cs",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\Canton.cs",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Canton.cs",
-              "RelativeToolTip": "DaPazWebApp\\Models\\Canton.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAIAAAAQAAAAAAAAAA==",
+              "Title": "EmpleadoController.cs",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\EmpleadoController.cs",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Controllers\\EmpleadoController.cs",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\EmpleadoController.cs*",
+              "RelativeToolTip": "DaPazWebApp\\Controllers\\EmpleadoController.cs*",
+              "ViewState": "AgIAACMAAAAAAAAAAAAqwEgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T21:55:14.003Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "Provincia.cs",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Provincia.cs",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\Provincia.cs",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\Provincia.cs",
-              "RelativeToolTip": "DaPazWebApp\\Models\\Provincia.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAIAAAAaAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T21:54:48.017Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "UsersModel.cs",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\UsersModel.cs",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\UsersModel.cs",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\UsersModel.cs",
-              "RelativeToolTip": "DaPazWebApp\\Models\\UsersModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAmAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-30T21:45:54.491Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Signin.cshtml",
-              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Login\\Signin.cshtml",
-              "RelativeDocumentMoniker": "DaPazWebApp\\Views\\Login\\Signin.cshtml",
-              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Login\\Signin.cshtml",
-              "RelativeToolTip": "DaPazWebApp\\Views\\Login\\Signin.cshtml",
-              "ViewState": "AgIAAFsAAAAAAAAAAAAUwJgAAAABAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2025-05-30T20:42:13.582Z",
+              "WhenOpened": "2025-06-01T00:46:27.269Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
+              "Title": "EmpleadoModel.cs",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\EmpleadoModel.cs",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\EmpleadoModel.cs",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\EmpleadoModel.cs*",
+              "RelativeToolTip": "DaPazWebApp\\Models\\EmpleadoModel.cs*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-06-01T00:46:11.037Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AgregarE.cshtml",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Empleado\\AgregarE.cshtml",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Views\\Empleado\\AgregarE.cshtml",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Empleado\\AgregarE.cshtml*",
+              "RelativeToolTip": "DaPazWebApp\\Views\\Empleado\\AgregarE.cshtml*",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-01T00:36:24.676Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Shared\\_Layout.cshtml*",
+              "RelativeToolTip": "DaPazWebApp\\Views\\Shared\\_Layout.cshtml*",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAEYAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-06-01T00:34:15.618Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "UsersModel.cs",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\UsersModel.cs",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Models\\UsersModel.cs",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Models\\UsersModel.cs",
+              "RelativeToolTip": "DaPazWebApp\\Models\\UsersModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA0AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-31T23:58:34.056Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "LoginController.cs",
               "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\LoginController.cs",
               "RelativeDocumentMoniker": "DaPazWebApp\\Controllers\\LoginController.cs",
               "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Controllers\\LoginController.cs",
               "RelativeToolTip": "DaPazWebApp\\Controllers\\LoginController.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAswG8AAAB9AAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAC0AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-05-27T22:37:20.338Z",
+              "WhenOpened": "2025-05-31T23:58:30.877Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Signin.cshtml",
+              "DocumentMoniker": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Login\\Signin.cshtml",
+              "RelativeDocumentMoniker": "DaPazWebApp\\Views\\Login\\Signin.cshtml",
+              "ToolTip": "C:\\progra avanzada clase\\FloristeriaDaPaz\\FloristeriaDaPaz\\DaPazWebApp\\Views\\Login\\Signin.cshtml",
+              "RelativeToolTip": "DaPazWebApp\\Views\\Login\\Signin.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-05-31T03:18:11.576Z",
               "EditorCaption": ""
             }
           ]

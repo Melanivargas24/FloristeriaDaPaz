@@ -20,19 +20,7 @@ namespace DaPazWebApp.Controllers
         [HttpGet]
         public IActionResult Signin()
         {
-            // Obtener provincias directamente desde la base de datos usando Dapper
-            List<Provincia> Provincia;
-            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-            {
-                Provincia = context.Query<Provincia>("SELECT idProvincia, nombreProvincia FROM Provincia").ToList();
-            }
-
-            var model = new UsersModel
-            {
-                Provincia = Provincia,
-                Canton = new List<Canton>(), // Vacío hasta que se seleccione provincia
-                Distrito = new List<Distrito>() // Vacío hasta que se seleccione cantón
-            };
+            var model = new UsersModel();
             return View(model);
         }
 
@@ -55,10 +43,6 @@ namespace DaPazWebApp.Controllers
                         model.correo,
                         model.telefono,
                         model.contrasena,
-                        model.direccionExacta,
-                        model.idDistrito,
-                        model.idProvincia,
-                        model.idCanton
                     },
                     commandType: CommandType.StoredProcedure);
             }
@@ -88,7 +72,7 @@ namespace DaPazWebApp.Controllers
                 if (result == null)
                 {
                     ViewBag.Error = "Correo o contraseña incorrectos.";
-                    return View(); 
+                    return View();
                 }
 
                 return RedirectToAction("Index", "Home");
@@ -96,21 +80,5 @@ namespace DaPazWebApp.Controllers
         }
 
         #endregion
-
-        [HttpGet]
-        public JsonResult GetCantones(int idProvincia)
-        {
-            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            var cantones = context.Query<Canton>("SELECT idCanton, nombreCanton, idProvincia FROM Canton WHERE idProvincia = @idProvincia", new { idProvincia }).ToList();
-            return Json(cantones);
-        }
-
-        [HttpGet]
-        public JsonResult GetDistritos(int idCanton)
-        {
-            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            var distritos = context.Query<Distrito>("SELECT idDistrito, nombreDistrito, idCanton FROM Distrito WHERE idCanton = @idCanton", new { idCanton }).ToList();
-            return Json(distritos);
-        }
     }
 }

@@ -8,14 +8,9 @@
         public string?  correo { get; set; }
         public string?  telefono { get; set; }
         public string?  contrasena { get; set; }
-        public string?  direccionExacta { get; set; }
         public string?  estado { get; set; }
         public int?  idRol { get; set; }
-        public int? idDistrito { get; set; }
-        public int? idCanton { get; set; }
-        public int? idProvincia { get; set; }
-        public List<Provincia> Provincia { get; set; }
-        public List<Canton> Canton { get; set; }
-        public List<Distrito> Distrito { get; set; }
+        public int? idDireccion { get; set; }
+
     }
 }

@@ -21,86 +21,54 @@
                         </div>
                     }
 
-                    <form asp-action="Signin" method="post">
+                    <form asp-action="Signin"
+						  method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="nombre" class="form-label">Nombre</label>
-                                <input asp-for="nombre" class="form-control" placeholder="Juan" />
-                                <span asp-validation-for="nombre" class="text-danger"></span>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="nombre" class="form-control" placeholder="Nombre" />
+                                    <label asp-for="nombre">Nombre</label>
+                                    <span asp-validation-for="nombre" class="text-danger"></span>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="apellido" class="form-label">Apellido</label>
-                                <input asp-for="apellido" class="form-control" placeholder="Pérez" />
-                                <span asp-validation-for="apellido" class="text-danger"></span>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="apellido" class="form-control" placeholder="Apellido" />
+                                    <label asp-for="apellido">Apellido</label>
+                                    <span asp-validation-for="apellido" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="correo" class="form-label">Correo</label>
-                                <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" />
-                                <span asp-validation-for="correo" class="text-danger"></span>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="correo" class="form-control" placeholder="Correo" />
+                                    <label asp-for="correo">Correo</label>
+                                    <span asp-validation-for="correo" class="text-danger"></span>
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="telefono" class="form-label">Teléfono</label>
-                                <input asp-for="telefono" class="form-control" placeholder="8888-9999" />
+                                <div class="form-floating mb-3">
+                                <input asp-for="telefono" class="form-control" placeholder="Telefono" />
+                                    <label asp-for="telefono">Teléfono</label>
                                 <span asp-validation-for="telefono" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="contrasena" class="form-label">Contraseña</label>
-                                <input asp-for="contrasena" type="password" class="form-control" placeholder="******" />
+                                <div class="form-floating mb-3">
+                                <input asp-for="contrasena" type="password" class="form-control" placeholder="Contraseña" />
+                                <label asp-for="contrasena">Contraseña</label>
                                 <span asp-validation-for="contrasena" class="text-danger"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="direccionExacta" class="form-label">Dirección</label>
-                                <input asp-for="direccionExacta" class="form-control" placeholder="Dirección exacta" />
-                                <span asp-validation-for="direccionExacta" class="text-danger"></span>
+                                </div>
                             </div>
                         </div>
 
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label asp-for="idProvincia" class="form-label mb-1">Provincia</label>
-                                <select asp-for="idProvincia" class="form-select" id="idProvincia">
-                                    <option value="">Seleccione una provincia</option>
-                                    @foreach (var provincia in Model.Provincia)
-                                    {
-                                        <option value="@provincia.idProvincia">@provincia.nombreProvincia</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="idProvincia" class="text-danger"></span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="idCanton" class="form-label mb-1">Cantón</label>
-                                <select asp-for="idCanton" class="form-select" id="idCanton">
-                                    <option value="">Seleccione un cantón</option>
-                                    @foreach (var canton in Model.Canton)
-                                    {
-                                        <option value="@canton.idCanton">@canton.nombreCanton</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="idCanton" class="text-danger"></span>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label asp-for="idDistrito" class="form-label mb-1">Distrito</label>
-                                <select asp-for="idDistrito" class="form-select" id="idDistrito">
-                                    <option value="">Seleccione un distrito</option>
-                                    @foreach (var distrito in Model.Distrito)
-                                    {
-                                        <option value="@distrito.idDistrito">@distrito.nombreDistrito</option>
-                                    }
-                                </select>
-                                <span asp-validation-for="idDistrito" class="text-danger"></span>
-                            </div>
-                        </div>
 
                         <div class="row justify-content-center mt-4">
                             <div class="col-md-4">
@@ -120,34 +88,3 @@
     </div>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-    <script>
-        $(function () {
-            $('#idProvincia').change(function () {
-                var idProvincia = $(this).val();
-                $('#idCanton').empty().append('<option value="">Seleccione un cantón</option>');
-                $('#idDistrito').empty().append('<option value="">Seleccione un distrito</option>');
-                if (idProvincia) {
-                    $.getJSON('@Url.Action("GetCantones", "Login")', { idProvincia: idProvincia }, function (data) {
-                        $.each(data, function (i, item) {
-                            $('#idCanton').append($('<option>', { value: item.idCanton, text: item.nombreCanton }));
-                        });
-                    });
-                }
-            });
-
-            $('#idCanton').change(function () {
-                var idCanton = $(this).val();
-                $('#idDistrito').empty().append('<option value="">Seleccione un distrito</option>');
-                if (idCanton) {
-                    $.getJSON('@Url.Action("GetDistritos", "Login")', { idCanton: idCanton }, function (data) {
-                        $.each(data, function (i, item) {
-                            $('#idDistrito').append($('<option>', { value: item.idDistrito, text: item.nombreDistrito }));
-                        });
-                    });
-                }
-            });
-        });
-    </script>
-}

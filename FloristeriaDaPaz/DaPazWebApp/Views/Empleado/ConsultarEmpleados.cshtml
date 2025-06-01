@@ -1,0 +1,37 @@
+@model IEnumerable<DaPazWebApp.Models.EmpleadoModel>
+
+@{
+    ViewData["Title"] = "Consultar Empleados";
+}
+
+<h2>Consultar Empleados</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Empleado</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Correo</th>
+            <th>Salario</th>
+            <th>Fecha Ingreso</th>
+            <th>Fecha Salida</th>
+            <th>ID Usuario</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var empleado in Model)
+    {
+        <tr>
+            <td>@empleado.idEmpleado</td>
+            <td>@empleado.nombre</td>
+            <td>@empleado.apellido</td>
+            <td>@empleado.correo</td>
+            <td>@empleado.salario</td>
+            <td>@empleado.fechaIngreso?.ToString("yyyy-MM-dd")</td>
+            <td>@(empleado.fechaSalida?.ToString("yyyy-MM-dd") ?? "-")</td>
+            <td>@empleado.idUsuario</td>
+        </tr>
+    }
+    </tbody>
+</table>
