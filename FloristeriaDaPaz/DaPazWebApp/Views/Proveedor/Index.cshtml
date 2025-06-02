@@ -20,6 +20,7 @@
                 <th>Correo</th>
                 <th>Teléfono</th>
                 <th>Dirección</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -31,6 +32,7 @@
                     <td>@proveedor.correoProveedor</td>
                     <td>@proveedor.telefonoProveedor</td>
                     <td>@proveedor.direccionProveedor</td>
+                    <td>@proveedor.estado</td>
                     <td>
 
                         <a asp-controller="Proveedor" asp-action="Edit" asp-route-id="@proveedor.IdProveedor" class="btn btn-sm btn-edit">

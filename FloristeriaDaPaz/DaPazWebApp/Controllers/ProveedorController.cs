@@ -52,6 +52,7 @@ namespace DaPazWebApp.Controllers
                         model.correoProveedor,
                         model.telefonoProveedor,
                         model.direccionProveedor,
+                        model.estado,
                         model.IdDistrito
                     },
                     commandType: CommandType.StoredProcedure);
@@ -96,6 +97,7 @@ namespace DaPazWebApp.Controllers
                         model.direccionProveedor,
                         model.correoProveedor,
                         model.telefonoProveedor,
+                        model.estado,
                         model.IdDistrito
                     },
                     commandType: CommandType.StoredProcedure

@@ -8,23 +8,23 @@
     "net9.0": []
   },
   "packageFolders": {
-    "C:\\Users\\AMD\\.nuget\\packages\\": {},
+    "C:\\Users\\Melani\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\xampp\\htdocs\\escuela\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz.csproj",
+      "projectUniqueName": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz.csproj",
       "projectName": "FloristeriaDaPaz",
-      "projectPath": "C:\\xampp\\htdocs\\escuela\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz.csproj",
-      "packagesPath": "C:\\Users\\AMD\\.nuget\\packages\\",
-      "outputPath": "C:\\xampp\\htdocs\\escuela\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\obj\\",
+      "projectPath": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz.csproj",
+      "packagesPath": "C:\\Users\\Melani\\.nuget\\packages\\",
+      "outputPath": "C:\\Projects\\FloristeriaDaPaz\\FloristeriaDaPaz\\FloristeriaDaPaz\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\AMD\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Melani\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -51,7 +51,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "9.0.100"
+      "SdkAnalysisLevel": "9.0.200"
     },
     "frameworks": {
       "net9.0": {
@@ -75,7 +75,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.203/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
