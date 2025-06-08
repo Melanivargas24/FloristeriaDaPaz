@@ -1,5 +1,6 @@
 ﻿using DaPazWebApp.Models;
 using Dapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using System.Data;
@@ -69,9 +70,21 @@ namespace DaPazWebApp.Controllers
                     new { model.correo, model.contrasena },
                     commandType: CommandType.StoredProcedure);
 
-                if (result == null)
+                // Si encuentra algo, iniciamos sesión
+                if (result != null)
                 {
-                    ViewBag.Error = "Correo o contraseña incorrectos.";
+                    // Usar HttpContext.Session para almacenar datos de sesión
+                    HttpContext.Session.SetString("NombreUsuario", result.nombre ?? string.Empty);
+                    HttpContext.Session.SetInt32("Rol", result.idRol ?? 0);
+                    HttpContext.Session.SetInt32("IdUsuario", result.idUsuario ?? 0);
+                    HttpContext.Session.SetString("Correo", result.correo ?? string.Empty);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                // Si no encuentra nada, mostramos mensaje de error
+                else if (result == null)
+                {
+                    ViewBag.Error = "Su información no se ha podido validar correctamente";
                     return View();
                 }
 

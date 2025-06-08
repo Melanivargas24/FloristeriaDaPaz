@@ -16,6 +16,14 @@
 	<link href="~/css/style.css" rel="stylesheet" />
 	<title>Floristeria Da'Paz</title>
 </head>
+
+@using Microsoft.AspNetCore.Http
+
+@{
+    var nombreUsuario = Context.Session.GetString("NombreUsuario") ?? "Invitad@";
+    var rol = (Context.Session.GetString("Rol") ?? "Invitad@").Trim();
+}
+
 <body>
 	<header>
 		<!-- Start Header/Navigation -->
@@ -82,8 +90,18 @@
 							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
 								<img src="~/images/user.svg" width="20" height="20" />
 							</a>
-							<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-								<li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Iniciar Sesión</a></li>
+							<ul class="dropdown-menu" aria-labelledby="userDropdown">
+								@if (nombreUsuario != "Invitad@")
+								{
+									<li><a class="dropdown-item" href="#" data-value="ActualizarUsuario">ActualizarUsuario</a></li>
+									<li><a class="dropdown-item" href="#" data-value="CambiarContraseña">CambiarContraseña</a></li>
+									<li><a class="dropdown-item" href="#" data-value="CerrarSesion">CerrarSesion</a></li>
+
+								}
+								@if (rol == "Invitad@")
+								{
+									<li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Iniciar Sesión</a></li>
+								}
 							</ul>
 						</li>
 						<li><a class="nav-link" asp-area="" asp-page="/Cart"><img src="~/images/cart.svg" width="20" height="20" /></a></li>
@@ -95,6 +113,7 @@
 
 	<main role="main" class="pb-3">
 		@RenderBody()
+		<p>Usuario actual: @nombreUsuario</p>
 	</main>
 
 	<!-- Start Footer Section -->
