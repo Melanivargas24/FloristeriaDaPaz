@@ -1,15 +1,28 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Registrar servicios de MVC y autenticación
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login/Login";  // O la ruta de tu acción login GET
+        options.AccessDeniedPath = "/Login/AccessDenied"; // Opcional, para acceso denegado
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.SlidingExpiration = true;
+    });
+
+builder.Services.AddSession();  // Si usas sesión
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware pipeline
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -18,7 +31,10 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();  // ¡IMPORTANTE! Debe ir antes de UseAuthorization
 app.UseAuthorization();
+
+app.UseSession(); // Si usas sesiones
 
 app.MapControllerRoute(
     name: "default",

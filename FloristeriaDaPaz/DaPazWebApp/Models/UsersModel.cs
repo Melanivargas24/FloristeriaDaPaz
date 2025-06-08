@@ -1,11 +1,16 @@
-﻿namespace DaPazWebApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace DaPazWebApp.Models
 {
     public class UsersModel
     {
         public int? idUsuario { get; set; }
         public string?  nombre { get; set; }
         public string?  apellido { get; set; }
-        public string?  correo { get; set; }
+
+        [Required(ErrorMessage = "El correo es obligatorio")]
+        [EmailAddress(ErrorMessage = "Debe ingresar un correo válido")]
+        public string? correo { get; set; }
         public string?  telefono { get; set; }
         public string?  contrasena { get; set; }
         public string?  estado { get; set; }
