@@ -1,36 +1,71 @@
 ## Ignore Visual Studio temporary files, build results, and
 ## user-specific files
 
+# User-specific files
 *.user
+*.userosscache
 *.suo
 *.sdf
 *.cache
-*.pdb
 *.log
+*.pdb
+*.dbmdl
+*.opendb
+*.VC.db
+
+# Visual Studio profiler
+*.vsp
 *.vspscc
 *.vssscc
-*.dbmdl
+*.psess
 
 # Build results
 bin/
 obj/
 Debug/
 Release/
+publish/
+artifacts/
 
 # Visual Studio Code
 .vscode/
 
-# User-specific files
-.vs/
+# Rider
 .idea/
+*.sln.iml
+
+# Other user-specific files
+.vs/
 *.swp
 *.bak
-
-# Others
-*.DS_Store
-*.class
-*.psess
-*.vsp
 *.pidb
 *.svclog
 *.scc
+
+# Windows specific
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# macOS
+.DS_Store
+
+# Test results
+TestResults/
+
+# Coverage results
+*.coverage
+*.coveragexml
+
+# Crash dumps
+*.dmp
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+
+# Local History
+.localhistory/
