@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using Azure;
+using Microsoft.AspNetCore.Identity;
 
 namespace DaPazWebApp.Controllers
 {
@@ -42,6 +43,8 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
+            var contrasena = Encrypt(model.contrasena);
+
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 context.Execute("SP_RegistrarUsuario",
@@ -51,7 +54,7 @@ namespace DaPazWebApp.Controllers
                         model.apellido,
                         model.correo,
                         model.telefono,
-                        model.contrasena,
+                        contrasena,
                     },
                     commandType: CommandType.StoredProcedure);
             }
@@ -82,9 +85,11 @@ namespace DaPazWebApp.Controllers
             {
                 using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
+                    var contrasena = Encrypt(model.contrasena);
+
                     var result = context.QueryFirstOrDefault<UsersModel>(
                         "SP_IniciarSesion",
-                        new { model.correo, model.contrasena },
+                        new { model.correo, contrasena },
                         commandType: CommandType.StoredProcedure
                     );
 
@@ -146,7 +151,7 @@ namespace DaPazWebApp.Controllers
                 using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
                     var result = context.QueryFirstOrDefault<UsersModel>(
-                        "ValidarUsuarioCorreo",
+                        "SP_ValidarUsuarioCorreo",
                         new { correo = model.correo },
                         commandType: CommandType.StoredProcedure
                     );
@@ -158,12 +163,11 @@ namespace DaPazWebApp.Controllers
                         var contrasennaAnterior = string.Empty;
 
                         context.Execute(
-                            "ActualizarContrasenna",
+                            "SP_ActualizarContrasenna",
                             new
                             {
-                                idUsuario = result.idUsuario,
+                                Id = result.idUsuario,
                                 Contrasenna = nuevaContrasenna,
-                                ContrasennaAnterior = contrasennaAnterior
                             },
                             commandType: CommandType.StoredProcedure
                         );
