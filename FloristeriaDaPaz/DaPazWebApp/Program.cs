@@ -1,24 +1,26 @@
+
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Registrar servicios de MVC y autenticaci髇
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession(); // Registrar el servicio de sesi贸n SOLO UNA VEZ.
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login/Login";  // O la ruta de tu acci髇 login GET
+        options.LoginPath = "/Login/Login";  // O la ruta de tu acci贸n login GET
         options.AccessDeniedPath = "/Login/AccessDenied"; // Opcional, para acceso denegado
         options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
         options.SlidingExpiration = true;
     });
 
-builder.Services.AddSession();  // Si usas sesi髇
+builder.Services.AddSession();  // Si usas sesi贸n
 
 var app = builder.Build();
-
-// Middleware pipeline
 
 if (!app.Environment.IsDevelopment())
 {
@@ -28,10 +30,11 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
 
-app.UseAuthentication();  // MPORTANTE! Debe ir antes de UseAuthorization
+app.UseSession(); // Habilitar el middleware de sesi贸n ANTES de autenticaci贸n/autorizaci贸n.
+app.UseAuthentication();
+
 app.UseAuthorization();
 
 app.UseSession(); // Si usas sesiones
