@@ -1,27 +1,27 @@
 ﻿@model DaPazWebApp.Models.UsersModel
 
 @{
-    ViewData["Title"] = "Iniciar Sesión";
+    ViewData["Title"] = "Recuperar Contraseña";
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-5">
+        <div class="col-md-6">
             <div class="card shadow rounded-4">
                 <div class="card-header text-center bg-success text-white rounded-top-4">
                     <h3 class="mb-0">Floristería Da Paz</h3>
-                    <p class="mb-0">Iniciar sesión</p>
+                    <p class="mb-0">Recuperar Contraseña</p>
                 </div>
                 <div class="card-body">
 
-                    @if (ViewBag.Error != null)
+                    @if (ViewBag.Mensaje != null)
                     {
-                        <div class="alert alert-danger" role="alert">
-                            @ViewBag.Error
+                        <div class="alert alert-info" role="alert">
+                            @ViewBag.Mensaje
                         </div>
                     }
 
-                    <form asp-action="Login" method="post" novalidate>
+                    <form asp-action="RecuperarContrasenna" method="post" novalidate>
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                         <div class="mb-3">
@@ -30,21 +30,13 @@
                             <span asp-validation-for="correo" class="text-danger"></span>
                         </div>
 
-                        <div class="mb-3">
-                            <label asp-for="contrasena" class="form-label">Contraseña</label>
-                            <input asp-for="contrasena" type="password" class="form-control" placeholder="******" autocomplete="current-password" />
-                            <span asp-validation-for="contrasena" class="text-danger"></span>
-                        </div>
-
                         <div class="d-grid mt-3">
-                            <button type="submit" class="btn btn-success">Ingresar</button>
+                            <button type="submit" class="btn btn-success">Enviar Código</button>
                         </div>
                     </form>
                 </div>
-
                 <div class="card-footer text-center">
-                    <div>¿No tienes cuenta? <a asp-action="Signin" class="text-decoration-none">Crea una aquí</a></div>
-                    <div class="mt-2">¿Olvidaste tu contraseña? <a asp-action="RecuperarContrasenna" class="text-decoration-none">Recupérala aquí</a></div>
+                    ¿Ya tienes cuenta? <a asp-action="Login" class="text-decoration-none">Inicia sesión</a>
                 </div>
             </div>
         </div>
