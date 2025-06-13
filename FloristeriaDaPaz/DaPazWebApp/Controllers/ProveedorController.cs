@@ -22,7 +22,9 @@ namespace DaPazWebApp.Controllers
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 var proveedores = context.Query<ProveedorModel>("SP_ObtenerProveedores",
-                    commandType: CommandType.StoredProcedure).ToList();
+                    commandType: CommandType.StoredProcedure)
+                    .OrderByDescending(p => p.IdProveedor)
+                    .ToList();
                 return View(proveedores);
             }
         }

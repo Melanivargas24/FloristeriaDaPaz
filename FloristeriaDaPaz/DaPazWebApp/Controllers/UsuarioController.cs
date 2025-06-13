@@ -20,8 +20,9 @@ namespace DaPazWebApp.Controllers
             using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             var usuarios = context.Query<UsuarioConsultaModel>(
                 "SP_ObtenerUsuarios",
-                commandType: System.Data.CommandType.StoredProcedure
-            ).ToList();
+                commandType: System.Data.CommandType.StoredProcedure)
+                .OrderByDescending(u => u.idUsuario)
+                .ToList();
 
             return View(usuarios);
         }

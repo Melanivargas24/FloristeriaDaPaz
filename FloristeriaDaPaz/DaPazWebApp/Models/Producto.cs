@@ -13,17 +13,26 @@ namespace DaPazWebApp.Models
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string? Descripcion { get; set; }
 
-        public int Precio { get; set; }
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
+        public int? Precio { get; set; }
 
-        public int Stock { get; set; }
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
+        public int? Stock { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string? Imagen { get; set; }
 
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string? Estado { get; set; }
 
-        public int IdCategoriaProducto { get; set; }
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
+        public int? IdCategoriaProducto { get; set; }
 
-        public int IdProveedor { get; set; }
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
+        public int? IdProveedor { get; set; }
+
+
+        public string? NombreCategoriaProducto { get; set; }
+        public string? NombreProveedor { get; set; }
     }
 }

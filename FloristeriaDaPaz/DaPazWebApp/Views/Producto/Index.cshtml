@@ -38,6 +38,7 @@
                 <th>Estado</th>
                 <th>Categoría</th>
                 <th>Proveedor</th>
+                <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -50,8 +51,8 @@
                     <td>@producto.Stock</td>
                     <td>@producto.Imagen</td>
                     <td>@producto.Estado</td>
-                    <td>@producto.IdCategoriaProducto</td>
-                    <td>@producto.IdProveedor</td>
+                    <td>@producto.NombreCategoriaProducto</td>
+                    <td>@producto.NombreProveedor</td>
                     <td>
 
                         <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-edit">

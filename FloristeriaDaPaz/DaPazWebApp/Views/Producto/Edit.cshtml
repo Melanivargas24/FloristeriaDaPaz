@@ -46,25 +46,38 @@
 
         <div class="form-group">
             <label asp-for="Estado" class="control-label">Estado</label>
-            <input asp-for="Estado" class="form-control" />
+            <select asp-for="Estado" class="form-control">
+                <option value="Activo">-- Activo --</option>
+                <option value="Inactivo">-- Inactivo --</option>
+            </select>
             <span asp-validation-for="Estado" class="text-danger"></span>
         </div>
 
 
         <div class="form-group">
             <label asp-for="IdCategoriaProducto" class="control-label">Categoría</label>
-            <input asp-for="IdCategoriaProducto" class="form-control" />
+            <select asp-for="IdCategoriaProducto" class="form-control" asp-items="ViewBag.Categorias">
+                <option value="">-- Seleccione una categoría --</option>
+            </select>
             <span asp-validation-for="IdCategoriaProducto" class="text-danger"></span>
         </div>
+
         <div class="form-group">
             <label asp-for="IdProveedor" class="control-label">Proveedor</label>
-            <input asp-for="IdProveedor" class="form-control" />
+            <select asp-for="IdProveedor" class="form-control" asp-items="ViewBag.Proveedores">
+                <option value="">-- Seleccione un proveedor --</option>
+            </select>
             <span asp-validation-for="IdProveedor" class="text-danger"></span>
         </div>
 
         <br />
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-action="Index" class="btn-cancelar">Cancelar</a>
+        </div>
+
+
     </form>
 </div>
 
