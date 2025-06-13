@@ -110,6 +110,7 @@ namespace DaPazWebApp.Controllers
                     HttpContext.Session.SetString("Nombre", result.nombre!);
                     HttpContext.Session.SetString("RolId", result.idRol.ToString());
                     HttpContext.Session.SetString("UserId", result.idUsuario.ToString());
+                    HttpContext.Session.SetInt32("IdUsuario", result.idUsuario ?? 0);
 
                     return RedirectToAction("Index", "Home");
                 }
