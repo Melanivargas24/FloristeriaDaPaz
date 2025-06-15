@@ -38,12 +38,14 @@ namespace DaPazWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Si el modelo no es válido, vuelve a la vista con los errores.
                 return View(model);
             }
 
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
+                // Encriptar la contraseña antes de guardarla
+                var contrasenaEncriptada = Encrypt(model.contrasena!);
+
                 context.Execute("SP_RegistrarUsuario",
                     new
                     {
@@ -51,7 +53,7 @@ namespace DaPazWebApp.Controllers
                         model.apellido,
                         model.correo,
                         model.telefono,
-                        model.contrasena,
+                        contrasena = contrasenaEncriptada
                     },
                     commandType: CommandType.StoredProcedure);
             }
