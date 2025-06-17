@@ -37,7 +37,7 @@ namespace DaPazWebApp.Controllers
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 usuario = context.QueryFirstOrDefault<EditarUsuarioModel>(
-                    "SELECT idUsuario, nombre, apellido, telefono, correo FROM Usuario WHERE idUsuario = @id",
+                    "SELECT idUsuario, nombre, apellido, telefono, correo, direccion FROM Usuario WHERE idUsuario = @id",
                     new { id });
             }
             if (usuario == null)
