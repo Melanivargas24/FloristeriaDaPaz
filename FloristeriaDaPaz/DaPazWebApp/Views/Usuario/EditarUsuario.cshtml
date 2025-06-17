@@ -1,0 +1,67 @@
+﻿@model DaPazWebApp.Models.EditarUsuarioModel
+
+@{
+    ViewData["Title"] = "Editar Perfil";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+
+    <div class="d-flex justify-between align-items-center encabezado-usuarios">
+        <h2>Editar usuario</h2>
+    </div>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <form asp-action="EditarUsuario" method="post">
+        <input type="hidden" asp-for="idUsuario" />
+
+        <div class="form-group">
+            <label asp-for="nombre" class="control-label">Nombre</label>
+            <input asp-for="nombre" class="form-control" />
+            <span asp-validation-for="nombre" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="apellido" class="control-label">Apellido</label>
+            <input asp-for="apellido" class="form-control" />
+            <span asp-validation-for="apellido" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="telefono" class="control-label">Teléfono</label>
+            <input asp-for="telefono" class="form-control" />
+            <span asp-validation-for="telefono" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="correo" class="control-label">Correo</label>
+            <input asp-for="correo" class="form-control" />
+            <span asp-validation-for="correo" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="contrasenaActual" class="control-label">Contraseña Actual</label>
+            <input asp-for="contrasenaActual" type="password" class="form-control" />
+            <span asp-validation-for="contrasenaActual" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="nuevaContrasena" class="control-label">Nueva Contraseña</label>
+            <input asp-for="nuevaContrasena" type="password" class="form-control" />
+            <span asp-validation-for="nuevaContrasena" class="text-danger"></span>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-controller="Home" asp-action="Index" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

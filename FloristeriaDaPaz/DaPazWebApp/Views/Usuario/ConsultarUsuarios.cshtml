@@ -20,9 +20,6 @@
             </div>
         </div>
 
-        <a asp-controller="Empleado" asp-action="AgregarE" class="btn-create">
-            <i class="fas fa-plus"></i> Agregar
-        </a>
     </div>
 
     <table class="table table-bordered" id="tablaUsuarios">
@@ -56,14 +53,6 @@
             <td>@usuario.nombreDistrito</td>
             <td>@usuario.nombreCanton</td>
             <td>@usuario.nombreProvincia</td>
-
-                    <td>
-
-                        <a asp-controller="Empleado" asp-action="EditarE" asp-route-id="@usuario.idUsuario" class="btn btn-sm btn-edit">
-                            Editar
-                        </a>
-
-                    </td>
         </tr>
     }
     </tbody>

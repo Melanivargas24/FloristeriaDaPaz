@@ -20,8 +20,9 @@
 @using Microsoft.AspNetCore.Http
 
 @{
-    var nombreUsuario = Context.Session.GetString("NombreUsuario") ?? "Invitad@";
+    var nombreUsuario = Context.Session.GetString("Nombre") ?? "Invitad@";
     var rol = (Context.Session.GetString("Rol") ?? "Invitad@").Trim();
+	var idUsuario = Context.Session.GetInt32("IdUsuario");
 }
 
 <body>
@@ -92,8 +93,16 @@
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="userDropdown">
 								@if (nombreUsuario != "Invitad@")
+								
 								{
-									<li><a class="dropdown-item" href="#" data-value="ActualizarUsuario">ActualizarUsuario</a></li>
+									<li>
+										<a class="dropdown-item"
+										   asp-controller="Usuario"
+										   asp-action="EditarUsuario"
+										   asp-route-id="@idUsuario">
+											Editar Usuario
+										</a>
+									</li>
 									<li><a class="dropdown-item" href="#" data-value="CambiarContraseña">CambiarContraseña</a></li>
 									<li><a class="dropdown-item" href="#" data-value="CerrarSesion">CerrarSesion</a></li>
 
@@ -114,6 +123,7 @@
 	<main role="main" class="pb-3">
 		@RenderBody()
 		<p>Usuario actual: @nombreUsuario</p>
+		<p>IdUsuario actual: @idUsuario</p>
 	</main>
 
 	<!-- Start Footer Section -->
