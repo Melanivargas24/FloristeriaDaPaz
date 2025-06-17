@@ -752,31 +752,84 @@ textarea {
     background: rgba(59, 93, 80, 0.2); }
 
 
-.encabezado-proveedores {
+.encabezado-tablas {
     margin-bottom: 25px;
     padding-bottom: 0.5rem;
     border-bottom: 1px solid #ccc;
 }
 
-.btn-prov {
+/*Estilo de botones*/
+
+/*Registro y cancelar*/
+
+.btn-guardar {
+    background-color: #007bff;
+    color: white;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    cursor: pointer;
+}
+
+    .btn-guardar:hover {
+        background-color: #0069d9;
+        transform: scale(1.03);
+    }
+
+.btn-cancelar {
+    background-color: #6c757d;
+    color: white;
+    padding: 0.45rem 1.2rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 0.25rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s ease, transform 0.1s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+    .btn-cancelar:hover {
+        background-color: #5a6268;
+        transform: scale(1.03);
+    }
+
+
+
+
+/*Agregar y editar*/
+
+.btn-create {
     background-color: #28a745;
     color: white;
-    padding: 0.4rem 0.75rem;
+    height: 50px; 
+    padding: 0 1rem; 
     font-size: 0.875rem;
     text-decoration: none;
     border: none;
     border-radius: 0.25rem;
     font-weight: 500;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.2s ease, transform 0.1s ease;
-    margin-left: 640px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    line-height: 1;
 }
 
-    .btn-prov:hover {
+    .btn-create:hover {
         background-color: #218838;
         transform: scale(1.05);
         color: white;
     }
+
 
 
 
