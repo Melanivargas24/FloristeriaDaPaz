@@ -5,6 +5,9 @@
     Layout = "_Layout";
 }
 
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 <div class="container" style="margin-top:35px; margin-bottom:135px">
 
     <div class="d-flex justify-between align-items-center encabezado-usuarios">
@@ -55,6 +58,14 @@
             <span asp-validation-for="nuevaContrasena" class="text-danger"></span>
         </div>
 
+        <div class="form-group">
+            <label asp-for="direccion" class="control-label">Dirección (haz click en el mapa)</label>
+            <input asp-for="direccion" id="direccion" class="form-control" readonly />
+            <span asp-validation-for="direccion" class="text-danger"></span>
+        </div>
+
+        <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
+
         <div class="d-flex justify-content-end gap-2 mt-4">
             <button type="submit" class="btn-guardar">Guardar</button>
             <a asp-controller="Home" asp-action="Index" class="btn-cancelar">Cancelar</a>
@@ -63,5 +74,46 @@
 </div>
 
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        var map = L.map('map').setView([9.9281, -84.0907], 13); // San José, CR
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        var marker = L.marker([9.9281, -84.0907], {draggable: true}).addTo(map);
+
+        function reverseGeocode(lat, lon) {
+            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.display_name) {
+                        document.getElementById('direccion').value = data.display_name;
+                    } else {
+                        document.getElementById('direccion').value = "Dirección no encontrada";
+                    }
+                })
+                .catch(error => {
+                    console.error('Error en reverse geocoding:', error);
+                    document.getElementById('direccion').value = "Error al obtener dirección";
+                });
+        }
+
+        map.on('click', function(e) {
+            var lat = e.latlng.lat;
+            var lon = e.latlng.lng;
+
+            marker.setLatLng([lat, lon]);
+            reverseGeocode(lat, lon);
+        });
+
+        marker.on('dragend', function(e) {
+            var position = marker.getLatLng();
+            reverseGeocode(position.lat, position.lng);
+        });
+    </script>
 }

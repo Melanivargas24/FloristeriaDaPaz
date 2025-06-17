@@ -9,7 +9,7 @@ namespace DaPazWebApp.Models
         public string? telefono { get; set; }
         public string? estado { get; set; }
         public string? nombreRol { get; set; }
-        public string? direccionExacta { get; set; }
+        public string? direccion { get; set; }
         public string? nombreDistrito { get; set; }
         public string? nombreCanton { get; set; }
         public string? nombreProvincia { get; set; }

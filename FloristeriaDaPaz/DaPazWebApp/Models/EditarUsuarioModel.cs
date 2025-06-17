@@ -16,6 +16,8 @@ namespace DaPazWebApp.Models
         [EmailAddress(ErrorMessage = "Debe ingresar un correo válido")]
         public string? correo { get; set; }
 
+        public string? direccion { get; set; }
+
         public string? telefono { get; set; }
         public string? contrasenaActual { get; set; }
         public string? nuevaContrasena { get; set; }

@@ -17,7 +17,7 @@ namespace DaPazWebApp.Models
         public string? nuevaContrasena { get; set; }
         public string?  estado { get; set; }
         public int?  idRol { get; set; }
-        public int? idDireccion { get; set; }
+        public string? direccion { get; set; }
 
     }
 }

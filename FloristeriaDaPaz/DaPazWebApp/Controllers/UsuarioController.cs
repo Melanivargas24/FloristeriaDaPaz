@@ -56,6 +56,7 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
+
             var nuevaContrasenaEncriptada = Encrypt(model.nuevaContrasena);
 
 
@@ -70,8 +71,9 @@ namespace DaPazWebApp.Controllers
                         model.apellido,
                         model.telefono,
                         model.correo,
-                        model.contrasenaActual,
-                        nuevaContrasena = nuevaContrasenaEncriptada
+                        contrasenaActual = Encrypt(model.contrasenaActual),
+                        nuevaContrasena = nuevaContrasenaEncriptada,
+                        model.direccion
                     },
                     commandType: CommandType.StoredProcedure);
             }
