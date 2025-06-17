@@ -5,6 +5,8 @@
     Layout = "_Layout";
 }
 
+
+
 <div class="container" style="margin-top:35px; margin-bottom:135px">
     <div class="d-flex justify-between align-items-center encabezado-tablas">
         <h2 class="m-0">Inventario</h2>
@@ -24,8 +26,6 @@
             <i class="fas fa-plus"></i> Agregar
         </a>
     </div>
-
-
 
     <table class="table table-bordered" id="tablaProductos">
         <thead>
@@ -54,46 +54,48 @@
                     <td>@producto.NombreCategoriaProducto</td>
                     <td>@producto.NombreProveedor</td>
                     <td>
-
                         <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-edit">
-                            Editar
+                            <i class="fas fa-edit"></i> Editar
                         </a>
-
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-
     <div id="resultadoProducto"></div>
-
 </div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const buscador = document.getElementById("buscador");
-            const filas = document.querySelectorAll("tbody tr");
+        $(document).ready(function () {
+            const tabla = $('#tablaProductos').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron resultados",
+                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de _MAX_ registros totales)",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    }
+                },
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
+             
+                dom: 'lrtip'
+            });
 
-            function normalizarTexto(texto) {
-                return texto
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase();
-            }
-
-            buscador.addEventListener("input", function () {
-                const valor = normalizarTexto(buscador.value);
-
-                filas.forEach(fila => {
-                    const textoFila = normalizarTexto(fila.innerText);
-                    fila.style.display = textoFila.includes(valor) ? "" : "none";
-                });
+            $('#buscador').on('keyup', function () {
+                tabla.search(this.value).draw();
             });
         });
     </script>
-
 }
-

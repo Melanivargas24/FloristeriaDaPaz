@@ -36,6 +36,7 @@
             <th>Telefono</th>
             <th>Fecha Ingreso</th>
             <th>ID Usuario</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
@@ -65,25 +66,33 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const buscador = document.getElementById("buscador");
-            const filas = document.querySelectorAll("tbody tr");
+        $(document).ready(function () {
+            const tabla = $('#tablaEmpleados').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron resultados",
+                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de _MAX_ registros totales)",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    }
+                },
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
 
-            function normalizarTexto(texto) {
-                return texto
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "")
-                    .toLowerCase();
-            }
+                dom: 'lrtip'
+            });
 
-            buscador.addEventListener("input", function () {
-                const valor = normalizarTexto(buscador.value);
-
-                filas.forEach(fila => {
-                    const textoFila = normalizarTexto(fila.innerText);
-                    fila.style.display = textoFila.includes(valor) ? "" : "none";
-                });
+            $('#buscador').on('keyup', function () {
+                tabla.search(this.value).draw();
             });
         });
     </script>
