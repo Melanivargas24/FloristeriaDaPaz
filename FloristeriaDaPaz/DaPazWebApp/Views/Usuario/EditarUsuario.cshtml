@@ -55,9 +55,10 @@
             <span asp-validation-for="nuevaContrasena" class="text-danger"></span>
         </div>
 
-        <br />
-        <button type="submit" class="btn btn-success">Guardar</button>
-        <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-controller="Home" asp-action="Index" class="btn-cancelar">Cancelar</a>
+        </div>
     </form>
 </div>
 
