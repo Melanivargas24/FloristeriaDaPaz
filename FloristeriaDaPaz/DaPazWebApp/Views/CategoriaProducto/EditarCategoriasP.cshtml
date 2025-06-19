@@ -1,0 +1,30 @@
+﻿@model DaPazWebApp.Models.CategoriaProductoModel
+
+@{
+    ViewData["Title"] = "Editar Categoría de Producto";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="d-flex justify-between align-items-center encabezado-tablas">
+        <h2 class="m-0">Editar Categoría de Producto</h2>
+    </div>
+
+    <form asp-action="EditarCategoriasP" method="post">
+        <input type="hidden" asp-for="idCategoriaProducto" />
+        <div class="form-group">
+            <label asp-for="nombreCategoriaProducto" class="control-label">Producto</label>
+            <input asp-for="nombreCategoriaProducto" class="form-control" />
+            <span asp-validation-for="nombreCategoriaProducto" class="text-danger"></span>
+        </div>
+        <br />
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-action="ConsultarCategoriasP" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

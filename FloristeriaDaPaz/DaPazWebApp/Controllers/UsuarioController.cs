@@ -37,13 +37,13 @@ namespace DaPazWebApp.Controllers
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 usuario = context.QueryFirstOrDefault<EditarUsuarioModel>(
-                    "SELECT idUsuario, nombre, apellido, telefono, correo, direccion FROM Usuario WHERE idUsuario = @id",
-                    new { id });
+                    "SP_ObtenerUsuarioPorId",
+                    new { idUsuario = id },
+                    commandType: CommandType.StoredProcedure);
             }
             if (usuario == null)
                 return NotFound();
 
-            usuario.idUsuario = id;
             return View(usuario);
         }
 
@@ -147,4 +147,3 @@ namespace DaPazWebApp.Controllers
         }
     }
 }
-    

@@ -35,20 +35,19 @@ namespace DaPazWebApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-                {
-                    var categorias = connection.Query<CategoriaProducto>("SP_ObtenerCategorias",
-                        commandType: CommandType.StoredProcedure).ToList();
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
+                    commandType: CommandType.StoredProcedure).ToList();
 
-                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
-                        commandType: CommandType.StoredProcedure).ToList();
+                var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+                    commandType: CommandType.StoredProcedure).ToList();
 
-                    ViewBag.Categorias = new SelectList(categorias, "IdCategoriaProducto", "NombreCategoriaProducto");
-                    ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
-                }
-            
+                ViewBag.Categorias = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
+                ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
+            }
 
-            return View();
+            return View(new Producto());
         }
 
 
@@ -61,13 +60,13 @@ namespace DaPazWebApp.Controllers
             {
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
-                    var categorias = connection.Query<CategoriaProducto>("SP_ObtenerCategorias",
+                    var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
                         commandType: CommandType.StoredProcedure).ToList();
 
                     var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
                         commandType: CommandType.StoredProcedure).ToList();
 
-                    ViewBag.Categorias = new SelectList(categorias, "IdCategoriaProducto", "NombreCategoriaProducto");
+                    ViewBag.CategoriasP = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
                     ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
                 }
                 return View(model);
@@ -100,13 +99,13 @@ namespace DaPazWebApp.Controllers
         {
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                var categorias = context.Query<CategoriaProducto>("SP_ObtenerCategorias",
+                var categorias = context.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
                    commandType: CommandType.StoredProcedure).ToList();
 
                 var proveedores = context.Query<ProveedorModel>("SP_ObtenerProveedores",
                     commandType: CommandType.StoredProcedure).ToList();
 
-                ViewBag.Categorias = new SelectList(categorias, "IdCategoriaProducto", "NombreCategoriaProducto");
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto");
                 ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
 
                 var producto = context.QuerySingleOrDefault<Producto>(
@@ -125,20 +124,25 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Producto model)
         {
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
+                List<CategoriaProductoModel> categorias;
+                List<ProveedorModel> proveedores;
+
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
-                    var categorias = connection.Query<CategoriaProducto>("SP_ObtenerCategorias",
+                    categorias = connection.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
                         commandType: CommandType.StoredProcedure).ToList();
 
-                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+                    proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
                         commandType: CommandType.StoredProcedure).ToList();
-
-                    ViewBag.Categorias = new SelectList(categorias, "IdCategoriaProducto", "NombreCategoriaProducto");
-                    ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
                 }
+
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto");
+                ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
+
                 return View(model);
-        }
+            }
 
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {

@@ -67,17 +67,18 @@ namespace DaPazWebApp.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+            ProveedorModel proveedor;
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                var proveedor = context.QuerySingleOrDefault<ProveedorModel>(
-                    "SELECT * FROM Proveedor WHERE IdProveedor = @Id",
-                    new { Id = id });
-
-                if (proveedor == null)
-                    return NotFound();
-
-                return View(proveedor);
+                proveedor = context.QueryFirstOrDefault<ProveedorModel>(
+                    "SP_ObtenerProveedorPorId",
+                    new { idProveedor = id },
+                    commandType: CommandType.StoredProcedure);
             }
+            if (proveedor == null)
+                return NotFound();
+
+            return View(proveedor);
         }
 
 
