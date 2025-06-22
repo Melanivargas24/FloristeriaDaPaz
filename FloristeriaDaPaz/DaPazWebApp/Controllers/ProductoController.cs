@@ -51,10 +51,76 @@ namespace DaPazWebApp.Controllers
         }
 
 
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Create(Producto model)
+        //{
+
+        //    if (!ModelState.IsValid)
+        //    {
+        //        using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+        //        {
+        //            var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
+        //                commandType: CommandType.StoredProcedure).ToList();
+
+        //            var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+        //                commandType: CommandType.StoredProcedure).ToList();
+
+        //            ViewBag.CategoriasP = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
+        //            ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
+        //        }
+        //        return View(model);
+        //    }
+
+        //    using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+        //    {
+        //        context.Execute("SP_AgregarProducto",
+        //            new
+        //            {
+        //                model.NombreProducto,
+        //                model.Descripcion,
+        //                model.Precio,
+        //                model.Stock,
+        //                model.Imagen,
+        //                model.Estado,
+        //                model.IdCategoriaProducto,
+        //                model.IdProveedor
+
+        //            },
+        //            commandType: CommandType.StoredProcedure);
+        //    }
+        //    return RedirectToAction("Index");
+
+
+        //}
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(Producto model)
         {
+            var file = Request.Form.Files["Imagen"];
+
+            if (file != null && file.Length > 0)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagenes");
+
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    file.CopyTo(stream);
+                }
+
+                model.Imagen = "/imagenes/" + fileName;
+            }
+            else
+            {
+                ModelState.AddModelError("Imagen", "Debe seleccionar una imagen.");
+            }
 
             if (!ModelState.IsValid)
             {
@@ -66,9 +132,10 @@ namespace DaPazWebApp.Controllers
                     var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
                         commandType: CommandType.StoredProcedure).ToList();
 
-                    ViewBag.CategoriasP = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
+                    ViewBag.Categorias = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
                     ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
                 }
+
                 return View(model);
             }
 
@@ -85,14 +152,14 @@ namespace DaPazWebApp.Controllers
                         model.Estado,
                         model.IdCategoriaProducto,
                         model.IdProveedor
-
                     },
                     commandType: CommandType.StoredProcedure);
             }
+
             return RedirectToAction("Index");
-
-
         }
+
+
 
         [HttpGet]
         public IActionResult Edit(int id)
@@ -124,22 +191,41 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Producto model)
         {
-            if (!ModelState.IsValid)
+            // Manejo de nueva imagen (si se sube)
+            var nuevaImagen = Request.Form.Files["ImagenNueva"];
+            if (nuevaImagen != null && nuevaImagen.Length > 0)
             {
-                List<CategoriaProductoModel> categorias;
-                List<ProveedorModel> proveedores;
+                var fileName = Path.GetFileName(nuevaImagen.FileName);
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "imagenes");
 
-                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                if (!Directory.Exists(folderPath))
+                    Directory.CreateDirectory(folderPath);
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    categorias = connection.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
-                        commandType: CommandType.StoredProcedure).ToList();
-
-                    proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
-                        commandType: CommandType.StoredProcedure).ToList();
+                    nuevaImagen.CopyTo(stream);
                 }
 
-                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto");
-                ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
+                // Guardar nueva ruta
+                model.Imagen = "/imagenes/" + fileName;
+            }
+            // Si no hay imagen nueva, se conserva la que viene en el hidden input (ya está en model.Imagen)
+
+            if (!ModelState.IsValid)
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var categorias = connection.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
+                        commandType: CommandType.StoredProcedure).ToList();
+
+                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+                        commandType: CommandType.StoredProcedure).ToList();
+
+                    ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto");
+                    ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
+                }
 
                 return View(model);
             }
@@ -155,7 +241,7 @@ namespace DaPazWebApp.Controllers
                         model.Descripcion,
                         model.Precio,
                         model.Stock,
-                        model.Imagen,
+                        model.Imagen, // nueva o la misma
                         model.Estado,
                         model.IdCategoriaProducto,
                         model.IdProveedor
