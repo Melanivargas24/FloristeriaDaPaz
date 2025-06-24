@@ -1,163 +1,58 @@
-﻿@page
-@using DaPazWebApp.Views.Home
+﻿@model List<DaPazWebApp.Models.Arreglo>
+
 @{
+    ViewData["Title"] = "Catálogo";
+    Layout = "_Layout";
 }
 
-	
-	<!-- Start Hero Section -->
-	<div class="hero">
-		<div class="container">
-			<div class="row justify-content-between">
-				<div class="col-lg-5">
-					<div class="intro-excerpt">
-						<h1>Catálogo</h1>
-					</div>
-				</div>
-				<div class="col-lg-7">
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- End Hero Section -->
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Catálogo</h1>
+                </div>
+            </div>
+            <div class="col-lg-7"></div>
+        </div>
+    </div>
+</div>
 
 <!-- Filtro por categoría -->
 <div class="container">
-	<div class="row align-items-center mt-3 mb-2">
-		<div class="col"></div>
-		<div class="col-auto">
-			<select class="form-select" id="categoryFilter" style="min-width: 200px;">
-				<option selected value="all">Categorías</option>
-				<option value="arreglos">Arreglo</option>
-				<option value="flores">Flores</option>
-				<option value="decoraciones">Decoraciones</option>
-				<option value="sanvalentin">San Valentín</option>
-				<option value="floresA">Flores Artificiales</option>
-				<option value="peluches">Peluches</option>
-			</select>
-		</div>
-	</div>
+    <div class="row align-items-center mt-3 mb-2">
+        <div class="col"></div>
+        <div class="col-auto">
+            <select class="form-select" id="categoryFilter" style="min-width: 200px;">
+                <option selected value="all">Categorías</option>
+                <option value="arreglos">Arreglo</option>
+                <option value="flores">Flores</option>
+                <option value="decoraciones">Decoraciones</option>
+                <option value="sanvalentin">San Valentín</option>
+                <option value="floresA">Flores Artificiales</option>
+                <option value="peluches">Peluches</option>
+            </select>
+        </div>
+    </div>
 </div>
 
-
-
-	<div class="untree_co-section product-section before-footer-section">
-		<div class="container">
-			<div class="row">
-
-				<!-- Start Column 1 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-						<img src="images/product-1.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo Floral: Rosas</h3>
-						<p>Categoría: Flores</p>
-						<strong class="product-price">$50.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 1 -->
-				<!-- Start Column 2 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-						<img src="images/product-2.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo Floral: Girasoles 1</h3>
-					    <p>Categoría: Flores</p>
-						<strong class="product-price">$50.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 2 -->
-				<!-- Start Column 3 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-						<img src="images/product-01.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo Floral: Girasoles 2</h3>
-					    <p>Categoría: Flores</p>
-						<strong class="product-price">$78.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 3 -->
-				<!-- Start Column 4 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-						<img src="images/product-3.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo Floral: Girasoles 3</h3>
-					<p>Categoría: Flores</p>
-						<strong class="product-price">$43.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 4 -->
-				<!-- Start Column 1 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-						<img src="images/product-4.jpg" class="img-product product-thumbnail">
-					<h3 class="product-title">Arreglo de Stitch</h3>
-					<p>Categoría: Arreglo</p>
-						<strong class="product-price">$50.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 1 -->
-				<!-- Start Column 2 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-					<img src="images/product-5.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo de San Valentín</h3>
-					  <p>Categoría: San Valentín</p>
-						<strong class="product-price">$50.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 2 -->
-				<!-- Start Column 3 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-					<img src="images/product-8.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Arreglo Primera Comunión</h3>
-					    <p>Categoría: Arreglo</p>
-						<strong class="product-price">$78.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 3 -->
-				<!-- Start Column 4 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5">
-					<a class="product-item" href="#">
-					<img src="images/product-7.jpg" class="img-product product-thumbnail">
-						<h3 class="product-title">Caja Día del Padre</h3>
-					    <p>Categoría: Arreglo</p>
-						<strong class="product-price">$43.00</strong>
-
-						<span class="icon-cross">
-							<img src="images/cross.svg" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 4 -->
-
-			</div>
-		</div>
-	</div>
-
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-4 col-lg-3 mb-5">
+                    <a class="product-item" href="#">
+                        <img src="@item.imagen" class="img-product product-thumbnail" />
+                        <h3 class="product-title">@item.nombreArreglo</h3>
+                        <p>Categoría: @item.nombreCategoriaArreglo</p>
+                        <strong class="product-price">$@item.precio.ToString("F2")</strong>
+                        <span class="icon-cross">
+                            <img src="~/images/cross.svg" class="img-fluid" />
+                        </span>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
