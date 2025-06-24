@@ -1,0 +1,53 @@
+﻿@model DaPazWebApp.Models.Promociones
+
+@{
+    ViewData["Title"] = "Nueva Promoción";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="d-flex justify-between align-items-center encabezado-proveedores">
+        <h2>Nueva Promoción</h2>
+    </div>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label asp-for="nombrePromocion" class="control-label">Nombre de la promoción</label>
+            <input asp-for="nombrePromocion" class="form-control" />
+            <span asp-validation-for="nombrePromocion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="descuentoPorcentaje" class="control-label">Descuento (%)</label>
+            <input asp-for="descuentoPorcentaje" class="form-control" type="number" step="0.01" min="0" max="100" />
+            <span asp-validation-for="descuentoPorcentaje" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="fechaInicio" class="control-label">Fecha inicio</label>
+            <input asp-for="fechaInicio" class="form-control" type="date" />
+            <span asp-validation-for="fechaInicio" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="fechaFin" class="control-label">Fecha fin</label>
+            <input asp-for="fechaFin" class="form-control" type="date" />
+            <span asp-validation-for="fechaFin" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="idProducto" class="control-label">Producto</label>
+            <select asp-for="idProducto" class="form-control" asp-items="ViewBag.Productos">
+                <option value="">-- Seleccione un producto --</option>
+            </select>
+            <span asp-validation-for="idProducto" class="text-danger"></span>
+        </div>
+
+        <br />
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-action="Index" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
+</div>
