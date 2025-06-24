@@ -98,7 +98,8 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Producto model)
         {
-            var file = Request.Form.Files["Imagen"];
+            var file = Request.Form.Files.GetFile("Imagen");
+
 
             if (file != null && file.Length > 0)
             {
@@ -241,7 +242,7 @@ namespace DaPazWebApp.Controllers
                         model.Descripcion,
                         model.Precio,
                         model.Stock,
-                        model.Imagen, // nueva o la misma
+                        model.Imagen, 
                         model.Estado,
                         model.IdCategoriaProducto,
                         model.IdProveedor

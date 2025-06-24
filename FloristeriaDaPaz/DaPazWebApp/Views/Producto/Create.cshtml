@@ -19,7 +19,7 @@
 
         <div class="form-group">
             <label asp-for="Descripcion" class="control-label">Descripción</label>
-            <input asp-for="Descripcion" class="form-control" />
+            <textarea asp-for="Descripcion" class="form-control"></textarea>
             <span asp-validation-for="Descripcion" class="text-danger"></span>
         </div>
 
@@ -38,6 +38,7 @@
         <div class="form-group">
             <label class="control-label">Imagen</label>
             <input type="file" name="Imagen" class="form-control" />
+
             <span asp-validation-for="Imagen" class="text-danger"></span>
         </div>
 

@@ -19,7 +19,6 @@ namespace DaPazWebApp.Models
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public int? Stock { get; set; }
 
-        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public string? Imagen { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
