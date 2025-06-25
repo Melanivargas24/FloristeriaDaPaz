@@ -25,13 +25,11 @@
         <div class="col-auto">
             <select class="form-select" id="categoryFilter" style="min-width: 200px;">
                 <option selected value="all">Categorías</option>
-                <option value="arreglos">Arreglo</option>
-                <option value="flores">Flores</option>
-                <option value="decoraciones">Decoraciones</option>
-                <option value="sanvalentin">San Valentín</option>
-                <option value="floresA">Flores Artificiales</option>
-                <option value="peluches">Peluches</option>
+                <option value="tributos">Tributos</option>
+                <option value="ramos">Ramos</option>
+                <option value="arreglos florales">Arreglos florales</option>
             </select>
+
         </div>
     </div>
 </div>
@@ -41,7 +39,7 @@
         <div class="row">
             @foreach (var item in Model)
             {
-                <div class="col-12 col-md-4 col-lg-3 mb-5">
+                <div class="col-12 col-md-4 col-lg-3 mb-5 product-item-wrapper" data-category="@item.nombreCategoriaArreglo.ToLower()">
                     <a class="product-item" href="#">
                         <img src="@item.imagen" class="img-product product-thumbnail" />
                         <h3 class="product-title">@item.nombreArreglo</h3>
@@ -53,6 +51,31 @@
                     </a>
                 </div>
             }
+
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const filter = document.getElementById('categoryFilter');
+            const items = document.querySelectorAll('.product-item-wrapper');
+
+            filter.addEventListener('change', function () {
+                const selected = this.value;
+
+                items.forEach(item => {
+                    const category = item.getAttribute('data-category');
+
+                    if (selected === 'all' || category === selected) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+}
