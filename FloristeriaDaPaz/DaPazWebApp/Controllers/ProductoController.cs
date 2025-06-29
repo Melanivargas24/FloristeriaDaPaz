@@ -51,48 +51,6 @@ namespace DaPazWebApp.Controllers
         }
 
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Create(Producto model)
-        //{
-
-        //    if (!ModelState.IsValid)
-        //    {
-        //        using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-        //        {
-        //            var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
-        //                commandType: CommandType.StoredProcedure).ToList();
-
-        //            var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
-        //                commandType: CommandType.StoredProcedure).ToList();
-
-        //            ViewBag.CategoriasP = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
-        //            ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
-        //        }
-        //        return View(model);
-        //    }
-
-        //    using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-        //    {
-        //        context.Execute("SP_AgregarProducto",
-        //            new
-        //            {
-        //                model.NombreProducto,
-        //                model.Descripcion,
-        //                model.Precio,
-        //                model.Stock,
-        //                model.Imagen,
-        //                model.Estado,
-        //                model.IdCategoriaProducto,
-        //                model.IdProveedor
-
-        //            },
-        //            commandType: CommandType.StoredProcedure);
-        //    }
-        //    return RedirectToAction("Index");
-
-
-        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]

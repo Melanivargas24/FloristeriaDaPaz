@@ -24,17 +24,10 @@
             <span asp-validation-for="descripcion" class="text-danger"></span>
         </div>
 
-
         <div class="form-group">
             <label asp-for="precio" class="control-label">Precio</label>
             <input asp-for="precio" class="form-control" />
             <span asp-validation-for="precio" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="stock" class="control-label">Stock</label>
-            <input asp-for="stock" class="form-control" />
-            <span asp-validation-for="stock" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -46,8 +39,8 @@
         <div class="form-group">
             <label asp-for="estado" class="control-label">Estado</label>
             <select asp-for="estado" class="form-control">
-                <option value="Activo">-- Activo --</option>
-                <option value="Inactivo">-- Inactivo --</option>
+                <option value="true">-- Activo --</option>
+                <option value="false">-- Inactivo --</option>
             </select>
             <span asp-validation-for="estado" class="text-danger"></span>
         </div>
@@ -60,6 +53,40 @@
             <span asp-validation-for="idCategoriaArreglo" class="text-danger"></span>
         </div>
 
+        <!-- Bloque para productos del arreglo -->
+        <div class="form-group">
+            <label>Productos del arreglo</label>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="productos-arreglo-body">
+                    <tr>
+                        <td>
+                            <select class="form-control producto-select">
+                                <option value="">Seleccione un producto</option>
+                                @foreach (var producto in ViewBag.Productos)
+                                {
+                                    <option value="@producto.idProducto">@producto.nombreProducto</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control cantidad-input" min="1" value="1" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-add-producto">Agregar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <input type="hidden" name="productosSeleccionados" id="productosSeleccionados" />
+            <input type="hidden" name="cantidades" id="cantidades" />
+        </div>
 
         <br />
 
@@ -71,7 +98,44 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        let productos = [];
+        let cantidades = [];
+
+        $(document).on('click', '.btn-add-producto', function () {
+            let productoId = $(this).closest('tr').find('.producto-select').val();
+            let productoNombre = $(this).closest('tr').find('.producto-select option:selected').text();
+            let cantidad = $(this).closest('tr').find('.cantidad-input').val();
+
+            if (productoId && cantidad > 0) {
+                productos.push(productoId);
+                cantidades.push(cantidad);
+
+                $('#productos-arreglo-body').append(
+                    `<tr>
+                        <td>${productoNombre}<input type="hidden" class="producto-id-hidden" value="${productoId}" /></td>
+                        <td>${cantidad}<input type="hidden" class="cantidad-hidden" value="${cantidad}" /></td>
+                        <td><button type="button" class="btn btn-danger btn-remove-producto">Quitar</button></td>
+                    </tr>`
+                );
+
+                $('#productosSeleccionados').val(productos.join(','));
+                $('#cantidades').val(cantidades.join(','));
+            }
+        });
+
+        $(document).on('click', '.btn-remove-producto', function () {
+            let row = $(this).closest('tr');
+            let index = $('#productos-arreglo-body tr').index(row) - 1; // -1 por la fila de selección
+
+            productos.splice(index, 1);
+            cantidades.splice(index, 1);
+
+            row.remove();
+
+            $('#productosSeleccionados').val(productos.join(','));
+            $('#cantidades').val(cantidades.join(','));
+        });
+    </script>
+    @Html.RenderPartialAsync("_ValidationScriptsPartial");
 }

@@ -14,6 +14,18 @@
     <form asp-action="Edit" method="post" enctype="multipart/form-data">
         <input type="hidden" asp-for="idArreglo" />
 
+        @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
         <div class="form-group">
             <label asp-for="nombreArreglo" class="control-label">Nombre</label>
             <input asp-for="nombreArreglo" class="form-control" />
@@ -33,28 +45,20 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="stock" class="control-label">Stock</label>
-            <input asp-for="stock" class="form-control" />
-            <span asp-validation-for="stock" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
             <label class="control-label">Imagen actual</label><br />
             <img src="@Model.imagen" alt="Imagen actual" style="max-height:150px;" /><br /><br />
 
             <label class="control-label">Cambiar imagen</label>
-            <input type="file" name="imagen" class="form-control" />
-            <span class="text-danger">@ViewBag.ImagenError</span>
-
-            <!-- Se conserva la imagen actual si no se sube nueva -->
-            <input type="hidden" asp-for="imagen" />
+            <input type="file" name="imagen" class="form-control" data-val="false" />
+            <input type="hidden" name="imagen" value="@Model.imagen" />
+            <span asp-validation-for="imagen" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="estado" class="control-label">Estado</label>
             <select asp-for="estado" class="form-control">
-                <option value="Activo">-- Activo --</option>
-                <option value="Inactivo">-- Inactivo --</option>
+                <option value="true">-- Activo --</option>
+                <option value="false">-- Inactivo --</option>
             </select>
             <span asp-validation-for="estado" class="text-danger"></span>
         </div>
@@ -65,6 +69,60 @@
                 <option value="">-- Seleccione una categoría --</option>
             </select>
             <span asp-validation-for="idCategoriaArreglo" class="text-danger"></span>
+        </div>
+
+        <!-- Bloque para productos del arreglo -->
+        <div class="form-group">
+            <label>Productos del arreglo</label>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="productos-arreglo-body">
+                    <tr>
+                        <td>
+                            <select class="form-control producto-select">
+                                <option value="">Seleccione un producto</option>
+                                @foreach (var producto in ViewBag.Productos)
+                                {
+                                    <option value="@producto.idProducto">@producto.nombreProducto</option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input type="number" class="form-control cantidad-input" min="1" value="1" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-success btn-add-producto">Agregar</button>
+                        </td>
+                    </tr>
+                    @if (Model.Productos != null)
+                    {
+                        foreach (var prod in Model.Productos)
+                        {
+                            <tr>
+                                <td>
+                                    @prod.nombreProducto
+                                    <input type="hidden" class="producto-id-hidden" value="@prod.idProducto" />
+                                </td>
+                                <td>
+                                    @prod.cantidadProducto
+                                    <input type="hidden" class="cantidad-hidden" value="@prod.cantidadProducto" />
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-remove-producto">Quitar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+            <input type="hidden" name="productosSeleccionados" id="productosSeleccionados" />
+            <input type="hidden" name="cantidades" id="cantidades" />
         </div>
 
         <br />
@@ -78,7 +136,67 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        let productos = [];
+        let cantidades = [];
+
+        // Cargar productos existentes al editar
+        $(document).ready(function () {
+            // Solo toma las filas que tienen producto-id-hidden (evita la fila de selección)
+            $('#productos-arreglo-body tr').each(function () {
+                let productoId = $(this).find('.producto-id-hidden').val();
+                let cantidad = $(this).find('.cantidad-hidden').val();
+                if (productoId && cantidad) {
+                    productos.push(productoId);
+                    cantidades.push(cantidad);
+                }
+            });
+            $('#productosSeleccionados').val(productos.join(','));
+            $('#cantidades').val(cantidades.join(','));
+        });
+
+        // Agregar producto
+        $(document).on('click', '.btn-add-producto', function () {
+            let productoId = $(this).closest('tr').find('.producto-select').val();
+            let productoNombre = $(this).closest('tr').find('.producto-select option:selected').text();
+            let cantidad = $(this).closest('tr').find('.cantidad-input').val();
+
+            if (productoId && cantidad > 0) {
+                productos.push(productoId);
+                cantidades.push(cantidad);
+
+                $('#productos-arreglo-body').append(
+                    `<tr>
+                        <td>${productoNombre}<input type="hidden" class="producto-id-hidden" value="${productoId}" /></td>
+                        <td>${cantidad}<input type="hidden" class="cantidad-hidden" value="${cantidad}" /></td>
+                        <td><button type="button" class="btn btn-danger btn-remove-producto">Quitar</button></td>
+                    </tr>`
+                );
+
+                $('#productosSeleccionados').val(productos.join(','));
+                $('#cantidades').val(cantidades.join(','));
+            }
+        });
+
+        // Quitar producto
+        $(document).on('click', '.btn-remove-producto', function () {
+            let row = $(this).closest('tr');
+            // Solo cuenta las filas que tienen producto-id-hidden (evita la fila de selección)
+            let filas = $('#productos-arreglo-body tr').filter(function () {
+                return $(this).find('.producto-id-hidden').length > 0;
+            });
+            let index = filas.index(row);
+
+            if (index > -1) {
+                productos.splice(index, 1);
+                cantidades.splice(index, 1);
+            }
+
+            row.remove();
+
+            $('#productosSeleccionados').val(productos.join(','));
+            $('#cantidades').val(cantidades.join(','));
+        });
+    </script>
+    @Html.RenderPartialAsync("_ValidationScriptsPartial");
 }
