@@ -33,12 +33,21 @@ namespace DaPazWebApp.Controllers
         {
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
+                // Obtener arreglos
                 var arreglos = context.Query<Arreglo>("SP_ObtenerArreglos",
                     commandType: CommandType.StoredProcedure)
                     .OrderByDescending(a => a.idArreglo)
                     .ToList();
 
-                return View(arreglos); 
+                // Obtener categorías para el filtro
+                var categorias = context.Query<CategoriaArregloModel>(
+                    "SP_ObtenerCategoriaArreglo",
+                    commandType: CommandType.StoredProcedure).ToList();
+
+                // Enviar categorías a la vista
+                ViewBag.Categorias = categorias;
+
+                return View(arreglos);
             }
         }
 

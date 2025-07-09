@@ -1,0 +1,43 @@
+@model DaPazWebApp.Models.Arreglo
+
+@{
+    ViewData["Title"] = "Detalles del Arreglo";
+    Layout = "_Layout";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="row g-0">
+                    <div class="col-md-5 d-flex align-items-center justify-content-center bg-light">
+                        <img src="@Model.imagen" class="img-fluid rounded-start p-3" alt="@Model.nombreArreglo" style="max-height: 350px; object-fit: contain;">
+                    </div>
+                    <div class="col-md-7">
+                        <div class="card-body">
+                            <h2 class="card-title mb-3">@Model.nombreArreglo</h2>
+                            <p class="card-text mb-2"><span class="fw-bold">Descripción:</span> @Model.descripcion</p>
+                            <p class="card-text mb-2"><span class="fw-bold">Precio:</span> <span class="text-success">₡@Model.precio.ToString("N2")</span></p>
+                            <hr />
+                            <h5>Productos incluidos:</h5>
+                            @if (Model.Productos != null && Model.Productos.Count > 0)
+                            {
+                                <ul>
+                                    @foreach (var prod in Model.Productos)
+                                    {
+                                        <li>@prod.nombreProducto (Cantidad: @prod.cantidadProducto)</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p class="text-muted">No hay productos asociados a este arreglo.</p>
+                            }
+                            <a asp-controller="Catalogo" asp-action="Index" class="btn btn-outline-secondary mt-4">Volver al catálogo</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

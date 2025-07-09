@@ -1,0 +1,145 @@
+@model List<DaPazWebApp.Models.CatalogoModel>
+
+@{
+    ViewData["Title"] = "Catálogo";
+    Layout = "_Layout";
+}
+
+<div class="hero">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-5">
+                <div class="intro-excerpt">
+                    <h1>Catálogo</h1>
+                </div>
+            </div>
+            <div class="col-lg-7"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Barra de búsqueda -->
+<div class="container mt-4 mb-4">
+    <form asp-action="Index" method="get" class="row g-3 align-items-end justify-content-center bg-light p-3 rounded shadow-sm">
+        <div class="col-12 col-md-4">
+            <input type="text" name="buscar" class="form-control" placeholder="Buscar por nombre o categoría..." value="@Context.Request.Query["buscar"]" />
+        </div>
+        <div class="col-12 col-md-3 d-grid">
+            <button type="button" class="btn btn-outline-secondary btn-lg" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFiltro" aria-controls="offcanvasFiltro">
+                Filtrar y ordenar
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Offcanvas Sidebar para Filtros -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasFiltro" aria-labelledby="offcanvasFiltroLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasFiltroLabel">Filtrar y ordenar</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+    <form asp-action="Index" method="get">
+        <!-- Ordenar por -->
+        <div class="form-group mb-3">
+            <label for="ordenarPor" class="form-label">Ordenar por</label>
+            <select id="ordenarPor" name="ordenarPor" class="form-control">
+                @{
+                    var ordenarPor = Context.Request.Query["ordenarPor"].ToString();
+                }
+                <option value="precioAsc" selected="@(ordenarPor == "precioAsc")">Precio: menor a mayor</option>
+                <option value="precioDesc" selected="@(ordenarPor == "precioDesc")">Precio: mayor a menor</option>
+                <option value="recientes" selected="@(string.IsNullOrEmpty(ordenarPor) || ordenarPor == "recientes")">Más recientes</option>
+            </select>
+        </div>
+
+        <!-- Arreglos -->
+        <div class="form-group mb-3">
+            <label for="arregloCategoria" class="form-label">Arreglos</label>
+            <select id="arregloCategoria" name="arregloCategoria" class="form-control">
+                @{
+                    var selectedArreglo = Context.Request.Query["arregloCategoria"].ToString();
+                    var arregloCats = ViewBag.CategoriasArreglos as List<string>;
+                }
+                <option value="all" selected="@(string.IsNullOrEmpty(selectedArreglo) || selectedArreglo == "all")">Todas</option>
+                @if (arregloCats != null)
+                {
+                    foreach (var cat in arregloCats)
+                    {
+                        var catValue = cat.ToLower();
+                        <option value="@catValue" selected="@(selectedArreglo == catValue)">@cat</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>No hay categorías de arreglos</option>
+                }
+            </select>
+        </div>
+
+        <!-- Productos -->
+        <div class="form-group mb-3">
+            <label for="productoCategoria" class="form-label">Productos</label>
+            <select id="productoCategoria" name="productoCategoria" class="form-control">
+                @{
+                    var selectedProducto = Context.Request.Query["productoCategoria"].ToString();
+                    var productoCats = ViewBag.CategoriasProductos as List<string>;
+                }
+                <option value="all" selected="@(string.IsNullOrEmpty(selectedProducto) || selectedProducto == "all")">Todas</option>
+                @if (productoCats != null)
+                {
+                    foreach (var cat in productoCats)
+                    {
+                        var catValue = cat.ToLower();
+                        <option value="@catValue" selected="@(selectedProducto == catValue)">@cat</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>No hay categorías de productos</option>
+                }
+            </select>
+        </div>
+
+        <!-- Botón -->
+        <div class="form-group mt-4 d-grid">
+            <button type="submit" class="btn btn-success btn-lg">Aplicar filtros</button>
+        </div>
+    </form>
+</div>
+
+</div>
+
+<!-- Catálogo de productos y arreglos -->
+<div class="untree_co-section product-section before-footer-section">
+    <div class="container">
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-md-4 col-lg-3 mb-4 product-item-wrapper" data-category="@item.Categoria.ToLower()">
+                    <div class="card h-100">
+                        <img src="@item.Imagen" class="card-img-top img-fluid" alt="@item.Nombre">
+                        <div class="card-body">
+                            <h5 class="card-title">@item.Nombre</h5>
+                            <p class="card-text">Categoría: @item.Categoria</p>
+                            <p class="card-text"><strong>₡@item.Precio.ToString("N2")</strong></p>
+                            <span class="badge bg-secondary">@item.Tipo</span>
+                            <div class="mt-3">
+                                @if (item.Tipo == "Producto")
+                                {
+                                    <a asp-controller="Producto" asp-action="DetallesPV" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm w-100">Ver más detalles</a>
+                                }
+                                else if (item.Tipo == "Arreglo")
+                                {
+                                    <a asp-controller="Arreglo" asp-action="DetallesAV" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm w-100">Ver más detalles</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+

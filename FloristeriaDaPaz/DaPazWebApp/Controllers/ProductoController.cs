@@ -106,10 +106,12 @@ namespace DaPazWebApp.Controllers
                         model.NombreProducto,
                         model.Descripcion,
                         model.Precio,
+                        model.PrecioCompra,
                         model.Stock,
                         model.Imagen,
                         model.Estado,
                         model.IdCategoriaProducto,
+                        model.IdSubcategoriaProducto,
                         model.IdProveedor
                     },
                     commandType: CommandType.StoredProcedure);
@@ -199,10 +201,12 @@ namespace DaPazWebApp.Controllers
                         model.NombreProducto,
                         model.Descripcion,
                         model.Precio,
+                        model.PrecioCompra,
                         model.Stock,
-                        model.Imagen, 
+                        model.Imagen,
                         model.Estado,
                         model.IdCategoriaProducto,
+                        model.IdSubcategoriaProducto,
                         model.IdProveedor
                     },
                     commandType: CommandType.StoredProcedure
@@ -210,6 +214,36 @@ namespace DaPazWebApp.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public JsonResult GetSubcategorias(int idCategoriaProducto)
+        {
+            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var subcategorias = context.Query<SubcategoriaProductoModel>(
+                    "SP_ObtenerSubcategoriasPorCategoria",
+                    new { idCategoriaProducto },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+
+                return Json(subcategorias);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult DetallesPV(int id)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var producto = connection.QuerySingleOrDefault<Producto>(
+                    "SP_ObtenerProductoPorId",
+                    new { IdProducto = id },
+                    commandType: System.Data.CommandType.StoredProcedure
+                );
+                if (producto == null)
+                    return NotFound();
+                return View("DetallesPV", producto);
+            }
         }
 
     }

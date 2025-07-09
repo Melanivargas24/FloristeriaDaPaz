@@ -17,6 +17,9 @@ namespace DaPazWebApp.Models
         public int? Precio { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        public int? PrecioCompra { get; set; }
+
+        [Required(ErrorMessage = "Este campo es obligatorio.")]
         public int? Stock { get; set; }
 
         public string? Imagen { get; set; }
@@ -30,8 +33,9 @@ namespace DaPazWebApp.Models
         [Required(ErrorMessage = "Este campo es obligatorio.")]
         public int? IdProveedor { get; set; }
 
-
         public string? NombreCategoriaProducto { get; set; }
         public string? NombreProveedor { get; set; }
+        public int? IdSubcategoriaProducto { get; set; }
+        public string? NombreSubcategoriaProducto { get; set; }
     }
 }

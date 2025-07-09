@@ -25,9 +25,22 @@
 
         <div class="form-group">
             <label asp-for="Precio" class="control-label">Precio</label>
-            <input asp-for="Precio" class="form-control" />
+            <div class="input-group">
+                <span class="input-group-text">₡</span>
+                <input asp-for="Precio" class="form-control" />
+            </div>
             <span asp-validation-for="Precio" class="text-danger"></span>
         </div>
+
+        <div class="form-group">
+            <label asp-for="PrecioCompra" class="control-label">Precio de Compra</label>
+            <div class="input-group">
+                <span class="input-group-text">₡</span>
+                <input asp-for="PrecioCompra" class="form-control" />
+            </div>
+            <span asp-validation-for="PrecioCompra" class="text-danger"></span>
+        </div>
+
 
         <div class="form-group">
             <label asp-for="Stock" class="control-label">Stock</label>
@@ -59,6 +72,14 @@
             <span asp-validation-for="IdCategoriaProducto" class="text-danger"></span>
         </div>
 
+        <div class="form-group" id="subcategoria-group" style="display:none;">
+            <label asp-for="IdSubcategoriaProducto" class="control-label">Subcategoría</label>
+            <select asp-for="IdSubcategoriaProducto" class="form-control" id="subcategoriaSelect">
+                <option value="">-- Seleccione una subcategoría --</option>
+            </select>
+            <span asp-validation-for="IdSubcategoriaProducto" class="text-danger"></span>
+        </div>
+
         <div class="form-group">
             <label asp-for="IdProveedor" class="control-label">Proveedor</label>
             <select asp-for="IdProveedor" class="form-control" asp-items="ViewBag.Proveedores">
@@ -77,7 +98,38 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <script>
+        function cargarSubcategorias(idCategoria) {
+            if (!idCategoria) {
+                $('#subcategoria-group').hide();
+                $('#subcategoriaSelect').empty().append('<option value="">-- Seleccione una subcategoría --</option>');
+                return;
+            }
+            $.getJSON('@Url.Action("GetSubcategorias", "Producto")', { idCategoriaProducto: idCategoria }, function (data) {
+                if (data.length > 0) {
+                    $('#subcategoriaSelect').empty().append('<option value="">-- Seleccione una subcategoría --</option>');
+                    $.each(data, function (i, item) {
+                        $('#subcategoriaSelect').append('<option value="' + item.idSubcategoriaProducto + '">' + item.nombreSubcategoriaProducto + '</option>');
+                    });
+                    $('#subcategoria-group').show();
+                } else {
+                    $('#subcategoria-group').hide();
+                    $('#subcategoriaSelect').empty().append('<option value="">-- Seleccione una subcategoría --</option>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            $('#IdCategoriaProducto').change(function () {
+                cargarSubcategorias($(this).val());
+            });
+
+            // Si ya hay una categoría seleccionada (en Edit), cargar subcategorías
+            var categoriaInicial = $('#IdCategoriaProducto').val();
+            if (categoriaInicial) {
+                cargarSubcategorias(categoriaInicial);
+            }
+        });
+    </script>
+    @Html.RenderPartialAsync("_ValidationScriptsPartial");
 }

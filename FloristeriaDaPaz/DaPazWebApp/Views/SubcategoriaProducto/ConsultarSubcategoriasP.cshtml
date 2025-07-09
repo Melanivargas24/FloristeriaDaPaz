@@ -1,15 +1,14 @@
-﻿@model IEnumerable<DaPazWebApp.Models.Producto>
+@model IEnumerable<DaPazWebApp.Models.SubcategoriaProductoModel>
 
 @{
-    ViewData["Title"] = "Inventario";
+    ViewData["Title"] = "Subcategorías de Producto";
     Layout = "_Layout";
 }
 
-
-
 <div class="container" style="margin-top:35px; margin-bottom:135px">
+
     <div class="d-flex justify-between align-items-center encabezado-tablas">
-        <h2 class="m-0">Inventario</h2>
+        <h2 class="m-0">Subcategorías de Producto</h2>
     </div>
 
     <div class="d-flex justify-content-between align-items-center mb-3" style="gap: 0.75rem;">
@@ -22,45 +21,30 @@
             </div>
         </div>
 
-        <a asp-controller="Producto" asp-action="Create" class="btn-create">
+        <a asp-controller="SubcategoriaProducto" asp-action="AgregarSubcategoriasP" class="btn-create">
             <i class="fas fa-plus"></i> Agregar
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaProductos">
-        <thead>
+    <table class="table table-bordered" id="tablaSubcategoriasP">
+        <thead class="table-light">
             <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Precio Compra</th>
-                <th>Stock</th>
-                <th>Imagen</th>
-                <th>Estado</th>
-                <th>Categoría</th>
-                <th>Subcategoría</th>
-                <th>Proveedor</th>
+                <th>Nombre de subcategoría</th>
+                <th>Nombre de categoría</th>
                 <th>Acciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var producto in Model)
+            @foreach (var sub in Model)
             {
                 <tr>
-                    <td>@producto.NombreProducto</td>
-                    <td>@producto.Descripcion</td>
-                    <td>₡@producto.Precio</td>
-                    <td>₡@producto.PrecioCompra</td>
-                    <td>@producto.Stock</td>
+                    <td>@sub.nombreSubcategoriaProducto</td>
+                    <td>@sub.nombreCategoriaProducto</td>
                     <td>
-                        <img src="@producto.Imagen" alt="Imagen" style="max-height: 80px; max-width: 80px;" />
-                    </td>
-                    <td>@producto.Estado</td>
-                    <td>@producto.NombreCategoriaProducto</td>
-                    <td>@producto.NombreSubcategoriaProducto</td>
-                    <td>@producto.NombreProveedor</td>
-                    <td>
-                        <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-edit">
+                        <a asp-controller="SubcategoriaProducto"
+                           asp-action="EditarSubcategoriasP"
+                           asp-route-id="@sub.idSubcategoriaProducto"
+                           class="btn btn-sm btn-edit">
                             <i class="fas fa-edit"></i> Editar
                         </a>
                     </td>
@@ -68,8 +52,6 @@
             }
         </tbody>
     </table>
-
-    <div id="resultadoProducto"></div>
 </div>
 
 @section Scripts {
@@ -80,7 +62,7 @@
 
     <script>
         $(document).ready(function () {
-            const tabla = $('#tablaProductos').DataTable({
+            const tabla = $('#tablaSubcategoriasP').DataTable({
                 language: {
                     search: "Buscar:",
                     lengthMenu: "Mostrar _MENU_ registros por página",
@@ -95,7 +77,6 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-             
                 dom: 'lrtip'
             });
 

@@ -15,16 +15,16 @@
         <input type="hidden" asp-for="idArreglo" />
 
         @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            <ul>
-                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    <li>@error.ErrorMessage</li>
-                }
-            </ul>
-        </div>
-    }
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
 
         <div class="form-group">
             <label asp-for="nombreArreglo" class="control-label">Nombre</label>
@@ -40,7 +40,10 @@
 
         <div class="form-group">
             <label asp-for="precio" class="control-label">Precio</label>
-            <input asp-for="precio" class="form-control" />
+            <div class="input-group">
+                <span class="input-group-text">₡</span>
+                <input asp-for="precio" class="form-control" />
+            </div>
             <span asp-validation-for="precio" class="text-danger"></span>
         </div>
 
@@ -167,10 +170,10 @@
 
                 $('#productos-arreglo-body').append(
                     `<tr>
-                        <td>${productoNombre}<input type="hidden" class="producto-id-hidden" value="${productoId}" /></td>
-                        <td>${cantidad}<input type="hidden" class="cantidad-hidden" value="${cantidad}" /></td>
-                        <td><button type="button" class="btn btn-danger btn-remove-producto">Quitar</button></td>
-                    </tr>`
+                            <td>${productoNombre}<input type="hidden" class="producto-id-hidden" value="${productoId}" /></td>
+                            <td>${cantidad}<input type="hidden" class="cantidad-hidden" value="${cantidad}" /></td>
+                            <td><button type="button" class="btn btn-danger btn-remove-producto">Quitar</button></td>
+                        </tr>`
                 );
 
                 $('#productosSeleccionados').val(productos.join(','));

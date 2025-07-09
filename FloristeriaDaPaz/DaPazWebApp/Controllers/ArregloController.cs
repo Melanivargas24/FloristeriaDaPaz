@@ -332,6 +332,29 @@ namespace DaPazWebApp.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public IActionResult DetallesAV(int id)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var arreglo = connection.QuerySingleOrDefault<Arreglo>(
+                    "SP_ObtenerArregloPorId",
+                    new { IdArreglo = id },
+                    commandType: System.Data.CommandType.StoredProcedure
+                );
+                if (arreglo == null)
+                    return NotFound();
+                // Cargar productos asociados
+                var productos = connection.Query<ArregloProductoModel>(
+                    "SP_ObtenerProductosPorArreglo",
+                    new { idArreglo = id },
+                    commandType: System.Data.CommandType.StoredProcedure
+                ).ToList();
+                arreglo.Productos = productos;
+                return View("DetallesAV", arreglo);
+            }
+        }
+
     }
 }
 
