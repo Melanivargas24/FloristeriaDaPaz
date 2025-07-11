@@ -6,6 +6,7 @@ namespace DaPazWebApp.Models
         public string? nombre { get; set; }
         public string? apellido { get; set; }
         public string? correo { get; set; }
+        public string? Cargo { get; set; }
         public decimal salario { get; set; }
         public string? telefono { get; set; }
         public DateTime fechaIngreso { get; set; }

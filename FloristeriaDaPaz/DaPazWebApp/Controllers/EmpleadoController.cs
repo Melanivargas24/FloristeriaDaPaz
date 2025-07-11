@@ -36,6 +36,7 @@ namespace DaPazWebApp.Controllers
                     {
                         model.salario,
                         model.fechaIngreso,
+                        model.Cargo,
                         model.idUsuario
                     },
                     commandType: CommandType.StoredProcedure);
@@ -100,6 +101,7 @@ namespace DaPazWebApp.Controllers
                     model.idEmpleado,
                     model.salario,
                     model.fechaIngreso,
+                    model.Cargo,
                     model.idUsuario,
                     model.nombre,
                     model.apellido,
