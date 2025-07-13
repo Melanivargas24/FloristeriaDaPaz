@@ -6,21 +6,43 @@
 }
 
 <div class="container mt-5 mb-5">
+    @if (TempData["CarritoMensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["CarritoMensaje"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="row g-0">
-                    <div class="col-md-5 d-flex align-items-center justify-content-center bg-light">
-                        <img src="@Model.Imagen" class="img-fluid rounded-start p-3" alt="@Model.NombreProducto" style="max-height: 350px; object-fit: contain;">
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <h2 class="card-title mb-3">@Model.NombreProducto</h2>
-                            <p class="card-text mb-2"><span class="fw-bold">Descripción:</span> @Model.Descripcion</p>
-                            <p class="card-text mb-2"><span class="fw-bold">Precio:</span> <span class="text-success">₡@Model.Precio?.ToString("N2")</span></p>
-                            <a asp-controller="Catalogo" asp-action="Index" class="btn btn-outline-secondary mt-4">Volver al catálogo</a>
-                        </div>
-                    </div>
+        <div class="col-lg-5 d-flex align-items-start justify-content-center mb-4 mb-lg-0">
+            <img src="@Model.Imagen" class="img-fluid rounded shadow" alt="@Model.NombreProducto"
+                style="max-width: 100%; max-height: 500px; object-fit: contain;">
+        </div>
+        <div class="col-lg-7">
+            <div class="ps-lg-4">
+                
+                <h1 class="fw-bold">@Model.NombreProducto</h1>
+                <div class="fs-4 text-muted mb-2">₡@Model.Precio?.ToString("N2")</div>
+                <div class="mb-3">
+                    <span class="fw-bold fs-4">Descripción</span>
+                    <p class="mb-1" style="white-space: pre-line;">
+                        @Model.Descripcion
+                    </p>
+                </div>
+                <form asp-action="AgregarAlCarrito" asp-controller="Carrito" method="post"
+                    class="d-flex align-items-center mb-2" style="max-width: 300px;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idProducto" value="@Model.IdProducto" />
+                    <label for="cantidad" class="me-2">Cantidad</label>
+                    <input type="number" id="cantidad" name="cantidad" class="form-control me-2" value="1" min="1"
+                        style="width: 80px;">
+                    <button type="submit" class="btn btn-danger flex-grow-1">AÑADIR AL CARRITO</button>
+                </form>
+                <a href="/Catalogo/Index" class="btn btn-outline-secondary mb-3"><i
+                        class="fas fa-arrow-left me-2"></i>Regresar al Catálogo</a>
+                <div class="mt-2 small">
+                    <span class="fw-bold">SKU:</span> @Model.NombreProducto<br />
+                    <span class="fw-bold">Categoría:</span> @Model.NombreCategoriaProducto
                 </div>
             </div>
         </div>

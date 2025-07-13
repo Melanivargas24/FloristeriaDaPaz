@@ -344,6 +344,15 @@ namespace DaPazWebApp.Controllers
                 );
                 if (arreglo == null)
                     return NotFound();
+                // Cargar nombre de la categoría si no viene
+                if (string.IsNullOrEmpty(arreglo.nombreCategoriaArreglo))
+                {
+                    var categoria = connection.QuerySingleOrDefault<CategoriaArregloModel>(
+                        "SELECT nombreCategoriaArreglo FROM CategoriaArreglo WHERE idCategoriaArreglo = @idCategoriaArreglo",
+                        new { idCategoriaArreglo = arreglo.idCategoriaArreglo }
+                    );
+                    arreglo.nombreCategoriaArreglo = categoria?.nombreCategoriaArreglo ?? "";
+                }
                 // Cargar productos asociados
                 var productos = connection.Query<ArregloProductoModel>(
                     "SP_ObtenerProductosPorArreglo",

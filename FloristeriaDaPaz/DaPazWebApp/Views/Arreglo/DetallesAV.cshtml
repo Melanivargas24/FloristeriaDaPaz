@@ -6,38 +6,58 @@
 }
 
 <div class="container mt-5 mb-5">
+    @if (TempData["CarritoMensaje"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["CarritoMensaje"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg">
-                <div class="row g-0">
-                    <div class="col-md-5 d-flex align-items-center justify-content-center bg-light">
-                        <img src="@Model.imagen" class="img-fluid rounded-start p-3" alt="@Model.nombreArreglo" style="max-height: 350px; object-fit: contain;">
-                    </div>
-                    <div class="col-md-7">
-                        <div class="card-body">
-                            <h2 class="card-title mb-3">@Model.nombreArreglo</h2>
-                            <p class="card-text mb-2"><span class="fw-bold">Descripción:</span> @Model.descripcion</p>
-                            <p class="card-text mb-2"><span class="fw-bold">Precio:</span> <span class="text-success">₡@Model.precio.ToString("N2")</span></p>
-                            <hr />
-                            <h5>Productos incluidos:</h5>
-                            @if (Model.Productos != null && Model.Productos.Count > 0)
+        <div class="col-lg-5 d-flex align-items-start justify-content-center mb-4 mb-lg-0">
+            <img src="@Model.imagen" class="img-fluid rounded shadow" alt="@Model.nombreArreglo"
+                style="max-width: 100%; max-height: 500px; object-fit: contain;">
+        </div>
+        <div class="col-lg-7">
+            <div class="ps-lg-4">
+                
+                <h1 class="fw-bold">@Model.nombreArreglo</h1>
+                <div class="fs-4 text-muted mb-2">₡@Model.precio.ToString("N2")</div>
+                <div class="mb-3">
+                    <ul class="mb-2">
+                        @if (Model.Productos != null && Model.Productos.Count > 0)
+                        {
+                            foreach (var prod in Model.Productos)
                             {
-                                <ul>
-                                    @foreach (var prod in Model.Productos)
-                                    {
-                                        <li>@prod.nombreProducto (Cantidad: @prod.cantidadProducto)</li>
-                                    }
-                                </ul>
+                                <li>@prod.nombreProducto (Cantidad: @prod.cantidadProducto)</li>
                             }
-                            else
-                            {
-                                <p class="text-muted">No hay productos asociados a este arreglo.</p>
-                            }
-                            <a asp-controller="Catalogo" asp-action="Index" class="btn btn-outline-secondary mt-4">Volver al catálogo</a>
-                        </div>
-                    </div>
+                        }
+                    </ul>
+                </div>
+                <div class="mb-3">
+                    <span class="fw-bold fs-4">Descripción</span>
+                    <p class="mb-1" style="white-space: pre-line;">
+                        @Model.descripcion
+                    </p>
+                </div>
+                <form asp-action="AgregarAlCarrito" asp-controller="Carrito" method="post"
+                    class="d-flex align-items-center mb-2" style="max-width: 300px;">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="idProducto" value="@Model.idArreglo" />
+                    <input type="hidden" name="tipo" value="arreglo" />
+                    <label for="cantidad" class="me-2">Cantidad</label>
+                    <input type="number" id="cantidad" name="cantidad" class="form-control me-2" value="1" min="1"
+                        style="width: 80px;">
+                    <button type="submit" class="btn btn-danger flex-grow-1">AÑADIR AL CARRITO</button>
+                </form>
+                    <a href="/Catalogo/Index" class="btn btn-outline-secondary mb-3"><i
+                        class="fas fa-arrow-left me-2"></i>Regresar al Catálogo</a>
+                <div class="mt-2 small">
+                    <span class="fw-bold">SKU:</span> @Model.nombreArreglo<br />
+                    <span class="fw-bold">Categoría:</span> @Model.nombreCategoriaArreglo
                 </div>
             </div>
+
         </div>
     </div>
 </div>

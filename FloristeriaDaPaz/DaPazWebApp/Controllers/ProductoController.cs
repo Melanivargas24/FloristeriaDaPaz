@@ -1,4 +1,5 @@
-﻿using DaPazWebApp.Models;
+﻿using DaPazWebApp.Helpers;
+using DaPazWebApp.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -242,6 +243,18 @@ namespace DaPazWebApp.Controllers
                 );
                 if (producto == null)
                     return NotFound();
+
+                // Obtener y asignar el nombre de la categoría
+                if (producto.IdCategoriaProducto.HasValue)
+                {
+                    var categoria = connection.QuerySingleOrDefault<CategoriaProductoModel>(
+                        "SP_ObtenerCategoriaProductoPorId",
+                        new { idCategoriaProducto = producto.IdCategoriaProducto },
+                        commandType: System.Data.CommandType.StoredProcedure
+                    );
+                    producto.NombreCategoriaProducto = categoria?.nombreCategoriaProducto;
+                }
+
                 return View("DetallesPV", producto);
             }
         }
