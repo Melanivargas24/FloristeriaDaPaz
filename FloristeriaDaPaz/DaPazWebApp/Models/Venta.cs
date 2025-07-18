@@ -11,6 +11,6 @@ namespace DaPazWebApp.Models
         public int? idArreglo { get; set; }
         public string tipoEntrega { get; set; }
         public string metodoPago { get; set; }
-        // Puedes agregar más propiedades si tu SP retorna más columnas
+        public string NombreProducto { get; set; } // Para mostrar en historial
     }
 }

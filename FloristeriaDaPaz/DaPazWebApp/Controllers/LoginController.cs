@@ -116,8 +116,8 @@ namespace DaPazWebApp.Controllers
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
                     HttpContext.Session.SetString("Nombre", result.nombre!);
-                    HttpContext.Session.SetString("RolId", result.idRol.ToString());
-                    HttpContext.Session.SetString("UserId", result.idUsuario.ToString());
+                    // Guardar rol y usuario con las claves que usa el layout
+                    HttpContext.Session.SetInt32("IdRol", result.idRol ?? 0);
                     HttpContext.Session.SetInt32("IdUsuario", result.idUsuario ?? 0);
 
                     return RedirectToAction("Index", "Home");

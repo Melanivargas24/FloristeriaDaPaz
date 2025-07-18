@@ -7,11 +7,40 @@ using Microsoft.Data.SqlClient;
 namespace DaPazWebApp.Controllers
 {
     public class CarritoController : Controller
+
     {
         private readonly IConfiguration _configuration;
         public CarritoController(IConfiguration configuration)
         {
             _configuration = configuration;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ActualizarCantidad(int IdProducto, int Cantidad, string Tipo)
+        {
+            var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+            var item = carrito.FirstOrDefault(x => x.IdProducto == IdProducto && x.Tipo == Tipo);
+            if (item != null && Cantidad > 0)
+            {
+                item.Cantidad = Cantidad;
+                HttpContext.Session.SetObjectAsJson("Carrito", carrito);
+            }
+            return RedirectToAction("Cart");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EliminarDelCarrito(int IdProducto, string Tipo)
+        {
+            var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+            var item = carrito.FirstOrDefault(x => x.IdProducto == IdProducto && x.Tipo == Tipo);
+            if (item != null)
+            {
+                carrito.Remove(item);
+                HttpContext.Session.SetObjectAsJson("Carrito", carrito);
+            }
+            return RedirectToAction("Cart");
         }
 
         [HttpPost]
@@ -189,10 +218,19 @@ namespace DaPazWebApp.Controllers
                         commandType: System.Data.CommandType.StoredProcedure
                     );
 
-                    // Si es un arreglo, guardar los productos que lo componen en VentaProducto
+                    // Si es un producto individual, rebajar stock
+                    if (item.Tipo == "producto")
+                    {
+                        connection.Execute(
+                            "SP_ActualizarStockProducto",
+                            new { idProducto = item.IdProducto, cantidadVendida = item.Cantidad },
+                            commandType: System.Data.CommandType.StoredProcedure
+                        );
+                    }
+
+                    // Si es un arreglo, guardar los productos que lo componen en VentaProducto y rebajar stock
                     if (item.Tipo == "arreglo")
                     {
-                        // Obtener los productos del arreglo
                         var productosArreglo = connection.Query<ArregloProductoModel>(
                             "SP_ObtenerProductosPorArreglo",
                             new { idArreglo = item.IdProducto },
@@ -204,18 +242,22 @@ namespace DaPazWebApp.Controllers
                             int cantidadTotal = prod.cantidadProducto * item.Cantidad;
                             try
                             {
-                                // Puedes poner un breakpoint aquí o loguear los valores
-                                System.Diagnostics.Debug.WriteLine($"Insertando: idVenta={idVenta}, idProducto={prod.idProducto}, cantidad={cantidadTotal}");
                                 connection.Execute(
                                     "SP_InsertarVentaProducto",
                                     new { idVenta = idVenta, idProducto = prod.idProducto, cantidad = cantidadTotal },
+                                    commandType: System.Data.CommandType.StoredProcedure
+                                );
+                                // Rebajar stock del producto del arreglo
+                                connection.Execute(
+                                    "SP_ActualizarStockProducto",
+                                    new { idProducto = prod.idProducto, cantidadVendida = cantidadTotal },
                                     commandType: System.Data.CommandType.StoredProcedure
                                 );
                             }
                             catch (Exception ex)
                             {
                                 System.Diagnostics.Debug.WriteLine($"Error al insertar en VentaProducto: {ex.Message}");
-                                throw; // O puedes manejarlo como prefieras
+                                throw;
                             }
                         }
                     }
@@ -250,6 +292,69 @@ namespace DaPazWebApp.Controllers
                 return View(viewModel);
             }
         }
-    }
 
+        [HttpGet]
+        public IActionResult HistorialUsuario()
+        {
+            var idUsuario = HttpContext.Session.GetInt32("IdUsuario");
+            if (idUsuario == null || idUsuario == 0)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            var viewModel = new HistorialCompraViewModel();
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                // Obtener todas las facturas del usuario
+                var facturas = connection.Query<Factura>(
+                    "SP_ObtenerFacturasPorUsuario",
+                    new { idUsuario },
+                    commandType: System.Data.CommandType.StoredProcedure
+                ).ToList();
+                viewModel.Facturas = facturas;
+                // Obtener ventas por cada factura
+                foreach (var factura in facturas)
+                {
+                    var ventas = connection.Query<Venta>(
+                        "SP_ObtenerVentasPorFactura",
+                        new { idFactura = factura.idFactura },
+                        commandType: System.Data.CommandType.StoredProcedure
+                    ).ToList();
+                    viewModel.VentasPorFactura[factura.idFactura] = ventas;
+                }
+            }
+            return View(viewModel);
+        }
+        
+        [HttpGet]
+        public IActionResult HistorialGlobal()
+        {
+            var idRol = HttpContext.Session.GetInt32("IdRol");
+            if (idRol != 1 && idRol != 3)
+            {
+                return RedirectToAction("Login", "Login");
+            }
+            var viewModel = new HistorialCompraViewModel();
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                // Obtener todas las facturas del sistema
+                var facturas = connection.Query<Factura>(
+                    "SP_ObtenerTodasLasFacturas",
+                    commandType: System.Data.CommandType.StoredProcedure
+                ).ToList();
+                viewModel.Facturas = facturas;
+                // Obtener ventas por cada factura
+                foreach (var factura in facturas)
+                {
+                    var ventas = connection.Query<Venta>(
+                        "SP_ObtenerVentasPorFactura",
+                        new { idFactura = factura.idFactura },
+                        commandType: System.Data.CommandType.StoredProcedure
+                    ).ToList();
+                    viewModel.VentasPorFactura[factura.idFactura] = ventas;
+                }
+            }
+            return View(viewModel);
+        }
+    }
 }
+

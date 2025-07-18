@@ -8,91 +8,100 @@
     var direccion = usuario?.direccion ?? "Dirección de entrega";
     var telefono = usuario?.telefono ?? "0000-0000";
 }
+
 <div class="container mt-5 mb-5">
-    <div class="row g-4">
-        <!-- Lado izquierdo: Información del usuario y opciones -->
-        <div class="col-lg-6">
-            <h2 class="fw-bold mb-3">Datos del Cliente</h2>
-            <table class="table table-bordered mb-4">
-                <tr><th>Nombre</th><td>@nombre</td></tr>
-                <tr><th>Correo</th><td>@correo</td></tr>
-                <tr><th>Dirección</th><td>@direccion</td></tr>
-                <tr><th>Teléfono</th><td>@telefono</td></tr>
-            </table>
-            <form method="post" action="/Carrito/ConfirmarPedido">
-                @Html.AntiForgeryToken()
-                <div class="form-group">
-                    <label for="tipoEntrega" class="control-label fw-bold">Tipo de Entrega</label>
-                    <select id="tipoEntrega" name="tipoEntrega" class="form-control">
-                        <option value="">-- Seleccione el tipo de entrega --</option>
-                        <option value="domicilio">Envío a domicilio</option>
-                        <option value="retiro">Retiro en tienda</option>
-                    </select>
-                    <span class="text-danger" id="tipoEntregaError" style="display:none;">Seleccione el tipo de entrega.</span>
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">Checkout</h2>
                 </div>
-                <div class="form-group mt-3">
-                    <label for="metodoPago" class="control-label fw-bold">Método de Pago</label>
-                    <select id="metodoPago" name="metodoPago" class="form-control">
-                        <option value="">-- Seleccione el método de pago --</option>
-                        <option value="efectivo">Efectivo</option>
-                        <option value="sinpe">SINPE Móvil</option>
-                    </select>
-                    <span class="text-danger" id="metodoPagoError" style="display:none;">Seleccione el método de pago.</span>
+                <div class="card-body">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <h4 class="fw-bold mb-3">Datos del Cliente</h4>
+                            <table class="table table-bordered mb-4">
+                                <tr><th>Nombre</th><td>@nombre</td></tr>
+                                <tr><th>Correo</th><td>@correo</td></tr>
+                                <tr><th>Dirección</th><td>@direccion</td></tr>
+                                <tr><th>Teléfono</th><td>@telefono</td></tr>
+                            </table>
+                            <form method="post" action="/Carrito/ConfirmarPedido">
+                                @Html.AntiForgeryToken()
+                                <div class="form-group mb-3">
+                                    <label for="tipoEntrega" class="control-label fw-bold">Tipo de Entrega</label>
+                                    <select id="tipoEntrega" name="tipoEntrega" class="form-control">
+                                        <option value="">-- Seleccione el tipo de entrega --</option>
+                                        <option value="domicilio">Envío a domicilio</option>
+                                        <option value="retiro">Retiro en tienda</option>
+                                    </select>
+                                    <span class="text-danger" id="tipoEntregaError" style="display:none;">Seleccione el tipo de entrega.</span>
+                                </div>
+                                <div class="form-group mb-3">
+                                    <label for="metodoPago" class="control-label fw-bold">Método de Pago</label>
+                                    <select id="metodoPago" name="metodoPago" class="form-control">
+                                        <option value="">-- Seleccione el método de pago --</option>
+                                        <option value="efectivo">Efectivo</option>
+                                        <option value="sinpe">SINPE Móvil</option>
+                                    </select>
+                                    <span class="text-danger" id="metodoPagoError" style="display:none;">Seleccione el método de pago.</span>
+                                </div>
+<button type="submit" class="btn-guardar btn-lg w-100">Confirmar Pedido</button>
+                                <script>
+                                    document.querySelector('form').addEventListener('submit', function(e) {
+                                        let tipoEntrega = document.getElementById('tipoEntrega').value;
+                                        let metodoPago = document.getElementById('metodoPago').value;
+                                        let valid = true;
+                                        if (!tipoEntrega) {
+                                            document.getElementById('tipoEntregaError').style.display = 'block';
+                                            valid = false;
+                                        } else {
+                                            document.getElementById('tipoEntregaError').style.display = 'none';
+                                        }
+                                        if (!metodoPago) {
+                                            document.getElementById('metodoPagoError').style.display = 'block';
+                                            valid = false;
+                                        } else {
+                                            document.getElementById('metodoPagoError').style.display = 'none';
+                                        }
+                                        if (!valid) e.preventDefault();
+                                    });
+                                </script>
+                            </form>
+                        </div>
+                        <div class="col-lg-6">
+                            <h4 class="fw-bold mb-3">Resumen del Pedido</h4>
+                            <div class="table-responsive">
+                                <table class="table align-middle">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Imagen</th>
+                                            <th>Producto</th>
+                                            <th>Precio</th>
+                                            <th>Cantidad</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.Items)
+                                        {
+                                            <tr>
+                                                <td style="width:80px"><img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded border" style="max-width:60px;max-height:60px;object-fit:contain;"></td>
+                                                <td class="fw-bold">@item.NombreProducto</td>
+                                                <td>₡@item.Precio.ToString("N2")</td>
+                                                <td>@item.Cantidad</td>
+                                                <td>₡@(item.Precio * item.Cantidad)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-end mt-3">
+                                <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-success btn-lg w-100">Confirmar Pedido</button>
-            <script>
-                // Validación en el cliente para evitar submit si no seleccionan opciones
-                document.querySelector('form').addEventListener('submit', function(e) {
-                    let tipoEntrega = document.getElementById('tipoEntrega').value;
-                    let metodoPago = document.getElementById('metodoPago').value;
-                    let valid = true;
-                    if (!tipoEntrega) {
-                        document.getElementById('tipoEntregaError').style.display = 'block';
-                        valid = false;
-                    } else {
-                        document.getElementById('tipoEntregaError').style.display = 'none';
-                    }
-                    if (!metodoPago) {
-                        document.getElementById('metodoPagoError').style.display = 'block';
-                        valid = false;
-                    } else {
-                        document.getElementById('metodoPagoError').style.display = 'none';
-                    }
-                    if (!valid) e.preventDefault();
-                });
-            </script>
-            </form>
-        </div>
-        <!-- Lado derecho: Resumen del pedido -->
-        <div class="col-lg-6">
-            <h2 class="fw-bold mb-3">Pedido Realizado</h2>
-            <div class="table-responsive">
-                <table class="table align-middle">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Producto</th>
-                            <th>Precio</th>
-                            <th>Cantidad</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.Items)
-                        {
-                            <tr>
-                                <td style="width:80px"><img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded" style="max-width:60px;max-height:60px;object-fit:contain;"></td>
-                                <td>@item.NombreProducto</td>
-                                <td>₡@item.Precio.ToString("N2")</td>
-                                <td>@item.Cantidad</td>
-                                <td>₡@(item.Precio * item.Cantidad)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-            <div class="text-end mt-3">
-                <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
             </div>
         </div>
     </div>

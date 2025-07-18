@@ -1,0 +1,107 @@
+@model DaPazWebApp.Models.HistorialCompraViewModel
+@{
+    ViewData["Title"] = "Historial de Compras";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="d-flex justify-between align-items-center encabezado-tablas">
+        <h2 class="m-0">Historial de Compras</h2>
+    </div>
+    <div class="table-responsive">
+        @if (Model.Facturas.Count == 0)
+        {
+            <div class="alert alert-info mt-3">No tienes compras registradas.</div>
+        }
+        else
+        {
+            <table class="table table-bordered" id="tablaHistorialUsuario">
+                <thead>
+                    <tr>
+                        <th># Factura</th>
+                        <th>Fecha</th>
+                        <th>Total</th>
+                        <th>Detalle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var factura in Model.Facturas)
+                    {
+                        <tr>
+                            <td>@factura.idFactura</td>
+                            <td>@factura.fechaFactura.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>₡@factura.totalFactura.ToString("N2")</td>
+                            <td>
+                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#detalle-@factura.idFactura" aria-expanded="false" aria-controls="detalle-@factura.idFactura">
+                                    Ver detalle
+                                </button>
+                            </td>
+                        </tr>
+                        <tr class="collapse datatable-ignore" id="detalle-@factura.idFactura">
+                            <td colspan="4">
+                                <div class="p-3 bg-light rounded">
+                                    <h5 class="mb-3">Productos/Arreglos comprados</h5>
+                                    <table class="table table-sm">
+                                        <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Nombre</th>
+                                                <th>Cantidad</th>
+                                                <th>Total</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var venta in Model.VentasPorFactura[factura.idFactura])
+                                            {
+                                                <tr>
+                                                    <td>@(venta.idProducto != null ? "Producto" : "Arreglo")</td>
+                                                    <td>@(string.IsNullOrEmpty(venta.NombreProducto) ? "Sin nombre" : venta.NombreProducto)</td>
+                                                    <td>@venta.cantidad</td>
+                                                    <td>₡@venta.total.ToString("N2")</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+    <div id="resultadoHistorialUsuario"></div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Inicializar DataTable solo sobre las filas que no tienen la clase datatable-ignore
+            $('#tablaHistorialUsuario').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron resultados",
+                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de _MAX_ registros totales)",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    }
+                },
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
+                dom: 'lrtip',
+                rowCallback: function(row, data, index){
+                    if($(row).hasClass('datatable-ignore')){
+                        $(row).hide();
+                    }
+                }
+            });
+        });
+    </script>
+}

@@ -1,3 +1,4 @@
+
 @model DaPazWebApp.Models.CarritoViewModel
 @{
     ViewData["Title"] = "Carrito de Compras";
@@ -5,50 +6,80 @@
 }
 
 <div class="container mt-5 mb-5">
-    <h1 class="fw-bold mb-4">Carrito de Compras</h1>
-    @if (Model.Items.Count == 0)
-    {
-        <div class="alert alert-info">Tu carrito está vacío.</div>
-        <a href="/Catalogo/Index" class="btn btn-primary mt-3">Ir al Catálogo</a>
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table align-middle">
-                <thead>
-                    <tr>
-                        <th>Imagen</th>
-                        <th>Producto</th>
-                        <th>Precio</th>
-                        <th>Cantidad</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model.Items)
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="mb-0">Carrito de Compras</h2>
+                </div>
+                <div class="card-body">
+                    @if (Model.Items.Count == 0)
                     {
-                        <tr>
-                            <td style="width:100px"><img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded" style="max-width:80px;max-height:80px;object-fit:contain;"></td>
-                            <td>@item.NombreProducto</td>
-                            <td>₡@item.Precio.ToString("N2")</td>
-                            <td>@item.Cantidad</td>
-                            <td>₡@(item.Precio * item.Cantidad)</td>
-                        </tr>
+                        <div class="alert alert-info">Tu carrito está vacío.</div>
+                        <a href="/Catalogo/Index" class="btn btn-primary mt-3">Ir al Catálogo</a>
                     }
-                </tbody>
-            </table>
+                    else
+                    {
+                        <div class="table-responsive">
+                            <table class="table align-middle">
+                                <thead class="table-light">
+                                    <tr>
+<th>Imagen</th>
+<th>Producto</th>
+<th>Precio</th>
+<th>Cantidad</th>
+<th>Subtotal</th>
+<th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+@foreach (var item in Model.Items)
+{
+    <tr>
+        <td style="width:100px"><img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded border" style="max-width:80px;max-height:80px;object-fit:contain;"></td>
+        <td class="fw-bold">@item.NombreProducto</td>
+        <td>₡@item.Precio.ToString("N2")</td>
+        <td>
+            <form method="post" action="/Carrito/ActualizarCantidad" class="d-flex align-items-center" style="gap:4px;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdProducto" value="@item.IdProducto" />
+                <input type="hidden" name="Tipo" value="@item.Tipo" />
+                <input type="number" name="Cantidad" value="@item.Cantidad" min="1" class="form-control form-control-sm" style="width:70px;" />
+<button type="submit" style="background: none; border: none; padding: 0;">
+    <span class="bi bi-arrow-repeat" style="font-size:1.7rem;"></span>
+</button>
+            </form>
+        </td>
+        <td>₡@(item.Precio * item.Cantidad)</td>
+        <td>
+            <form method="post" action="/Carrito/EliminarDelCarrito" style="display:inline;">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="IdProducto" value="@item.IdProducto" />
+                <input type="hidden" name="Tipo" value="@item.Tipo" />
+<button type="submit" style="background: none; border: none; padding: 0;">
+    <span class="bi bi-trash" style="font-size:1.7rem;"></span>
+</button>
+            </form>
+        </td>
+    </tr>
+}
+                                </tbody>
+                            </table>
+                        </div>
+<div class="text-end mt-3">
+    <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
+       <a href="/Carrito/Checkout" class="btn-guardar btn-lg mt-2">Proceder al Pago</a>
+</div>
+                    }
+@if (TempData["PedidoConfirmado"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+        @TempData["PedidoConfirmado"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+                </div>
+            </div>
         </div>
-        <div class="text-end mt-3">
-            <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
-            <a href="/Carrito/Checkout" class="btn btn-success btn-lg mt-2">Proceder al Pago</a>
-        </div>
-    }
-
-    @if (TempData["PedidoConfirmado"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["PedidoConfirmado"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+    </div>
 </div>
