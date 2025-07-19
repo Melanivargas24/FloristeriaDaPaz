@@ -1,0 +1,276 @@
+﻿@model DaPazWebApp.Models.Liquidacion
+@{
+    ViewData["Title"] = "Nueva Liquidación";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-hand-holding-usd"></i> Registrar Nueva Liquidación
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger" style="display: none;"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="IdEmpleado" class="form-label fw-bold">
+                                <i class="fas fa-user"></i> Empleado
+                            </label>
+                            <select asp-for="IdEmpleado" class="form-select" asp-items="ViewBag.Empleados" id="empleadoSelect">
+                                <option value="">-- Seleccione un empleado --</option>
+                            </select>
+                            <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                        </div>
+
+                        <div class="row" id="infoEmpleado" style="display: none;">
+                            <div class="col-md-12">
+                                <div class="alert alert-info border-0">
+                                    <h6 class="alert-heading">
+                                        <i class="fas fa-user-circle"></i> Información del Empleado
+                                    </h6>
+                                    <div class="row">
+                                        <div class="col-md-3">
+                                            <strong>Fecha de Ingreso:</strong>
+                                            <div id="fechaIngreso" class="text-muted">-</div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Años de Servicio:</strong>
+                                            <div id="antiguedad" class="text-primary fw-bold">-</div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Salario Base:</strong>
+                                            <div id="salarioBase" class="text-success fw-bold">-</div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <strong>Liquidación Sugerida:</strong>
+                                            <div id="liquidacionSugerida" class="text-warning fw-bold">-</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="FechaLiquidacion" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-alt"></i> Fecha de Liquidación
+                                    </label>
+                                    <input asp-for="FechaLiquidacion" type="date" class="form-control" />
+                                    <span asp-validation-for="FechaLiquidacion" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="MontoLiquidacion" class="form-label fw-bold">
+                                        <i class="fas fa-dollar-sign"></i> Monto de Liquidación (₡)
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₡</span>
+                                        <input asp-for="MontoLiquidacion" type="number" step="0.01" min="0" class="form-control" placeholder="0.00" />
+                                        <button type="button" class="btn btn-outline-warning" id="btnUsarSugerencia" disabled>
+                                            <i class="fas fa-lightbulb"></i> Usar Sugerencia
+                                        </button>
+                                    </div>
+                                    <span asp-validation-for="MontoLiquidacion" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Motivo" class="form-label fw-bold">
+                                <i class="fas fa-comment"></i> Motivo (Opcional)
+                            </label>
+                            <textarea asp-for="Motivo" class="form-control" rows="3" placeholder="Ingrese el motivo de la liquidación (opcional)..."></textarea>
+                            <span asp-validation-for="Motivo" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4" id="resumenLiquidacion" style="display: none;">
+                            <div class="alert alert-warning border-0">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-clipboard-check"></i> Resumen de Liquidación
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Empleado:</strong>
+                                        <div id="empleadoResumen" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Monto a Liquidar:</strong>
+                                        <div id="montoResumen" class="text-success fw-bold">-</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Fecha de Salida:</strong>
+                                        <div id="fechaResumen" class="text-muted">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-danger border-0 mb-4">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>¡Importante!</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Al registrar esta liquidación, se actualizará automáticamente la fecha de salida del empleado.</li>
+                                <li>Esta acción <strong>no se puede deshacer</strong> fácilmente.</li>
+                                <li>Verifique que todos los datos sean correctos antes de continuar.</li>
+                                <li>El empleado será marcado como inactivo después de la liquidación.</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-danger btn-lg me-md-2" id="btnGuardar">
+                                <i class="fas fa-save"></i> Procesar Liquidación
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            var liquidacionSugerida = 0;
+
+            // Establecer fecha por defecto como hoy
+            var today = new Date().toISOString().split('T')[0];
+            $('#FechaLiquidacion').val(today);
+
+            // Al cambiar el empleado seleccionado
+            $('#empleadoSelect').change(function() {
+                var idEmpleado = $(this).val();
+                var nombreEmpleado = $(this).find('option:selected').text();
+
+                if (idEmpleado) {
+                    // Obtener información del empleado
+                    $.get('@Url.Action("GetEmpleadoSalario", "Liquidacion")', { idEmpleado: idEmpleado })
+                        .done(function(data) {
+                            if (data) {
+                                $('#fechaIngreso').text(data.fechaIngreso);
+                                $('#antiguedad').text(data.antiguedad + ' años');
+                                $('#salarioBase').text('₡' + data.salario.toLocaleString('es-CR', {minimumFractionDigits: 2}));
+                                $('#liquidacionSugerida').text('₡' + data.liquidacionSugerida.toLocaleString('es-CR', {minimumFractionDigits: 2}));
+
+                                liquidacionSugerida = data.liquidacionSugerida;
+                                $('#btnUsarSugerencia').prop('disabled', false);
+                                $('#infoEmpleado').show();
+
+                                // Actualizar resumen
+                                $('#empleadoResumen').text(nombreEmpleado);
+                                actualizarResumen();
+                            }
+                        })
+                        .fail(function() {
+                            alert('Error al obtener información del empleado');
+                        });
+                } else {
+                    $('#infoEmpleado').hide();
+                    $('#resumenLiquidacion').hide();
+                    $('#btnUsarSugerencia').prop('disabled', true);
+                    liquidacionSugerida = 0;
+                }
+            });
+
+            // Usar liquidación sugerida
+            $('#btnUsarSugerencia').click(function() {
+                $('#MontoLiquidacion').val(liquidacionSugerida.toFixed(2));
+                actualizarResumen();
+            });
+
+            // Actualizar resumen cuando cambie el monto
+            $('#MontoLiquidacion').on('input', function() {
+                actualizarResumen();
+            });
+
+            // Actualizar resumen cuando cambie la fecha
+            $('#FechaLiquidacion').change(function() {
+                actualizarResumen();
+            });
+
+            function actualizarResumen() {
+                var empleado = $('#empleadoSelect').val();
+                var monto = $('#MontoLiquidacion').val();
+                var fecha = $('#FechaLiquidacion').val();
+
+                if (empleado && monto && fecha) {
+                    $('#montoResumen').text('₡' + parseFloat(monto).toLocaleString('es-CR', {minimumFractionDigits: 2}));
+                    $('#fechaResumen').text(fecha);
+                    $('#resumenLiquidacion').show();
+                } else {
+                    $('#resumenLiquidacion').hide();
+                }
+            }
+
+            // Confirmación antes de enviar
+            $('#btnGuardar').click(function(e) {
+                var empleadoNombre = $('#empleadoSelect option:selected').text();
+                var monto = $('#MontoLiquidacion').val();
+                var fecha = $('#FechaLiquidacion').val();
+
+                if (empleadoNombre && monto && fecha) {
+                    var confirmMessage = '⚠️ CONFIRMACIÓN DE LIQUIDACIÓN ⚠️\n\n' +
+                                       '¿Está COMPLETAMENTE SEGURO de liquidar a:\n' +
+                                       'Empleado: ' + empleadoNombre + '\n' +
+                                       'Monto: ₡' + parseFloat(monto).toLocaleString('es-CR', {minimumFractionDigits: 2}) + '\n' +
+                                       'Fecha de salida: ' + fecha + '\n\n' +
+                                       '⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER ⚠️\n' +
+                                       'El empleado será marcado como inactivo.\n\n' +
+                                       '¿Desea continuar?';
+
+                    if (!confirm(confirmMessage)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            // Mostrar errores de validación
+            if ($('.text-danger').text().trim() !== '') {
+                $('.alert-danger').show();
+            }
+        });
+    </script>
+}
+ Usar liquidación sugerida
+            $('#btnUsarSugerencia').click(function() {
+                $('#MontoLiquidacion').val(liquidacionSugerida.toFixed(2));
+            });
+
+            // Formatear el monto mientras se escribe
+            $('#MontoLiquidacion').on('input', function() {
+                var value = $(this).val();
+                if (value && !isNaN(value)) {
+                    // Solo formatear visualmente si no está enfocado
+                    $(this).data('rawValue', value);
+                }
+            });
+
+            // Confirmación antes de enviar
+            $('#btnGuardar').click(function(e) {
+                var empleadoNombre = $('#empleadoSelect option:selected').text();
+                var monto = $('#MontoLiquidacion').val();
+
+                if (empleadoNombre && monto) {
+                    var confirmMessage = '¿Está seguro de liquidar a ' + empleadoNombre + ' por un monto de ₡' +
+                                       parseFloat(monto).toLocaleString('es-CR', {minimumFractionDigits: 2}) + '?\n\n' +
+                                       'Esta acción actualizará la fecha de salida del empleado.';
+
+                    if (!confirm(confirmMessage)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+        });
+</script>
+}

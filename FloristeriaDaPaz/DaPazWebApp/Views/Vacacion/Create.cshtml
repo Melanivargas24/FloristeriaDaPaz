@@ -1,0 +1,190 @@
+﻿@model DaPazWebApp.Models.Vacacion
+@{
+    ViewData["Title"] = "Nueva Vacación";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-calendar-plus"></i> Registrar Nueva Vacación
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Create" method="post">
+                        <div asp-validation-summary="All" class="alert alert-danger" style="display: none;"></div>
+
+                        <div class="mb-4">
+                            <label asp-for="IdEmpleado" class="form-label fw-bold">
+                                <i class="fas fa-user"></i> Empleado
+                            </label>
+                            <select asp-for="IdEmpleado" class="form-select" asp-items="ViewBag.Empleados" id="empleadoSelect">
+                                <option value="">-- Seleccione un empleado --</option>
+                            </select>
+                            <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="FechaInicio" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-alt"></i> Fecha de Inicio
+                                    </label>
+                                    <input asp-for="FechaInicio" type="date" class="form-control" id="fechaInicio" />
+                                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-4">
+                                    <label asp-for="FechaFin" class="form-label fw-bold">
+                                        <i class="fas fa-calendar-alt"></i> Fecha de Fin
+                                    </label>
+                                    <input asp-for="FechaFin" type="date" class="form-control" id="fechaFin" />
+                                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-4" id="resumenVacacion" style="display: none;">
+                            <div class="alert alert-info border-0">
+                                <h6 class="alert-heading">
+                                    <i class="fas fa-info-circle"></i> Resumen de Vacación
+                                </h6>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Empleado:</strong>
+                                        <div id="empleadoSeleccionado" class="text-muted">-</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Duración:</strong>
+                                        <div id="duracionVacacion" class="text-primary fw-bold">-</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Período:</strong>
+                                        <div id="periodoVacacion" class="text-muted">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning border-0 mb-4">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Importante:</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Las fechas seleccionadas determinarán automáticamente la cantidad de días de vacación.</li>
+                                <li>La fecha de fin debe ser posterior a la fecha de inicio.</li>
+                                <li>Verifique que las fechas no se solapen con otras vacaciones del empleado.</li>
+                            </ul>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                            <button type="submit" class="btn btn-success btn-lg me-md-2" id="btnGuardar">
+                                <i class="fas fa-save"></i> Guardar Vacación
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            // Establecer fecha mínima como hoy
+            var today = new Date().toISOString().split('T')[0];
+            $('#fechaInicio').attr('min', today);
+
+            // Función para calcular días
+            function calcularDias() {
+                var fechaInicio = $('#fechaInicio').val();
+                var fechaFin = $('#fechaFin').val();
+
+                if (fechaInicio && fechaFin) {
+                    var inicio = new Date(fechaInicio);
+                    var fin = new Date(fechaFin);
+                    var diferencia = fin.getTime() - inicio.getTime();
+                    var dias = Math.ceil(diferencia / (1000 * 3600 * 24)) + 1;
+
+                    if (dias > 0) {
+                        $('#duracionVacacion').text(dias + ' días');
+                        $('#periodoVacacion').text(fechaInicio + ' al ' + fechaFin);
+                        return dias;
+                    }
+                }
+                $('#duracionVacacion').text('-');
+                $('#periodoVacacion').text('-');
+                return 0;
+            }
+
+            // Actualizar fecha mínima de fin cuando cambie la fecha de inicio
+            $('#fechaInicio').change(function() {
+                var fechaInicio = $(this).val();
+                if (fechaInicio) {
+                    $('#fechaFin').attr('min', fechaInicio);
+
+                    // Si la fecha de fin es anterior, limpiarla
+                    var fechaFin = $('#fechaFin').val();
+                    if (fechaFin && fechaFin < fechaInicio) {
+                        $('#fechaFin').val('');
+                    }
+                }
+                calcularDias();
+                mostrarResumen();
+            });
+
+            $('#fechaFin').change(function() {
+                calcularDias();
+                mostrarResumen();
+            });
+
+            $('#empleadoSelect').change(function() {
+                var empleadoTexto = $(this).find('option:selected').text();
+                $('#empleadoSeleccionado').text(empleadoTexto);
+                mostrarResumen();
+            });
+
+            function mostrarResumen() {
+                var empleado = $('#empleadoSelect').val();
+                var fechaInicio = $('#fechaInicio').val();
+                var fechaFin = $('#fechaFin').val();
+
+                if (empleado && fechaInicio && fechaFin) {
+                    $('#resumenVacacion').show();
+                } else {
+                    $('#resumenVacacion').hide();
+                }
+            }
+
+            // Validación del formulario
+            $('#btnGuardar').click(function(e) {
+                var empleado = $('#empleadoSelect option:selected').text();
+                var dias = calcularDias();
+
+                if (empleado && dias > 0) {
+                    var confirmMessage = '¿Confirmar registro de vacación?\n\n' +
+                                       'Empleado: ' + empleado + '\n' +
+                                       'Duración: ' + dias + ' días\n' +
+                                       'Del ' + $('#fechaInicio').val() + ' al ' + $('#fechaFin').val();
+
+                    if (!confirm(confirmMessage)) {
+                        e.preventDefault();
+                    }
+                }
+            });
+
+            // Mostrar errores de validación
+            if ($('.text-danger').text().trim() !== '') {
+                $('.alert-danger').show();
+            }
+        });
+    </script>
+}
