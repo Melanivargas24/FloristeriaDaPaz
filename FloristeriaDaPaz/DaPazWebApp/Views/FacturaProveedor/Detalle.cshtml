@@ -1,0 +1,61 @@
+@model DaPazWebApp.Models.FacturaProveedorDetalleViewModel
+
+@{
+    ViewData["Title"] = "Detalle de Factura Proveedor";
+    Layout = "_Layout";
+}
+
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <h2>Detalle de Factura Proveedor</h2>
+    <div class="card mb-4">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3"># Factura</dt>
+                <dd class="col-sm-9">@Model.Factura.IdFacturaProveedor</dd>
+                <dt class="col-sm-3">Proveedor</dt>
+                <dd class="col-sm-9">@Model.Factura.NombreProveedor</dd>
+                <dt class="col-sm-3">Fecha</dt>
+                <dd class="col-sm-9">@Model.Factura.FechaFactura.ToString("dd/MM/yyyy HH:mm")</dd>
+                <dt class="col-sm-3">Total</dt>
+                <dd class="col-sm-9">₡@Model.Factura.TotalFactura.ToString("N2")</dd>
+            </dl>
+        </div>
+    </div>
+
+    <h4>Productos de la Factura</h4>
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio Compra</th>
+                    <th>Precio Venta</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Detalles == null || !Model.Detalles.Any())
+                {
+                    <tr>
+                        <td colspan="5" class="text-center">No hay productos en esta factura.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var detalle in Model.Detalles)
+                    {
+                        <tr>
+                            <td>@detalle.NombreProducto</td>
+                            <td>₡@detalle.PrecioUnitario.ToString("N2")</td>
+                            <td>₡@detalle.PrecioVenta.ToString("N2")</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>₡@detalle.Subtotal.ToString("N2")</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+        <a asp-action="Index" class="btn btn-secondary mt-3">Volver a Facturas</a>
+</div>
