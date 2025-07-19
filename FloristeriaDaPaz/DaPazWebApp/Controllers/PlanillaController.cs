@@ -22,23 +22,15 @@ namespace DaPazWebApp.Controllers
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                var sql = "SP_ObtenerPlanilla";
-
-                var planillas = connection.Query<Planilla, EmpleadoModel, Planilla>(
-                 "SP_ObtenerPlanilla",
-                  (planilla, empleado) =>
-                  {
-                      planilla.Empleado = empleado;
-                      return planilla;
-                  },
-                        splitOn: "nombre",
-                          commandType: CommandType.StoredProcedure
-                     ).ToList();
-
+                var planillas = connection.Query<PlanillaViewModel>(
+                    "SP_ObtenerPlanilla",
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
 
                 return View(planillas);
             }
         }
+
 
         [HttpGet]
         public IActionResult Create()

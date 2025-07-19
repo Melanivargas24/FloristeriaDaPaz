@@ -1,4 +1,4 @@
-﻿@model IEnumerable<DaPazWebApp.Models.Planilla>
+﻿@model IEnumerable<DaPazWebApp.Models.PlanillaViewModel>
 
 @{
     ViewData["Title"] = "Planilla";
@@ -34,6 +34,7 @@
                 <th>Fecha de Ingreso</th>
                 <th>Cargo</th>
                 <th>Salario Bruto</th>
+                <th>Detalle Deducción</th>
                 <th>Deducciones</th>
                 <th>Salario Neto</th>
             </tr>
@@ -43,17 +44,18 @@
             {
                 <tr>
                     <td>@planilla.FechaPlanilla.ToString("dd/MM/yyyy")</td>
-                    <td>@(planilla.Empleado != null ? planilla.Empleado.nombre + " " + planilla.Empleado.apellido : "Sin empleado")</td>
-                    <td>@planilla.Empleado?.fechaIngreso.ToString("dd/MM/yyyy")</td>
-                    <td>@planilla.Empleado?.Cargo</td>
+                    <td>@($"{planilla.NombreEmpleado} {planilla.ApellidoEmpleado}")</td>
+                    <td>@planilla.FechaIngreso.ToString("dd/MM/yyyy")</td>
+                    <td>@planilla.Cargo</td>
                     <td>₡@planilla.SalarioBruto.ToString("N2")</td>
+                    <td>@planilla.NombreDeduccion</td>
                     <td>₡@planilla.Deducciones.ToString("N2")</td>
                     <td>₡@planilla.SalarioNeto.ToString("N2")</td>
-             
                 </tr>
             }
         </tbody>
     </table>
+
 
     <div id="resultadoPlanilla"></div>
 
