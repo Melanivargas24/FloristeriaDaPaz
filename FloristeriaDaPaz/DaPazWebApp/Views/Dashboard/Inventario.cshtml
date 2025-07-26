@@ -1,0 +1,247 @@
+@model DaPazWebApp.Models.InventarioViewModel
+@{
+    ViewData["Title"] = "Dashboard de Inventario";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="row mb-3">
+        <div class="col-6">
+            <h2><i class="fas fa-boxes"></i> Dashboard de Inventario</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver al Centro de Control
+            </a>
+        </div>
+    </div>
+
+    <!-- Resumen General -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h3>@Model.ResumenInventario.TotalProductos</h3>
+                    <p>Total Productos</p>
+                    <i class="fas fa-box fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h3>@Model.ResumenInventario.ProductosConStock</h3>
+                    <p>Con Stock Suficiente</p>
+                    <i class="fas fa-check-circle fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h3>@Model.ResumenInventario.ProductosBajoStock</h3>
+                    <p>Bajo Stock</p>
+                    <i class="fas fa-exclamation-triangle fa-2x"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <h3>@Model.ResumenInventario.ProductosSinStock</h3>
+                    <p>Sin Stock</p>
+                    <i class="fas fa-times-circle fa-2x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Valor Total del Inventario -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h3>Valor Total del Inventario: <span class="text-success">₡@Model.ResumenInventario.ValorTotalInventario.ToString("N2")</span></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alertas de Stock -->
+    <div class="row mb-4">
+        <!-- Productos Sin Stock -->
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h5><i class="fas fa-exclamation-circle"></i> Productos Sin Stock (@Model.ProductosSinStock.Count)</h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    @if (Model.ProductosSinStock.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var producto in Model.ProductosSinStock)
+                                    {
+                                        <tr>
+                                            <td>@producto.NombreProducto</td>
+                                            <td>
+                                                    @(string.IsNullOrEmpty(producto.Categoria) ? "Sin categoría" : producto.Categoria)
+                                            </td>
+                                            <td>₡@producto.Precio.ToString("N2")</td>
+                                            <td>
+                                                <a href="@Url.Action("Crear", "FacturaProveedor")" 
+                                                   class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-shopping-cart"></i> Reabastecer
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-success">
+                            <i class="fas fa-check-circle fa-3x"></i>
+                            <p>No hay productos sin stock</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Productos con Bajo Stock -->
+        <div class="col-md-6">
+            <div class="card border-warning">
+                <div class="card-header bg-warning text-dark">
+                    <h5><i class="fas fa-exclamation-triangle"></i> Productos con Bajo Stock (@Model.ProductosBajoStock.Count)</h5>
+                </div>
+                <div class="card-body" style="max-height: 400px; overflow-y: auto;">
+                    @if (Model.ProductosBajoStock.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Stock</th>
+                                        <th>Categoría</th>
+                                        <th>Valor</th>
+                                        <th>Acción</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var producto in Model.ProductosBajoStock)
+                                    {
+                                        <tr>
+                                            <td>@producto.NombreProducto</td>
+                                            <td>@producto.StockActual</td>
+                                            <td>
+                                                @(string.IsNullOrEmpty(producto.Categoria) ? "Sin categoría" : producto.Categoria)
+                                            </td>
+                                            <td>₡@producto.ValorStock.ToString("N2")</td>
+                                            <td>
+                                                <a href="@Url.Action("Crear", "FacturaProveedor")" 
+                                                   class="btn btn-sm btn-outline-success">
+                                                    <i class="fas fa-shopping-cart"></i> Reabastecer
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-success">
+                            <i class="fas fa-check-circle fa-3x"></i>
+                            <p>No hay productos con bajo stock</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventario por Categoría -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-pie"></i> Inventario por Categoría</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Categoría</th>
+                                    <th>Total Productos</th>
+                                    <th>Stock Total</th>
+                                    <th>Valor Categoría</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var categoria in Model.ProductosPorCategoria)
+                                {
+                                    <tr>
+                                        <td><strong>@categoria.Categoria</strong></td>
+                                        <td>@categoria.TotalProductos</td>
+                                        <td>@categoria.TotalStock</td>
+                                        <td>₡@categoria.ValorCategoria.ToString("N2")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Acciones Rápidas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-tools"></i> Acciones Rápidas</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Index", "Producto")" class="btn btn-primary btn-block">
+                                <i class="fas fa-list"></i> Ver Todos los Productos
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Create", "Producto")" class="btn btn-success btn-block">
+                                <i class="fas fa-plus"></i> Agregar Producto
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Index", "FacturaProveedor")" class="btn btn-info btn-block">
+                                <i class="fas fa-file-invoice"></i> Facturas Proveedor
+                            </a>
+                        </div>
+                        <div class="col-md-3">
+                            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary btn-block">
+                                <i class="fas fa-chart-bar"></i> Volver al Centro de Control
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

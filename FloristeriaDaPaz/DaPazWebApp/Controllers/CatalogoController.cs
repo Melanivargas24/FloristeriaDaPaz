@@ -19,15 +19,15 @@ namespace DaPazWebApp.Controllers
 {
     using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
 
-    // Obtener datos
-    var productos = connection.Query("SP_ObtenerProductos", commandType: CommandType.StoredProcedure)
+    // Obtener datos - Solo productos con stock disponible
+    var productos = connection.Query("SP_ObtenerProductosConStock", commandType: CommandType.StoredProcedure)
         .Select(p => new CatalogoModel
         {
             Id = p.IdProducto,
             Nombre = p.NombreProducto,
             Precio = p.Precio,
             Imagen = p.Imagen,
-            Categoria = p.nombreCategoriaProducto,
+            Categoria = p.nombreCategoriaProducto ?? "Sin categoría",
             Tipo = "Producto"
         }).ToList();
 

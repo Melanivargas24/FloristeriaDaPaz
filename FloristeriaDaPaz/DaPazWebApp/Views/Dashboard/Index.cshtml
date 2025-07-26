@@ -1,0 +1,244 @@
+@{
+    ViewData["Title"] = "Centro de Control - Dashboards";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="row">
+        <div class="col-12 text-center mb-4">
+            <h1><i class="fas fa-tachometer-alt"></i> Centro de Control</h1>
+            <p class="lead">Selecciona el dashboard que deseas consultar</p>
+        </div>
+    </div>
+
+    <!-- Dashboards Principales -->
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row">
+                <!-- Dashboard de Ventas -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-chart-line fa-4x text-primary"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard de Ventas</h4>
+                            <p class="card-text">Análisis de ventas, tendencias y métricas de rendimiento comercial</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-chart-bar"></i> Ventas diarias, semanales y mensuales<br>
+                                    <i class="fas fa-trophy"></i> Top productos más vendidos<br>
+                                    <i class="fas fa-calendar"></i> Tendencias de ventas
+                                </small>
+                            </div>
+                            <a href="@Url.Action("Ventas", "Dashboard")" class="btn btn-primary btn-lg">
+                                <i class="fas fa-eye"></i> Ver Dashboard
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard de Inventario -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-boxes fa-4x text-success"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard de Inventario</h4>
+                            <p class="card-text">Control de stock, productos con bajo inventario y análisis por categorías</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-exclamation-triangle"></i> Alertas de stock bajo<br>
+                                    <i class="fas fa-chart-pie"></i> Inventario por categorías<br>
+                                    <i class="fas fa-dollar-sign"></i> Valor total del inventario
+                                </small>
+                            </div>
+                            <a href="@Url.Action("Inventario", "Dashboard")" class="btn btn-success btn-lg">
+                                <i class="fas fa-eye"></i> Ver Inventario
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard Financiero (Futuro) -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-calculator fa-4x text-info"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard Financiero</h4>
+                            <p class="card-text">Análisis financiero, gastos, ingresos y rentabilidad del negocio</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-money-bill-wave"></i> Ingresos y gastos<br>
+                                    <i class="fas fa-percentage"></i> Márgenes de ganancia<br>
+                                    <i class="fas fa-chart-area"></i> Flujo de efectivo
+                                </small>
+                            </div>
+                            <button class="btn btn-info btn-lg" disabled>
+                                <i class="fas fa-wrench"></i> Próximamente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard de Empleados (Futuro) -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-users fa-4x text-warning"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard de Empleados</h4>
+                            <p class="card-text">Métricas de recursos humanos, productividad y gestión de personal</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-user-check"></i> Rendimiento por empleado<br>
+                                    <i class="fas fa-clock"></i> Horas trabajadas<br>
+                                    <i class="fas fa-award"></i> Metas y objetivos
+                                </small>
+                            </div>
+                            <button class="btn btn-warning btn-lg" disabled>
+                                <i class="fas fa-wrench"></i> Próximamente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard de Marketing (Futuro) -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-bullhorn fa-4x text-danger"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard de Marketing</h4>
+                            <p class="card-text">Campañas, promociones y análisis de efectividad de marketing</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-tags"></i> Promociones activas<br>
+                                    <i class="fas fa-eye"></i> Alcance de campañas<br>
+                                    <i class="fas fa-conversion"></i> Tasa de conversión
+                                </small>
+                            </div>
+                            <button class="btn btn-danger btn-lg" disabled>
+                                <i class="fas fa-wrench"></i> Próximamente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dashboard de Clientes (Futuro) -->
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card dashboard-card h-100 shadow-sm">
+                        <div class="card-body text-center">
+                            <div class="dashboard-icon mb-3">
+                                <i class="fas fa-heart fa-4x text-secondary"></i>
+                            </div>
+                            <h4 class="card-title">Dashboard de Clientes</h4>
+                            <p class="card-text">Análisis de comportamiento, satisfacción y retención de clientes</p>
+                            <div class="dashboard-stats mb-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-star"></i> Satisfacción del cliente<br>
+                                    <i class="fas fa-redo"></i> Clientes recurrentes<br>
+                                    <i class="fas fa-gift"></i> Programas de fidelidad
+                                </small>
+                            </div>
+                            <button class="btn btn-secondary btn-lg" disabled>
+                                <i class="fas fa-wrench"></i> Próximamente
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Accesos Rápidos -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <hr>
+            <h3 class="text-center mb-4"><i class="fas fa-bolt"></i> Accesos Rápidos</h3>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="row">
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <a href="@Url.Action("Index", "Producto")" class="btn btn-outline-primary btn-block py-3">
+                        <i class="fas fa-box fa-2x d-block mb-2"></i>
+                        Productos
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <a href="@Url.Action("Index", "Promociones")" class="btn btn-outline-success btn-block py-3">
+                        <i class="fas fa-percentage fa-2x d-block mb-2"></i>
+                        Promociones
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <a href="@Url.Action("ConsultarEmpleados", "Empleado")" class="btn btn-outline-info btn-block py-3">
+                        <i class="fas fa-users fa-2x d-block mb-2"></i>
+                        Empleados
+                    </a>
+                </div>
+                <div class="col-md-3 col-sm-6 mb-3">
+                    <a href="@Url.Action("Index", "FacturaProveedor")" class="btn btn-outline-warning btn-block py-3">
+                        <i class="fas fa-file-invoice fa-2x d-block mb-2"></i>
+                        Facturas
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15) !important;
+}
+
+.dashboard-icon {
+    margin-bottom: 1rem;
+}
+
+.dashboard-stats {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    margin: 15px 0;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.py-3 {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.card-title {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.lead {
+    color: #6c757d;
+}
+
+h1 {
+    color: #2c3e50;
+    font-weight: 700;
+}
+</style>

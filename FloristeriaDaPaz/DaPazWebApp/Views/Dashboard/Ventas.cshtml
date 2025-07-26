@@ -1,0 +1,325 @@
+@model DaPazWebApp.Models.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard de Ventas";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="row mb-3">
+        <div class="col-6">
+            <h2><i class="fas fa-chart-line"></i> Dashboard de Ventas</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver al Centro de Control
+            </a>
+        </div>
+    </div>
+
+    <!-- Tarjetas de estadísticas generales -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Ventas Hoy</h6>
+                            <h4>₡@Model.EstadisticasGenerales.VentasHoy.ToString("N2")</h4>
+                            <small>@Model.EstadisticasGenerales.VentasHoyCount ventas</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-cash-register fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Ventas Semana</h6>
+                            <h4>₡@Model.EstadisticasGenerales.VentasSemana.ToString("N2")</h4>
+                            <small>Promedio: ₡@Model.EstadisticasGenerales.PromedioVentaDiaria.ToString("N0")</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-calendar-week fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Ventas Mes</h6>
+                            <h4>₡@Model.EstadisticasGenerales.VentasMes.ToString("N2")</h4>
+                            <small>@Model.EstadisticasGenerales.TotalProductos productos</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-calendar-alt fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <h6 class="card-title">Ventas Año</h6>
+                            <h4>₡@Model.EstadisticasGenerales.VentasAño.ToString("N2")</h4>
+                            <small>@Model.EstadisticasGenerales.TotalClientes clientes</small>
+                        </div>
+                        <div class="align-self-center">
+                            <i class="fas fa-chart-line fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos de ventas -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ventas por Período</h5>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-outline-primary active" onclick="cambiarPeriodo('diario')">Diario</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="cambiarPeriodo('semanal')">Semanal</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="cambiarPeriodo('mensual')">Mensual</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="ventasChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Top Productos Más Vendidos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var producto in Model.TopProductos.Take(10))
+                                {
+                                    <tr>
+                                        <td>@producto.NombreProducto</td>
+                                        <td>@producto.CantidadVendida</td>
+                                        <td>₡@producto.TotalVentas.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablas de datos detallados -->
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ventas Diarias (Últimos 7 días)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Ventas</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var venta in Model.VentasDiarias.OrderByDescending(v => v.Fecha))
+                                {
+                                    <tr>
+                                        <td>@venta.FechaFormateada</td>
+                                        <td>@venta.CantidadVentas</td>
+                                        <td>₡@venta.TotalVentas.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ventas Semanales (Últimas 4 semanas)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Ventas</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var venta in Model.VentasSemanales.OrderByDescending(v => v.Año).ThenByDescending(v => v.Semana))
+                                {
+                                    <tr>
+                                        <td>@venta.PeriodoFormateado</td>
+                                        <td>@venta.CantidadVentas</td>
+                                        <td>₡@venta.TotalVentas.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Ventas Mensuales (Últimos 6 meses)</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Ventas</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var venta in Model.VentasMensuales.OrderByDescending(v => v.Año).ThenByDescending(v => v.Mes))
+                                {
+                                    <tr>
+                                        <td>@venta.PeriodoFormateado</td>
+                                        <td>@venta.CantidadVentas</td>
+                                        <td>₡@venta.TotalVentas.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        let ventasChart;
+        let periodoActual = 'diario';
+
+        // Datos iniciales
+        const datosVentas = {
+            diario: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.VentasDiarias.OrderBy(v => v.Fecha).Select(v => new { fecha = v.FechaFormateada, total = v.TotalVentas, cantidad = v.CantidadVentas }))),
+            semanal: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.VentasSemanales.OrderBy(v => v.Año).ThenBy(v => v.Semana).Select(v => new { fecha = v.PeriodoFormateado, total = v.TotalVentas, cantidad = v.CantidadVentas }))),
+            mensual: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.VentasMensuales.OrderBy(v => v.Año).ThenBy(v => v.Mes).Select(v => new { fecha = v.PeriodoFormateado, total = v.TotalVentas, cantidad = v.CantidadVentas })))
+        };
+
+        function inicializarGrafico() {
+            const ctx = document.getElementById('ventasChart').getContext('2d');
+            ventasChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: datosVentas[periodoActual].map(d => d.fecha),
+                    datasets: [{
+                        label: 'Total Ventas (₡)',
+                        data: datosVentas[periodoActual].map(d => d.total),
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1,
+                        yAxisID: 'y'
+                    }, {
+                        label: 'Cantidad de Ventas',
+                        data: datosVentas[periodoActual].map(d => d.cantidad),
+                        borderColor: 'rgb(255, 99, 132)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        tension: 0.1,
+                        yAxisID: 'y1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    scales: {
+                        x: {
+                            display: true,
+                            title: {
+                                display: true,
+                                text: 'Período'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Total Ventas (₡)'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            title: {
+                                display: true,
+                                text: 'Cantidad de Ventas'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                        }
+                    }
+                }
+            });
+        }
+
+        function cambiarPeriodo(nuevoPeriodo) {
+            periodoActual = nuevoPeriodo;
+            
+            // Actualizar botones activos
+            document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Actualizar gráfico
+            ventasChart.data.labels = datosVentas[periodoActual].map(d => d.fecha);
+            ventasChart.data.datasets[0].data = datosVentas[periodoActual].map(d => d.total);
+            ventasChart.data.datasets[1].data = datosVentas[periodoActual].map(d => d.cantidad);
+            ventasChart.update();
+        }
+
+        // Inicializar cuando cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            inicializarGrafico();
+        });
+    </script>
+}

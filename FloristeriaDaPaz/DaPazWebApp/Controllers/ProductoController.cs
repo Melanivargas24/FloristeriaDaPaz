@@ -128,7 +128,7 @@ namespace DaPazWebApp.Controllers
         {
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                var categorias = context.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
+                var categorias = context.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
                    commandType: CommandType.StoredProcedure).ToList();
 
                 var proveedores = context.Query<ProveedorModel>("SP_ObtenerProveedores",
@@ -179,7 +179,7 @@ namespace DaPazWebApp.Controllers
             {
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
-                    var categorias = connection.Query<CategoriaProductoModel>("SP_ObtenerCategorias",
+                    var categorias = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
                         commandType: CommandType.StoredProcedure).ToList();
 
                     var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
