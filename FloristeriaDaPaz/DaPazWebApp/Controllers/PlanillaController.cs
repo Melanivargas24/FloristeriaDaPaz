@@ -3,14 +3,13 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
+using Rotativa.AspNetCore; // 👈 importante para el PDF
 using System.Data;
-using System.Reflection;
 
 namespace DaPazWebApp.Controllers
 {
     public class PlanillaController : Controller
     {
-
         private readonly IConfiguration _configuration;
 
         public PlanillaController(IConfiguration configuration)
@@ -31,22 +30,19 @@ namespace DaPazWebApp.Controllers
             }
         }
 
-
         [HttpGet]
         public IActionResult Create()
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 var empleados = connection.Query<EmpleadoModel>("SP_ConsultarEmpleados")
-                    .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido}).ToList();
+                    .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre /* + " " + e.apellido */ }).ToList();
 
                 ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
-
             }
 
             return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -92,9 +88,9 @@ namespace DaPazWebApp.Controllers
                         }
 
                         connection.Execute("SP_CalcularSalarioPlanilla",
-                        new { IdPlanilla = idPlanilla },
-                        transaction,
-                        commandType: CommandType.StoredProcedure);
+                            new { IdPlanilla = idPlanilla },
+                            transaction,
+                            commandType: CommandType.StoredProcedure);
 
                         transaction.Commit();
                         return RedirectToAction("Index");
@@ -105,6 +101,47 @@ namespace DaPazWebApp.Controllers
                         throw;
                     }
                 }
+            }
+        }
+
+        // ✅ PDF con consulta SQL directa
+        public IActionResult DescargarPdf(int id)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var query = @"
+    SELECT 
+        p.idPlanilla AS IdPlanilla,
+        p.fechaPlanilla AS FechaPlanilla,
+        p.salarioBruto AS SalarioBruto,
+        p.deducciones AS Deducciones,
+        p.salarioNeto AS SalarioNeto,
+        ISNULL(d.Nombre, 'Sin deducción') AS NombreDeduccion,
+        ISNULL(pd.MontoReducido, 0) AS MontoDeduccion,
+        '' AS NombreEmpleado,        -- valor por defecto
+        '' AS ApellidoEmpleado,      -- valor por defecto
+        e.fechaIngreso AS FechaIngreso,
+        e.Cargo AS Cargo
+    FROM Planilla p
+    INNER JOIN Empleado e ON p.idEmpleado = e.idEmpleado
+    LEFT JOIN PlanillaDeduccion pd ON p.idPlanilla = pd.IdPlanilla
+    LEFT JOIN Deduccion d ON pd.IdDeduccion = d.IdDeduccion
+    WHERE p.idPlanilla = @IdPlanilla;
+";
+
+
+                var planilla = connection.QueryFirstOrDefault<PlanillaViewModel>(
+                    query,
+                    new { IdPlanilla = id }
+                );
+
+                if (planilla == null)
+                    return NotFound();
+
+                return new ViewAsPdf("Comprobante", planilla)
+                {
+                    FileName = $"Planilla_{planilla.NombreEmpleado}_{planilla.FechaPlanilla:yyyyMMdd}.pdf"
+                };
             }
         }
     }

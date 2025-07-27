@@ -1,0 +1,42 @@
+﻿@model DaPazWebApp.Models.PlanillaViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Comprobante de Planilla</title>
+    <style>
+        body {
+            font-family: Arial;
+            font-size: 14px;
+            padding: 20px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        .dato {
+            margin-bottom: 8px;
+        }
+
+            .dato strong {
+                width: 160px;
+                display: inline-block;
+            }
+    </style>
+</head>
+<body>
+    <h2>Comprobante de Planilla</h2>
+
+    <div class="dato"><strong>Empleado:</strong> @Model.NombreEmpleado @Model.ApellidoEmpleado</div>
+    <div class="dato"><strong>Cargo:</strong> @Model.Cargo</div>
+    <div class="dato"><strong>Fecha de ingreso:</strong> @Model.FechaIngreso.ToShortDateString()</div>
+    <div class="dato"><strong>Fecha de planilla:</strong> @Model.FechaPlanilla.ToShortDateString()</div>
+    <hr />
+    <div class="dato"><strong>Salario Bruto:</strong> ₡@Model.SalarioBruto.ToString("N2")</div>
+    <div class="dato"><strong>Deducciones:</strong> ₡@Model.Deducciones.ToString("N2")</div>
+    <div class="dato"><strong>Detalle deducción:</strong> @Model.NombreDeduccion (₡@Model.MontoDeduccion.ToString("N2"))</div>
+    <div class="dato"><strong>Salario Neto:</strong> ₡@Model.SalarioNeto.ToString("N2")</div>
+</body>
+</html>

@@ -17,7 +17,7 @@
                     <i class="fas fa-search"></i>
                 </span>
                 <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar"
-                    aria-describedby="basic-addon1">
+                       aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -37,6 +37,7 @@
                 <th>Detalle Deducción</th>
                 <th>Deducciones</th>
                 <th>Salario Neto</th>
+                <th>Comprobante</th> <!-- 🔽 NUEVA COLUMNA -->
             </tr>
         </thead>
         <tbody>
@@ -51,14 +52,18 @@
                     <td>@planilla.NombreDeduccion</td>
                     <td>₡@planilla.Deducciones.ToString("N2")</td>
                     <td>₡@planilla.SalarioNeto.ToString("N2")</td>
+                    <td>
+                        <a asp-action="DescargarPdf" asp-route-id="@planilla.IdPlanilla" class="btn btn-sm btn-outline-primary">
+                            <i class="fas fa-file-pdf"></i> PDF
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
 
-
     <div id="resultadoPlanilla"></div>
-
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
