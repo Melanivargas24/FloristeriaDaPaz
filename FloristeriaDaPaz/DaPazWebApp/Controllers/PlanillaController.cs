@@ -103,7 +103,7 @@ namespace DaPazWebApp.Controllers
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 var empleados = connection.Query<EmpleadoModel>("SP_ConsultarEmpleados")
-                    .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre /* + " " + e.apellido */ }).ToList();
+                    .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido }).ToList();
 
                 ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
             }
@@ -171,6 +171,8 @@ namespace DaPazWebApp.Controllers
             }
         }
 
+        /*
+       
         // ✅ PDF con consulta SQL directa
         public IActionResult DescargarPdf(int id)
         {
@@ -211,5 +213,6 @@ namespace DaPazWebApp.Controllers
                 };
             }
         }
+        */
     }
 }
