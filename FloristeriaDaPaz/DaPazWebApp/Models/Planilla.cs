@@ -14,8 +14,7 @@
 
         public decimal SalarioNeto { get; set; }
 
-        public string NombreDeduccion { get; set; }
-        public decimal MontoDeduccion { get; set; }
+     
 
         public EmpleadoModel Empleado { get; set; }
 

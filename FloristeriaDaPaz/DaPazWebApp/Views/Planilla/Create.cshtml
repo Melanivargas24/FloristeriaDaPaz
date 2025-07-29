@@ -19,44 +19,48 @@
         </select>
     </div>
 
- 
+        <div class="mb-3">
+            <label for="fechaInicioSemana" class="form-label">Inicio de semana</label>
+            <input type="date" id="fechaInicioSemana" name="FechaInicioSemana" class="form-control" required />
+        </div>
 
-    <h4>Horas por día</h4>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Día</th>
-                <th>Fecha</th>
-                <th>Horas regulares</th>
-                <th>Horas extra</th>
-                <th>Porcentaje extra</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < 6; i++) 
-            {
-                var dia = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" }[i];
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@dia</td>
-                    <td>
-                        <input type="date" name="DetallesHoras[@i].Fecha" class="form-control" required />
-                    </td>
-                    <td>
-                        <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control" min="0" value="0" />
-                    </td>
-                    <td>
-                        <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control" min="0" value="0" />
-                    </td>
-                    <td>
+                    <th>Día</th>
+                    <th>Fecha</th>
+                    <th>Horas regulares</th>
+                    <th>Horas extra</th>
+                    <th>Porcentaje extra</th>
+                </tr>
+            </thead>
+            <tbody id="tabla-horas">
+                @{
+                    var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
+                }
+                @for (int i = 0; i < dias.Length; i++)
+                {
+                    <tr>
+                        <td>@dias[i]</td>
+                        <td>
+                            <input type="date" name="DetallesHoras[@i].Fecha" class="form-control fecha-dia" required readonly />
+                        </td>
+                        <td>
+                            <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control" min="0" value="0" />
+                        </td>
+                        <td>
+                            <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control" min="0" value="0" />
+                        </td>
+                        <td>
                             <select name="DetallesHoras[@i].Porcentaje" class="form-control" required>
                                 <option value="1.5">50%</option>
                             </select>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
    
 
     <input type="hidden" asp-for="SalarioBruto" />
@@ -69,3 +73,18 @@
 
 </form>
 </div>
+
+@section Scripts {
+    <script>
+        document.getElementById("fechaInicioSemana").addEventListener("change", function () {
+            const fechaInicio = new Date(this.value);
+            const inputsFecha = document.querySelectorAll(".fecha-dia");
+
+            inputsFecha.forEach((input, index) => {
+                const fecha = new Date(fechaInicio);
+                fecha.setDate(fecha.getDate() + index);
+                input.value = fecha.toISOString().split('T')[0];
+            });
+        });
+    </script>
+}

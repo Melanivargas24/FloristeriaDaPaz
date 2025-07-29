@@ -1,0 +1,360 @@
+﻿@model DaPazWebApp.Models.DetallePlanillaCompletoViewModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Boleta de Planilla</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .decorativo {
+            background: url('/ruta/imagen-fondo.png') no-repeat;
+            background-size: cover;
+            height: 180px;
+            color: #cc2f87;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            padding-top: 80px;
+        }
+
+        .boleta {
+            max-width: 800px;
+            margin: auto;
+            padding: 30px;
+        }
+
+        .info-linea {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .label-box {
+            background-color: #f28dc2;
+            color: white;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .dato-empleado {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px 30px;
+            margin-top: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px 5px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f6b8dc;
+            font-weight: bold;
+        }
+
+        .totales {
+            text-align: right;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .resumen-final {
+            margin-top: 25px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .neto {
+            border: 2px solid #000;
+            background-color: #fff;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 18px;
+            width: 250px;
+        }
+
+        .firmas {
+            margin-top: 60px;
+            display: table;
+            width: 100%;
+            font-size: 13px;
+            table-layout: fixed;
+        }
+
+            .firmas > div {
+                display: table-cell;
+                width: 50%;
+                text-align: center;
+                padding: 0 10px;
+            }
+
+        .firma-linea {
+            border-top: 1px solid #000;
+            margin: 20px 0 10px 0;
+            height: 0;
+        }
+
+
+        .encabezado h1 {
+			text-align: center;
+            font-size: 50px; 
+            margin-top: 30px; 
+            margin-bottom: 10px; 
+            font-weight: bold;
+            font-family: sans-serif;
+            font-color: #dd2a90;
+        }
+
+        .encabezado .subtitulo {
+            text-align: center;
+            font-size: 18px; 
+            font-weight: bold; 
+            color: #555; 
+            margin-top: 8px; 
+            font-family: sans-serif;
+        }
+
+
+
+        .boleta {
+            margin-top: 0; 
+        }
+
+
+        .barra-boleta {
+            display: table;
+            width: 100%;
+            background-color: #f28dc2;
+            color: white;
+            padding: 10px 25px;
+            font-weight: bold;
+            font-size: 14px;
+            margin-top: 15px;
+            margin-bottom: 25px;
+            table-layout: fixed; 
+        }
+
+            .barra-boleta > div {
+                display: table-cell;
+                vertical-align: middle;
+            }
+
+            .barra-boleta .izquierda {
+                text-align: left;
+            }
+
+            .barra-boleta .derecha {
+                text-align: right;
+            }
+
+
+        .nombre-empleado .label {
+            display: block;
+            font-weight: normal;
+            font-size: 12px;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+
+        .nombre-empleado .valor {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 25px;
+            text-transform: uppercase;
+            color: #222;
+        }
+
+        .datos-empleado {
+            width: 100%;
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+        }
+
+            .datos-empleado .campo {
+                display: inline-block;
+                vertical-align: top;
+                width: 48%;
+                margin-bottom: 10px;
+                margin-right: 2%;
+            }
+
+            .datos-empleado .etiqueta {
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #333;
+                margin-bottom: 3px;
+            }
+
+            .datos-empleado .valor {
+                color: #000;
+            }
+
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: sans-serif;
+        }
+
+            .info-table td {
+                padding: 0 20px 5px 0;
+                border: none;
+            }
+
+                .info-table td:first-child {
+                    padding-bottom: 30px;
+                }
+
+
+            .info-table strong {
+                font-size: 11px;
+                font-weight: bold;
+                display: block;
+            }
+
+            .info-table span {
+                font-size: 13px;
+            }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="encabezado">
+        <h1>FLORISTERÍA DA'PAZ</h1>
+        <div class="subtitulo">Boleta de pago</div>
+    </div>
+
+
+    <div class="boleta">
+        <div class="barra-boleta">
+            <div class="izquierda">No. Boleta : @Model.IdPlanilla</div>
+            <div class="derecha">Fecha : @Model.FechaPlanilla.ToString("dd MMMM yyyy")</div>
+        </div>
+
+        <div class="nombre-empleado">
+            <span class="label">NOMBRE:</span><br>
+            <span class="valor">@Model.Nombre @Model.Apellido</span>
+        </div>
+
+        <table class="info-table">
+            <tr>
+                <td>
+                    <strong>TELÉFONO</strong>
+                    <span>@Model.Telefono</span>
+                </td>
+                <td>
+                    <strong>EMAIL</strong>
+                    <span>@Model.Correo</span>
+                </td>
+                <td>
+                    <strong>FECHA DE INGRESO:</strong>
+                    <span>@Model.FechaIngreso.ToString("dd MMMM yyyy")</span>
+                </td>
+                <td style="padding: 0 0 5px 0;">
+                    <strong>CARGO:</strong>
+                    <span>VENDEDOR</span>
+                </td>
+            </tr>
+        </table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Horas</th>
+                    <th>Precio</th>
+                    <th>Horas Extra</th>
+                    <th>Porc. %</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.DetallesHoras)
+                {
+                    <tr>
+                        <td>@item.Fecha.ToString("dd-MM-yyyy")</td>
+                        <td>@item.HorasRegulares.ToString("N0")</td>
+                        <td>@item.Precio.ToString("N0")</td>
+                        <td>@item.HorasExtra.ToString("N0")</td>
+                        <td>@item.Porcentaje</td>
+                        <td>@item.Total.ToString("N0")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <div class="totales">
+            Total Semana: @Model.SalarioBruto.ToString("N0")
+        </div>
+
+        <div style="margin-top: 30px;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Deducción</th>
+                        <th>Cuota</th>
+                        <th>Monto Deducido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var deduccion in Model.DeduccionesDetalle)
+                    {
+                        <tr>
+                            <td style="text-align: left;">@deduccion.Nombre</td>
+                            <td>@deduccion.Monto.ToString("N2")</td>
+                            <td>@deduccion.Monto.ToString("N2")</td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            <div class="totales">Total Deducciones: @Model.TotalDeducciones.ToString("N0")</div>
+        </div>
+
+        <div class="resumen-final">
+            <div class="neto">
+                Neto a Recibir<br />
+                ₡@Model.SalarioNeto.ToString("N0")
+            </div>
+        </div>
+
+        <div class="firmas">
+            <div>
+                <div class="firma-linea"></div>
+                Aprobado por
+            </div>
+            <div>
+                <div class="firma-linea"></div>
+                Firma de Trabajador
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

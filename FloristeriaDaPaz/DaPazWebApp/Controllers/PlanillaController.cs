@@ -3,13 +3,16 @@ using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Data.SqlClient;
-using Rotativa.AspNetCore; // 👈 importante para el PDF
+using Rotativa.AspNetCore;
 using System.Data;
+using System.Reflection;
+using System.Threading;
 
 namespace DaPazWebApp.Controllers
 {
     public class PlanillaController : Controller
     {
+
         private readonly IConfiguration _configuration;
 
         public PlanillaController(IConfiguration configuration)
@@ -27,6 +30,70 @@ namespace DaPazWebApp.Controllers
                 ).ToList();
 
                 return View(planillas);
+            }
+        }
+
+        public IActionResult ImprimirPlanilla(int id)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var resultado = connection.Query(
+                    "SP_PlanillaCompleta",
+                    new { idPlanilla = id },
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
+
+                if (!resultado.Any())
+                {
+                    return NotFound();
+                }
+
+                var primera = resultado.First();
+
+                var viewModel = new DetallePlanillaCompletoViewModel
+                {
+                    IdPlanilla = primera.idPlanilla,
+                    FechaPlanilla = primera.fechaPlanilla,
+                    SalarioBruto = primera.salarioBruto,
+                    Deducciones = primera.deducciones,
+                    SalarioNeto = primera.salarioNeto,
+                    TotalDeducciones = primera.TotalDeducciones,
+                    SalarioEmpleado = primera.salarioEmpleado,
+                    FechaIngreso = primera.fechaIngreso,
+                    IdUsuario = primera.idUsuario,
+                    Nombre = primera.nombre,
+                    Apellido = primera.apellido,
+                    Correo = primera.correo,
+                    Telefono = primera.telefono,
+                    TotalHorasRegulares = resultado.Sum(r => (decimal)r.HorasRegulares),
+                    TotalHorasExtra = resultado.Sum(r => (decimal)r.HorasExtra),
+                    PorcentajePromedio = resultado.Average(r => (decimal)r.Porcentaje),
+                    DetallesHoras = resultado.Select(r => new DetalleHorasViewModel
+                    {
+                        Fecha = r.fecha,
+                        HorasRegulares = r.HorasRegulares,
+                        Precio = r.Precio,
+                        HorasExtra = r.HorasExtra,
+                        Porcentaje = r.Porcentaje,
+                        Total = r.TotalFila
+                    }).ToList(),
+
+                    SalarioNetoCalculado = resultado.Sum(r => (decimal)r.TotalFila) - primera.deducciones
+                };
+
+                var deducciones = connection.Query<DeduccionViewModel>(
+                    "SELECT Nombre, Monto FROM DetalleDeduccion WHERE IdPlanilla = @IdPlanilla",
+                    new { IdPlanilla = id }
+                ).ToList();
+
+                viewModel.DeduccionesDetalle = deducciones;
+
+                return new ViewAsPdf("ImprimirPlanilla", viewModel)
+                {
+                    FileName = $"Planilla_{viewModel.Nombre}.pdf",
+                    PageSize = Rotativa.AspNetCore.Options.Size.A4,
+                    PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
+                };
             }
         }
 
