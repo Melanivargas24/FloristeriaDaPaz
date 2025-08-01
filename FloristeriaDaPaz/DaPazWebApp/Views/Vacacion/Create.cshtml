@@ -4,88 +4,134 @@
     Layout = "_Layout";
 }
 
-<div class="container" style="margin-top:35px; margin-bottom:135px">
+<div class="container" style="margin-top: 35px; margin-bottom: 50px; padding-bottom: 30px;">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card shadow">
+            <div class="card shadow" style="min-height: auto; position: relative; z-index: 1;">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0">
                         <i class="fas fa-calendar-plus"></i> Registrar Nueva Vacación
                     </h3>
                 </div>
-                <div class="card-body">
-                    <form asp-action="Create" method="post">
-                        <div asp-validation-summary="All" class="alert alert-danger" style="display: none;"></div>
+                <div class="card-body" style="padding: 2rem; position: relative;">
+                    <form asp-action="Create" method="post" style="position: relative; z-index: 2;">
+                        <div asp-validation-summary="All" class="alert alert-danger" style="display: none; margin-bottom: 1.5rem;"></div>
 
-                        <div class="mb-4">
-                            <label asp-for="IdEmpleado" class="form-label fw-bold">
+                        <!-- Sección Empleado -->
+                        <div class="mb-4" style="margin-bottom: 2rem !important;">
+                            <label asp-for="IdEmpleado" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
                                 <i class="fas fa-user"></i> Empleado
                             </label>
-                            <select asp-for="IdEmpleado" class="form-select" asp-items="ViewBag.Empleados" id="empleadoSelect">
+                            <select asp-for="IdEmpleado"
+                                    class="form-select"
+                                    asp-items="ViewBag.Empleados"
+                                    id="empleadoSelect"
+                                    style="height: 45px; font-size: 1rem; position: relative; z-index: 10;">
                                 <option value="">-- Seleccione un empleado --</option>
                             </select>
-                            <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                            <span asp-validation-for="IdEmpleado" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
                         </div>
 
-                        <div class="row">
+                        <!-- Sección Fechas -->
+                        <div class="row" style="margin-bottom: 2rem;">
                             <div class="col-md-6">
-                                <div class="mb-4">
-                                    <label asp-for="FechaInicio" class="form-label fw-bold">
+                                <div class="mb-4" style="margin-bottom: 1.5rem !important;">
+                                    <label asp-for="FechaInicio" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
                                         <i class="fas fa-calendar-alt"></i> Fecha de Inicio
                                     </label>
-                                    <input asp-for="FechaInicio" type="date" class="form-control" id="fechaInicio" />
-                                    <span asp-validation-for="FechaInicio" class="text-danger"></span>
+                                    <input asp-for="FechaInicio"
+                                           type="date"
+                                           class="form-control"
+                                           id="fechaInicio"
+                                           style="height: 45px; font-size: 1rem; position: relative; z-index: 10;" />
+                                    <span asp-validation-for="FechaInicio" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-4">
-                                    <label asp-for="FechaFin" class="form-label fw-bold">
+                                <div class="mb-4" style="margin-bottom: 1.5rem !important;">
+                                    <label asp-for="FechaFin" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
                                         <i class="fas fa-calendar-alt"></i> Fecha de Fin
                                     </label>
-                                    <input asp-for="FechaFin" type="date" class="form-control" id="fechaFin" />
-                                    <span asp-validation-for="FechaFin" class="text-danger"></span>
+                                    <input asp-for="FechaFin"
+                                           type="date"
+                                           class="form-control"
+                                           id="fechaFin"
+                                           style="height: 45px; font-size: 1rem; position: relative; z-index: 10;" />
+                                    <span asp-validation-for="FechaFin" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="mb-4" id="resumenVacacion" style="display: none;">
-                            <div class="alert alert-info border-0">
-                                <h6 class="alert-heading">
+                        <!-- Resumen de Vacación -->
+                        <div class="mb-4" id="resumenVacacion" style="display: none; margin-bottom: 2rem !important; position: relative; z-index: 1;">
+                            <div class="alert alert-info border-0" style="padding: 1.5rem; margin-bottom: 0;">
+                                <h6 class="alert-heading" style="margin-bottom: 1rem;">
                                     <i class="fas fa-info-circle"></i> Resumen de Vacación
                                 </h6>
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
                                         <strong>Empleado:</strong>
-                                        <div id="empleadoSeleccionado" class="text-muted">-</div>
+                                        <div id="empleadoSeleccionado" class="text-muted" style="margin-top: 0.25rem;">-</div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
                                         <strong>Duración:</strong>
-                                        <div id="duracionVacacion" class="text-primary fw-bold">-</div>
+                                        <div id="duracionVacacion" class="text-primary fw-bold" style="margin-top: 0.25rem;">-</div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
                                         <strong>Período:</strong>
-                                        <div id="periodoVacacion" class="text-muted">-</div>
+                                        <div id="periodoVacacion" class="text-muted" style="margin-top: 0.25rem;">-</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="alert alert-warning border-0 mb-4">
-                            <i class="fas fa-exclamation-triangle"></i>
-                            <strong>Importante:</strong>
-                            <ul class="mb-0 mt-2">
-                                <li>Las fechas seleccionadas determinarán automáticamente la cantidad de días de vacación.</li>
-                                <li>La fecha de fin debe ser posterior a la fecha de inicio.</li>
-                                <li>Verifique que las fechas no se solapen con otras vacaciones del empleado.</li>
-                            </ul>
+                        <!-- Advertencias Importantes -->
+                        <div class="alert alert-warning border-0 mb-4" style="margin-bottom: 2.5rem !important; padding: 1.5rem; position: relative; z-index: 1;">
+                            <div style="display: flex; align-items: flex-start;">
+                                <i class="fas fa-exclamation-triangle" style="margin-right: 0.75rem; margin-top: 0.25rem; flex-shrink: 0;"></i>
+                                <div>
+                                    <strong>Importante:</strong>
+                                    <ul class="mb-0 mt-2" style="padding-left: 1.25rem; margin-bottom: 0 !important;">
+                                        <li style="margin-bottom: 0.5rem;">Las fechas seleccionadas determinarán automáticamente la cantidad de días de vacación.</li>
+                                        <li style="margin-bottom: 0.5rem;">La fecha de fin debe ser posterior a la fecha de inicio.</li>
+                                        <li style="margin-bottom: 0;">Verifique que las fechas no se solapen con otras vacaciones del empleado.</li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                            <button type="submit" class="btn btn-success btn-lg me-md-2" id="btnGuardar">
-                                <i class="fas fa-save"></i> Guardar Vacación
+                        <!-- Botones de Acción -->
+                        <div class="d-grid gap-3 d-md-flex justify-content-md-center"
+                             style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #dee2e6; position: relative; z-index: 100;">
+                            <button type="submit"
+                                    class="btn btn-success btn-lg me-md-3"
+                                    id="btnGuardar"
+                                    style="min-height: 50px;
+                                           padding: 0.75rem 2rem;
+                                           font-size: 1.1rem;
+                                           font-weight: 600;
+                                           position: relative;
+                                           z-index: 101;
+                                           cursor: pointer;
+                                           border: none;
+                                           box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <i class="fas fa-save" style="margin-right: 0.5rem;"></i> Guardar Vacación
                             </button>
-                            <a asp-action="Index" class="btn btn-secondary btn-lg">
-                                <i class="fas fa-times"></i> Cancelar
+                            <a asp-action="Index"
+                               class="btn btn-secondary btn-lg"
+                               style="min-height: 50px;
+                                      padding: 0.75rem 2rem;
+                                      font-size: 1.1rem;
+                                      font-weight: 600;
+                                      position: relative;
+                                      z-index: 101;
+                                      cursor: pointer;
+                                      text-decoration: none;
+                                      display: inline-flex;
+                                      align-items: center;
+                                      justify-content: center;
+                                      box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                <i class="fas fa-times" style="margin-right: 0.5rem;"></i> Cancelar
                             </a>
                         </div>
                     </form>
@@ -185,6 +231,13 @@
             if ($('.text-danger').text().trim() !== '') {
                 $('.alert-danger').show();
             }
+
+            // Mejorar la interacción con los elementos del formulario
+            $('.form-control, .form-select').on('focus', function() {
+                $(this).css('z-index', '20');
+            }).on('blur', function() {
+                $(this).css('z-index', '10');
+            });
         });
     </script>
 }
