@@ -28,6 +28,7 @@
 	var rol = (Context.Session.GetString("Rol") ?? "Invitad@").Trim();
 	var idUsuario = Context.Session.GetInt32("IdUsuario");
 	int? idRol = Context.Session.GetInt32("IdRol");
+	var chatMensajes = ViewData["ChatMensajes"] as List<(string remitente, string texto)> ?? new List<(string, string)>();
 }
 
 <body>
@@ -164,14 +165,128 @@
 				</div>
 			</div>
 	</footer>
-	<!-- End Footer Section -->
 
+	<!-- Botón flotante -->
+	<button id="chatbot-button" class="btn btn-success rounded-circle shadow p-0"
+			style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1050; overflow: hidden;">
+		<img src="/imagenes/Rosita.png" alt="Rosita" style="width: 100%; height: 100%; object-fit: cover;" />
+	</button>
+
+	<!-- Ventana del chatbot -->
+	<div id="chatbot-popup" class="card shadow"
+		 style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 420px; display: none; z-index: 1050;">
+
+
+		<!-- Encabezado -->
+		<div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+			<span>Asistente Floristería</span>
+			<button id="chatbot-close" class="btn btn-sm btn-light">&times;</button>
+		</div>
+
+		<!-- Mensajes -->
+		<div id="chatbot-messages" class="card-body overflow-auto d-flex flex-column" style="flex-grow: 1; font-size: 14px; gap: 8px;">
+			<div class="text-muted small text-center">Escríbeme para ayudarte 🌸</div>
+		</div>
+
+
+		<!-- Input -->
+		<div class="card-footer p-2">
+			<div class="input-group">
+				<input type="text" id="chatbot-input" class="form-control" placeholder="Escribe tu mensaje..." />
+				<button id="chatbot-send" class="btn btn-success">
+					<i class="bi bi-send-fill"></i>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			const btnOpen = document.getElementById("chatbot-button");
+			const btnClose = document.getElementById("chatbot-close");
+			const popup = document.getElementById("chatbot-popup");
+			const messages = document.getElementById("chatbot-messages");
+			const input = document.getElementById("chatbot-input");
+			const btnSend = document.getElementById("chatbot-send");
+
+			let chatIniciado = false;
+
+			function mostrarMensaje(remitente, texto) {
+				const div = document.createElement("div");
+				div.classList.add("d-flex", "align-items-center", "mb-2");
+
+				if (remitente === "bot") {
+					div.classList.add("justify-content-start");
+					div.innerHTML = `
+						<img src="/imagenes/Rosita.png" alt="Rosita" style="width:32px; height:32px; border-radius:50%; margin-right:10px;" />
+						<div class="badge bg-secondary text-wrap" style="max-width: 75%;">${texto}</div>
+					`;
+				} else {
+					div.classList.add("justify-content-end");
+					div.innerHTML = `
+						<div class="badge bg-primary text-wrap" style="max-width: 75%;">${texto}</div>
+					`;
+				}
+
+				messages.appendChild(div);
+				messages.scrollTop = messages.scrollHeight;
+			}
+
+			function enviarMensaje(mensaje) {
+				fetch("/Chatbot/EnviarMensaje", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify({ mensaje: mensaje })
+				})
+				.then(res => res.json())
+				.then(data => {
+					mostrarMensaje("bot", data.respuesta);
+				})
+				.catch(err => {
+					mostrarMensaje("bot", "Error al conectar con el servidor.");
+					console.error("Error:", err);
+				});
+			}
+
+			btnOpen.addEventListener("click", function () {
+				popup.style.display = "flex";
+
+				if (!chatIniciado) {
+					enviarMensaje(
+						"Eres el asistente virtual de la Floristería DaPaz. Ayuda al cliente a elegir flores, arreglos y resolver dudas, ademas intenta responder en un mensaje corto y y claro, no trates de dar explicaciones muy largas y detalladas unicamente tu trabajo es servir de ayuda al cliente, ademas no uses negrita para detallar mensajes ni emojis, en el caso de que el cliente necesite ayuda con su cuenta facilitale el siguiente correo (cesar.arceg.2005@gmail.com). Responde unicamente diciendo: Hola soy rosita tu virtual de floristeria DaPaz, en que te puedo ayudar hoy?");
+					chatIniciado = true;
+				}
+			});
+
+			btnClose.addEventListener("click", function () {
+				popup.style.display = "none";
+			});
+
+			btnSend.addEventListener("click", function () {
+				const texto = input.value.trim();
+				if (texto) {
+					mostrarMensaje("usuario", texto);
+					enviarMensaje(texto);
+					input.value = "";
+				}
+			});
+
+			input.addEventListener("keypress", function (e) {
+				if (e.key === "Enter") {
+					btnSend.click();
+				}
+			});
+		});
+	</script>
+
+
+
+	<!-- Scripts de tu app -->
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="~/js/tiny-slider.js"></script>
 	<script src="~/js/custom.js"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-
 
 	@RenderSection("Scripts", required: false)
 </body>

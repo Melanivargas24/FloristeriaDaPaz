@@ -10,7 +10,8 @@ using System.Globalization;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession(); // Registrar el servicio de sesión SOLO UNA VEZ.
+builder.Services.AddSession(); // Ya está registrado una vez, puedes eliminar la duplicación.
+builder.Services.AddHttpClient(); // <-- Agrega esto para IHttpClientFactory
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
