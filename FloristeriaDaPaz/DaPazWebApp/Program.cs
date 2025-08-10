@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Globalization;
+using DaPazWebApp.Helpers;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -37,6 +38,9 @@ CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
 CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
 
 var app = builder.Build();
+
+// Configurar el AuditoriaHelper con la configuración
+AuditoriaHelper.SetConfiguration(app.Configuration);
 
 if (!app.Environment.IsDevelopment())
 {

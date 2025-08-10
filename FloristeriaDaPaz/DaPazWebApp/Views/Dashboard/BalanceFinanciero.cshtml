@@ -1,0 +1,515 @@
+@model DaPazWebApp.Models.BalanceFinancieroViewModel
+@{
+    ViewData["Title"] = "Dashboard de Balance Financiero";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="row mb-3">
+        <div class="col-6">
+            <h2><i class="fas fa-chart-line"></i> Dashboard de Balance Financiero</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver al Centro de Control
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtro de Fechas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-calendar"></i> Filtrar por Rango de Fechas</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="@Url.Action("BalanceFinanciero", "Dashboard")" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="fechaInicio" class="form-label">Fecha Inicio:</label>
+                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" 
+                                   value="@Model.FiltroFechas.FechaInicioFormateada">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaFin" class="form-label">Fecha Fin:</label>
+                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" 
+                                   value="@Model.FiltroFechas.FechaFinFormateada">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a href="@Url.Action("BalanceFinanciero", "Dashboard")" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                    @if (Model.FiltroFechas.AplicarFiltro)
+                    {
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <i class="fas fa-info-circle"></i> 
+                                Mostrando datos desde @Model.FiltroFechas.FechaInicio?.ToString("dd/MM/yyyy") 
+                                hasta @Model.FiltroFechas.FechaFin?.ToString("dd/MM/yyyy")
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen General Financiero -->
+    <div class="row mb-4">
+        <div class="col-md-2">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h3>₡@Model.ResumenFinanciero.TotalIngresos.ToString("N0")</h3>
+                    <h6>Total Ingresos</h6>
+                    <small>Hoy: ₡@Model.ResumenFinanciero.IngresosHoy.ToString("N0")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-danger text-white">
+                <div class="card-body text-center">
+                    <h3>₡@Model.ResumenFinanciero.TotalEgresos.ToString("N0")</h3>
+                    <h6>Total Egresos</h6>
+                    <small>Hoy: ₡@Model.ResumenFinanciero.EgresosHoy.ToString("N0")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card @(Model.ResumenFinanciero.BalanceNeto >= 0 ? "bg-primary" : "bg-warning") text-white">
+                <div class="card-body text-center">
+                    <h3>₡@Model.ResumenFinanciero.BalanceNeto.ToString("N0")</h3>
+                    <h6>Balance Neto</h6>
+                    <small>@Model.ResumenFinanciero.EstadoFinanciero</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h3>@Model.ResumenFinanciero.PorcentajeMargen.ToString("F1")%</h3>
+                    <h6>Margen Bruto</h6>
+                    <small>₡@Model.ResumenFinanciero.MargenBruto.ToString("N0")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-secondary text-white">
+                <div class="card-body text-center">
+                    <h3>₡@Model.ResumenFinanciero.IngresosSemana.ToString("N0")</h3>
+                    <h6>Ingresos Semana</h6>
+                    <small>Egresos: ₡@Model.ResumenFinanciero.EgresosSemana.ToString("N0")</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="card bg-dark text-white">
+                <div class="card-body text-center">
+                    <h3>₡@Model.ResumenFinanciero.IngresosMes.ToString("N0")</h3>
+                    <h6>Ingresos Mes</h6>
+                    <small>Egresos: ₡@Model.ResumenFinanciero.EgresosMes.ToString("N0")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráficos de Flujo de Caja e Ingresos vs Egresos -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-area"></i> Flujo de Caja (Últimos 30 días)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="flujoCajaChart" height="300"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-pie"></i> Distribución Financiera</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="distribucionChart"></canvas>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between">
+                            <span><i class="fas fa-circle text-success"></i> Ingresos</span>
+                            <strong>₡@Model.ResumenFinanciero.TotalIngresos.ToString("N0")</strong>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span><i class="fas fa-circle text-danger"></i> Egresos</span>
+                            <strong>₡@Model.ResumenFinanciero.TotalEgresos.ToString("N0")</strong>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between">
+                            <strong>Balance Neto</strong>
+                            <strong class="@(Model.ResumenFinanciero.BalanceNeto >= 0 ? "text-success" : "text-danger")">
+                                ₡@Model.ResumenFinanciero.BalanceNeto.ToString("N0")
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Gráfico Comparativo Mensual -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-bar"></i> Ingresos vs Egresos Mensuales (Últimos 12 meses)</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="comparativoMensualChart" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Análisis Financiero y Movimientos Recientes -->
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-analytics"></i> Análisis Financiero</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6>Promedios Diarios</h6>
+                        <p class="mb-1">Ingresos: <strong class="text-success">₡@Model.AnalisisFinanciero.PromedioIngresosDiarios.ToString("N0")</strong></p>
+                        <p class="mb-1">Egresos: <strong class="text-danger">₡@Model.AnalisisFinanciero.PromedioEgresosDiarios.ToString("N0")</strong></p>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Tendencias</h6>
+                        <p class="mb-1">
+                            Ingresos: 
+                            <span class="@(Model.AnalisisFinanciero.TendenciaIngresos >= 0 ? "text-success" : "text-danger")">
+                                @Model.AnalisisFinanciero.TendenciaIngresosTexto
+                            </span>
+                        </p>
+                        <p class="mb-1">
+                            Egresos: 
+                            <span class="@(Model.AnalisisFinanciero.TendenciaEgresos >= 0 ? "text-danger" : "text-success")">
+                                @Model.AnalisisFinanciero.TendenciaEgresosTexto
+                            </span>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <h6>Métricas</h6>
+                        <p class="mb-1">Ratio I/E: <strong>@Model.AnalisisFinanciero.RatioIngresosEgresos.ToString("F2")</strong></p>
+                        <p class="mb-1">Días Operativos: <strong>@Model.AnalisisFinanciero.DiasOperativos</strong></p>
+                        <p class="mb-1">Punto Equilibrio: <strong>₡@Model.AnalisisFinanciero.PuntoEquilibrio.ToString("N0")</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-history"></i> Movimientos Recientes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+                        <table class="table table-sm">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo</th>
+                                    <th>Concepto</th>
+                                    <th>Detalle</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.MovimientosRecientes != null && Model.MovimientosRecientes.Any())
+                                {
+                                    @foreach (var movimiento in Model.MovimientosRecientes)
+                                    {
+                                        <tr>
+                                            <td>@movimiento.FechaFormateada</td>
+                                            <td>
+                                                <span class="badge @(movimiento.TipoMovimiento == "Ingreso" ? "bg-success" : "bg-danger")">
+                                                    @movimiento.TipoMovimiento
+                                                </span>
+                                            </td>
+                                            <td>@movimiento.Concepto</td>
+                                            <td>@movimiento.Detalle</td>
+                                            <td class="@movimiento.CssClass">
+                                                <strong>@movimiento.MontoFormateado</strong>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No hay movimientos registrados</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tablas Detalladas -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-arrow-up text-success"></i> Ingresos por Mes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Ventas</th>
+                                    <th>Otros</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.IngresosPorMes != null && Model.IngresosPorMes.Any())
+                                {
+                                    @foreach (var ingreso in Model.IngresosPorMes.OrderByDescending(i => i.Año).ThenByDescending(i => i.Mes))
+                                    {
+                                        <tr>
+                                            <td>@ingreso.PeriodoFormateado</td>
+                                            <td>₡@ingreso.TotalVentas.ToString("N0")</td>
+                                            <td>₡@ingreso.OtrosIngresos.ToString("N0")</td>
+                                            <td><strong>₡@ingreso.TotalIngresos.ToString("N0")</strong></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="4" class="text-center text-muted">No hay datos de ingresos</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-arrow-down text-danger"></i> Egresos por Mes</h5>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Período</th>
+                                    <th>Compras</th>
+                                    <th>Salarios</th>
+                                    <th>Otros</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model.EgresosPorMes != null && Model.EgresosPorMes.Any())
+                                {
+                                    @foreach (var egreso in Model.EgresosPorMes.OrderByDescending(e => e.Año).ThenByDescending(e => e.Mes))
+                                    {
+                                        <tr>
+                                            <td>@egreso.PeriodoFormateado</td>
+                                            <td>₡@egreso.ComprasProveedores.ToString("N0")</td>
+                                            <td>₡@egreso.SalariosPlanillas.ToString("N0")</td>
+                                            <td>₡@egreso.OtrosEgresos.ToString("N0")</td>
+                                            <td><strong>₡@egreso.TotalEgresos.ToString("N0")</strong></td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-center text-muted">No hay datos de egresos</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Datos para los gráficos
+        const datosFlujoCaja = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.FlujoCaja.OrderBy(f => f.Fecha).Select(f => new { 
+            fecha = f.FechaFormateada, 
+            ingresos = f.Ingresos, 
+            egresos = f.Egresos, 
+            flujoNeto = f.FlujoNeto,
+            saldoAcumulado = f.SaldoAcumulado
+        })));
+
+        const datosIngresosMensuales = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.IngresosPorMes.OrderBy(i => i.Año).ThenBy(i => i.Mes).Select(i => new { 
+            periodo = i.PeriodoFormateado, 
+            total = i.TotalIngresos 
+        })));
+
+        const datosEgresosMensuales = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.EgresosPorMes.OrderBy(e => e.Año).ThenBy(e => e.Mes).Select(e => new { 
+            periodo = e.PeriodoFormateado, 
+            total = e.TotalEgresos 
+        })));
+
+        // Configuración del gráfico de flujo de caja
+        const ctxFlujo = document.getElementById('flujoCajaChart').getContext('2d');
+        new Chart(ctxFlujo, {
+            type: 'line',
+            data: {
+                labels: datosFlujoCaja.map(d => d.fecha),
+                datasets: [{
+                    label: 'Ingresos',
+                    data: datosFlujoCaja.map(d => d.ingresos),
+                    borderColor: 'rgb(40, 167, 69)',
+                    backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Egresos',
+                    data: datosFlujoCaja.map(d => d.egresos),
+                    borderColor: 'rgb(220, 53, 69)',
+                    backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                    tension: 0.4
+                }, {
+                    label: 'Saldo Acumulado',
+                    data: datosFlujoCaja.map(d => d.saldoAcumulado),
+                    borderColor: 'rgb(13, 110, 253)',
+                    backgroundColor: 'rgba(13, 110, 253, 0.1)',
+                    tension: 0.4,
+                    yAxisID: 'y1'
+                }]
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Fecha'
+                        }
+                    },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Flujo Diario (₡)'
+                        }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'Saldo Acumulado (₡)'
+                        },
+                        grid: {
+                            drawOnChartArea: false,
+                        },
+                    }
+                }
+            }
+        });
+
+        // Configuración del gráfico de distribución (pie)
+        const ctxDistribucion = document.getElementById('distribucionChart').getContext('2d');
+        new Chart(ctxDistribucion, {
+            type: 'doughnut',
+            data: {
+                labels: ['Ingresos', 'Egresos'],
+                datasets: [{
+                    data: [@Model.ResumenFinanciero.TotalIngresos, @Model.ResumenFinanciero.TotalEgresos],
+                    backgroundColor: ['rgb(40, 167, 69)', 'rgb(220, 53, 69)']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        // Configuración del gráfico comparativo mensual
+        const ctxComparativo = document.getElementById('comparativoMensualChart').getContext('2d');
+        
+        // Combinar datos de ingresos y egresos por período
+        const periodos = [...new Set([...datosIngresosMensuales.map(d => d.periodo), ...datosEgresosMensuales.map(d => d.periodo)])].sort();
+        
+        const ingresosData = periodos.map(periodo => {
+            const ingreso = datosIngresosMensuales.find(d => d.periodo === periodo);
+            return ingreso ? ingreso.total : 0;
+        });
+        
+        const egresosData = periodos.map(periodo => {
+            const egreso = datosEgresosMensuales.find(d => d.periodo === periodo);
+            return egreso ? egreso.total : 0;
+        });
+
+        new Chart(ctxComparativo, {
+            type: 'bar',
+            data: {
+                labels: periodos,
+                datasets: [{
+                    label: 'Ingresos',
+                    data: ingresosData,
+                    backgroundColor: 'rgba(40, 167, 69, 0.8)',
+                    borderColor: 'rgb(40, 167, 69)',
+                    borderWidth: 1
+                }, {
+                    label: 'Egresos',
+                    data: egresosData,
+                    backgroundColor: 'rgba(220, 53, 69, 0.8)',
+                    borderColor: 'rgb(220, 53, 69)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Monto (₡)'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Período'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
