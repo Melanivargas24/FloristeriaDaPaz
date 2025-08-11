@@ -14,9 +14,10 @@
     <!-- Dashboards Principales -->
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="row">
+            <!-- Primera fila: 2 dashboards -->
+            <div class="row justify-content-center mb-4">
                 <!-- Dashboard de Ventas -->
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-5 mb-4">
                     <div class="card dashboard-card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <div class="dashboard-icon mb-3">
@@ -39,7 +40,7 @@
                 </div>
 
                 <!-- Dashboard de Inventario -->
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-5 mb-4">
                     <div class="card dashboard-card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <div class="dashboard-icon mb-3">
@@ -60,9 +61,12 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <!-- Segunda fila: 2 dashboards -->
+            <div class="row justify-content-center">
                 <!-- Dashboard Financiero -->
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-5 mb-4">
                     <div class="card dashboard-card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <div class="dashboard-icon mb-3">
@@ -85,7 +89,7 @@
                 </div>
 
                 <!-- Dashboard de Historial de Actividades -->
-                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="col-md-6 col-lg-5 mb-4">
                     <div class="card dashboard-card h-100 shadow-sm">
                         <div class="card-body text-center">
                             <div class="dashboard-icon mb-3">
@@ -103,75 +107,6 @@
                             <a href="@Url.Action("HistorialActividades", "Dashboard")" class="btn btn-warning btn-lg">
                                 <i class="fas fa-eye"></i> Ver Historial
                             </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashboard de Empleados (Futuro) -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card dashboard-card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="dashboard-icon mb-3">
-                                <i class="fas fa-users fa-4x text-dark"></i>
-                            </div>
-                            <h4 class="card-title">Dashboard de Empleados</h4>
-                            <p class="card-text">Métricas de recursos humanos, productividad y gestión de personal</p>
-                            <div class="dashboard-stats mb-3">
-                                <small class="text-muted">
-                                    <i class="fas fa-user-check"></i> Rendimiento por empleado<br>
-                                    <i class="fas fa-clock"></i> Horas trabajadas<br>
-                                    <i class="fas fa-award"></i> Metas y objetivos
-                                </small>
-                            </div>
-                            <button class="btn btn-dark btn-lg" disabled>
-                                <i class="fas fa-wrench"></i> Próximamente
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashboard de Marketing (Futuro) -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card dashboard-card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="dashboard-icon mb-3">
-                                <i class="fas fa-bullhorn fa-4x text-danger"></i>
-                            </div>
-                            <h4 class="card-title">Dashboard de Marketing</h4>
-                            <p class="card-text">Campañas, promociones y análisis de efectividad de marketing</p>
-                            <div class="dashboard-stats mb-3">
-                                <small class="text-muted">
-                                    <i class="fas fa-tags"></i> Promociones activas<br>
-                                    <i class="fas fa-eye"></i> Alcance de campañas<br>
-                                    <i class="fas fa-conversion"></i> Tasa de conversión
-                                </small>
-                            </div>
-                            <button class="btn btn-danger btn-lg" disabled>
-                                <i class="fas fa-wrench"></i> Próximamente
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Dashboard de Clientes (Futuro) -->
-                <div class="col-md-6 col-lg-4 mb-4">
-                    <div class="card dashboard-card h-100 shadow-sm">
-                        <div class="card-body text-center">
-                            <div class="dashboard-icon mb-3">
-                                <i class="fas fa-heart fa-4x text-secondary"></i>
-                            </div>
-                            <h4 class="card-title">Dashboard de Clientes</h4>
-                            <p class="card-text">Análisis de comportamiento, satisfacción y retención de clientes</p>
-                            <div class="dashboard-stats mb-3">
-                                <small class="text-muted">
-                                    <i class="fas fa-star"></i> Satisfacción del cliente<br>
-                                    <i class="fas fa-redo"></i> Clientes recurrentes<br>
-                                    <i class="fas fa-gift"></i> Programas de fidelidad
-                                </small>
-                            </div>
-                            <button class="btn btn-secondary btn-lg" disabled>
-                                <i class="fas fa-wrench"></i> Próximamente
-                            </button>
                         </div>
                     </div>
                 </div>
