@@ -16,49 +16,6 @@
         </div>
     </div>
 
-    <!-- Filtro de Fechas -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5><i class="fas fa-calendar"></i> Filtrar por Rango de Fechas</h5>
-                </div>
-                <div class="card-body">
-                    <form method="get" action="@Url.Action("Ventas", "Dashboard")" class="row g-3">
-                        <div class="col-md-4">
-                            <label for="fechaInicio" class="form-label">Fecha Inicio:</label>
-                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" 
-                                   value="@Model.FiltroFechas.FechaInicioFormateada">
-                        </div>
-                        <div class="col-md-4">
-                            <label for="fechaFin" class="form-label">Fecha Fin:</label>
-                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" 
-                                   value="@Model.FiltroFechas.FechaFinFormateada">
-                        </div>
-                        <div class="col-md-4 d-flex align-items-end">
-                            <button type="submit" class="btn btn-primary me-2">
-                                <i class="fas fa-search"></i> Filtrar
-                            </button>
-                            <a href="@Url.Action("Ventas", "Dashboard")" class="btn btn-outline-secondary">
-                                <i class="fas fa-times"></i> Limpiar
-                            </a>
-                        </div>
-                    </form>
-                    @if (Model.FiltroFechas.AplicarFiltro)
-                    {
-                        <div class="mt-2">
-                            <small class="text-info">
-                                <i class="fas fa-info-circle"></i> 
-                                Mostrando datos desde @Model.FiltroFechas.FechaInicio?.ToString("dd/MM/yyyy") 
-                                hasta @Model.FiltroFechas.FechaFin?.ToString("dd/MM/yyyy")
-                            </small>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Tarjetas de estadísticas generales -->
     <div class="row mb-4">
         <div class="col-md-3">

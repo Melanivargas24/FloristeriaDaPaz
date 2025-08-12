@@ -1,16 +1,5 @@
 namespace DaPazWebApp.Models
 {
-    // Modelo para filtros de fecha
-    public class FiltroFechasModel
-    {
-        public DateTime? FechaInicio { get; set; }
-        public DateTime? FechaFin { get; set; }
-        public bool AplicarFiltro => FechaInicio.HasValue && FechaFin.HasValue;
-        
-        public string FechaInicioFormateada => FechaInicio?.ToString("yyyy-MM-dd") ?? "";
-        public string FechaFinFormateada => FechaFin?.ToString("yyyy-MM-dd") ?? "";
-    }
-
     public class DashboardViewModel
     {
         public List<VentaDiariaModel> VentasDiarias { get; set; } = new List<VentaDiariaModel>();
@@ -20,7 +9,6 @@ namespace DaPazWebApp.Models
         public List<TopProductoModel> TopProductos { get; set; } = new List<TopProductoModel>();
         public List<ProductoBajoStockModel> ProductosBajoStock { get; set; } = new List<ProductoBajoStockModel>();
         public ResumenInventarioModel ResumenInventario { get; set; } = new ResumenInventarioModel();
-        public FiltroFechasModel FiltroFechas { get; set; } = new FiltroFechasModel();
     }
 
     public class VentaDiariaModel
@@ -118,7 +106,6 @@ namespace DaPazWebApp.Models
         public List<EgresoMensualModel> EgresosPorMes { get; set; } = new List<EgresoMensualModel>();
         public List<FlujoCajaModel> FlujoCaja { get; set; } = new List<FlujoCajaModel>();
         public AnalisisFinancieroModel AnalisisFinanciero { get; set; } = new AnalisisFinancieroModel();
-        public FiltroFechasModel FiltroFechas { get; set; } = new FiltroFechasModel();
     }
 
     public class ResumenFinancieroModel
@@ -206,7 +193,6 @@ namespace DaPazWebApp.Models
         public List<ActividadPorFechaModel> ActividadesPorFecha { get; set; } = new List<ActividadPorFechaModel>();
         public ResumenActividadesModel ResumenActividades { get; set; } = new ResumenActividadesModel();
         public List<ActividadDetalleModel> DetalleActividades { get; set; } = new List<ActividadDetalleModel>();
-        public FiltroFechasModel FiltroFechas { get; set; } = new FiltroFechasModel();
     }
 
     public class ActividadRecienteModel
