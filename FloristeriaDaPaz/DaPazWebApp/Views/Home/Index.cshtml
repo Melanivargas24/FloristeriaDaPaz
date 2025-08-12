@@ -13,8 +13,9 @@
 						Le ofrecemos todo en arreglos florales y decoración para el hogar. Realice su pedido y nosotros nos encargamos del resto.
 					</p>
 					<p>
-						<a asp-controller="Shop" asp-action="Index" class="btn btn-secondary me-2">Comprar</a>
-						<a asp-controller="Home" asp-action="Explore" class="btn btn-white-outline">Explorar</a>
+						<a asp-controller="Catalogo" asp-action="Index" class="btn btn-secondary me-2">Comprar</a>
+						<a href="#seccion-explorar" class="btn btn-white-outline">Explorar</a>
+
 					</p>
 				</div>
 			</div>
@@ -28,69 +29,77 @@
 </div>
 
 <!-- End Hero Section -->
+
+
 <!-- Start Product Section -->
-<div class="product-section">
+<div class="product-section" id="seccion-explorar">
 	<div class="container">
 		<div class="row">
 
-			<!-- Start Column 1 -->
+			<!-- Columna con título y botón -->
 			<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
 				<h2 class="mb-4 section-title">Visita Nuestro Catálogo</h2>
-				<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
-				<p><a href="shop.html" class="btn">Explore</a></p>
+				<p class="mb-4">Encuentra arreglos florales y productos cuidadosamente seleccionados para llenar de vida y color tu hogar o evento.</p>
+				<p><a href="#seccion-explorar2" class="btn btn-white-outline">Explorar</a></p>
 			</div>
-			<!-- End Column 1 -->
-			<!-- Start Column 2 -->
-			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-				<a class="product-item" href="cart.html">
-					<img src="images/product-1.jpg" class="img-product product-thumbnail">
-					<h3 class="product-title">Arreglo Floral: Rosas</h3>
-					<strong class="product-price">$50.00</strong>
 
-					<span class="icon-cross">
-						<img src="images/cross.svg" class="img-fluid">
-					</span>
+			<!-- Productos -->
+			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+					<a class="card h-100 border-success text-decoration-none text-dark" asp-controller="Catalogo" asp-action="Index">
+					<img src="imagenes/oso peluche.jpg" class="card-img-top img-fluid rounded" alt="Oso de Peluche" style="max-height:220px; object-fit:contain;">
+					<div class="card-body">
+						<h5 class="card-title fw-bold text-center">Oso de Peluche</h5>
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<span class="badge bg-secondary">Producto</span>
+							<p class="mb-0"><strong>Categoría:</strong>Peluches</p>
+
+						</div>
+						<p class="card-text text-success fs-5 fw-bold text-center">₡7000</p>
+					</div>
 				</a>
 			</div>
-			<!-- End Column 2 -->
-			<!-- Start Column 3 -->
-			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-				<a class="product-item" href="cart.html">
-					<img src="images/product-2.jpg" class="img-product product-thumbnail">
-					<h3 class="product-title">Arreglo Floral: Girasoles 1</h3>
-					<strong class="product-price">$78.00</strong>
 
-					<span class="icon-cross">
-						<img src="images/cross.svg" class="img-fluid">
-					</span>
+			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+				<a class="card h-100 border-success text-decoration-none text-dark" asp-controller="Catalogo" asp-action="Index">
+					<img src="imagenes/rosas.jpg" class="card-img-top img-fluid rounded" alt="Ramo de  Rosas" style="max-height:220px; object-fit:contain;">
+					<div class="card-body">
+						<h5 class="card-title fw-bold text-center">Ramo de Rosas</h5>
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<span class="badge bg-secondary">Arreglo</span>
+							<p class="mb-0"><strong>Categoría:</strong>Flores</p>
+
+						</div>
+						<p class="card-text text-success fs-5 fw-bold text-center">₡6000</p>
+					</div>
 				</a>
 			</div>
-			<!-- End Column 3 -->
-			<!-- Start Column 4 -->
-			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-				<a class="product-item" href="cart.html">
-					<img src="images/product-3.jpg" class="img-product product-thumbnail">
-					<h3 class="product-title">Arreglo Floral: Girasoles 2</h3>
-					<strong class="product-price">$43.00</strong>
 
-					<span class="icon-cross">
-						<img src="images/cross.svg" class="img-fluid">
-					</span>
+			<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+				<a class="card h-100 border-success text-decoration-none text-dark" asp-controller="Catalogo" asp-action="Index">
+					<img src="imagenes/girasoles.jpg" class="card-img-top img-fluid rounded" alt="Ramo de Girasoles" style="max-height:220px; object-fit:contain;">
+					<div class="card-body">
+						<h5 class="card-title fw-bold text-center">Ramo de Girasoles</h5>
+						<div class="d-flex justify-content-between align-items-center mb-2">
+							<span class="badge bg-secondary">Arreglo</span>
+							<p class="mb-0"><strong>Categoría:</strong> Flores</p>
+
+						</div>
+						<p class="card-text text-success fs-5 fw-bold text-center">₡1500</p>
+					</div>
 				</a>
 			</div>
-			<!-- End Column 4 -->
 
 		</div>
 	</div>
 </div>
-<!-- End Product Section -->
+
 <!-- Start Why Choose Us Section -->
-<div class="why-choose-section">
+<div class="why-choose-section" id="seccion-explorar2">
 	<div class="container">
 		<div class="row justify-content-between">
 			<div class="col-lg-6">
 				<h2 class="section-title">¿Por Qué Elegirnos?</h2>
-				<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+				<p>En nuestra floristería, nos dedicamos a brindar no solo flores, sino momentos inolvidables que transmiten emociones y belleza. Cada detalle cuenta y trabajamos con pasión para que tu experiencia sea única.</p>
 
 				<div class="row my-5">
 					<div class="col-6 col-md-6">
@@ -98,8 +107,8 @@
 							<div>
 								<img src="images/flowers-1.png" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Fast &amp; Free Shipping</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>Flores frescas</h3>
+							<p>Seleccionamos cuidadosamente cada flor para garantizar frescura y durabilidad.</p>
 						</div>
 					</div>
 
@@ -108,8 +117,8 @@
 							<div>
 								<img src="images/flowers-2.png" alt="Image" class="imf-fluid">
 							</div>
-							<h3>Easy to Shop</h3>
-							<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+							<h3>Facilidad de compra</h3>
+							<p>Ofrecemos una experiencia de compra sencilla y segura, con múltiples opciones de pago y envíos rápidos.</p>
 						</div>
 					</div>
 				</div>
@@ -127,84 +136,31 @@
 <!-- End Why Choose Us Section -->
 <!-- Start We Help Section -->
 <div class="we-help-section">
-	<div class="container">
-		<div class="row justify-content-between">
-			<div class="col-lg-7 mb-5 mb-lg-0">
-				<div class="imgs-grid">
-					<div class="grid grid-1"><img src="images/flowers-15.jpg" alt="Untree.co" height="600"></div>
-					<div class="grid grid-2"><img src="images/flowers-14.jpg" alt="Untree.co"></div>
-					<div class="grid grid-3"><img src="images/flowers-13.jpg" alt="Untree.co"></div>
-				</div>
-			</div>
-			<div class="col-lg-5 ps-lg-5">
-				<h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-				<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
+  <div class="container">
+    <div class="row justify-content-between">
+      <div class="col-lg-7 mb-5 mb-lg-0">
+        <div class="imgs-grid">
+          <div class="grid grid-1"><img src="images/flowers-15.jpg" alt="Arreglo floral 1" height="600"></div>
+          <div class="grid grid-2"><img src="images/flowers-14.jpg" alt="Arreglo floral 2"></div>
+          <div class="grid grid-3"><img src="images/flowers-13.jpg" alt="Arreglo floral 3"></div>
+        </div>
+      </div>
+      <div class="col-lg-5 ps-lg-5">
+        <h2 class="section-title mb-4">Te Ayudamos a Crear Espacios con Estilo</h2>
+        <p>Nos especializamos en transformar ambientes con arreglos florales únicos que aportan frescura, color y elegancia. Te acompañamos en cada paso para que tu espacio refleje tu personalidad y estilo.</p>
 
-				<ul class="list-unstyled custom-list my-4">
-					<li>Donec vitae odio quis nisl dapibus malesuada</li>
-					<li>Donec vitae odio quis nisl dapibus malesuada</li>
-					<li>Donec vitae odio quis nisl dapibus malesuada</li>
-					<li>Donec vitae odio quis nisl dapibus malesuada</li>
-				</ul>
-				<p><a herf="#" class="btn">Explore</a></p>
-			</div>
-		</div>
-	</div>
+        <ul class="list-unstyled custom-list my-4">
+          <li>Asesoría personalizada para cada ocasión y espacio</li>
+          <li>Diseños exclusivos adaptados a tus gustos y necesidades</li>
+          <li>Flores frescas y materiales de alta calidad</li>
+          <li>Entrega puntual y cuidado en cada detalle</li>
+        </ul>
+				<p><a asp-controller="Home" asp-action="Services" class="btn btn-white-outline">Ver Servicios</a></p>
+      </div>
+    </div>
+  </div>
 </div>
+
 <!-- End We Help Section -->
-<!-- Start Blog Section -->
-<div class="blog-section">
-	<div class="container">
-		<div class="row mb-5">
-			<div class="col-md-6">
-				<h2 class="section-title">Productos Más Vendidos</h2>
-			</div>
-			<div class="col-md-6 text-start text-md-end">
-				<a class="more" asp-area="" asp-page="/Shop">Ver catálogo</a>
-			</div>
-		</div>
-
-		<div class="row">
-
-			<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-				<div class="post-entry">
-					<a href="#" class="post-thumbnail"><img src="images/product-3.jpg" alt="Image" class="img-product"></a>
-					<div class="post-content-entry">
-						<h3><a href="#">Arreglo Floral: Girasoles 3</a></h3>
-						<div class="meta">
-							<span>Categoría: Arreglo</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-				<div class="post-entry">
-					<a href="#" class="post-thumbnail"><img src="images/product-7.jpg" alt="Image" class="img-product"></a>
-					<div class="post-content-entry">
-						<h3><a href="#">Caja del día del padre</a></h3>
-						<div class="meta">
-							<span>Categoría: Arreglo</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
-				<div class="post-entry">
-					<a href="#" class="post-thumbnail"><img src="images/product-5.jpg" alt="Image" class="img-product"></a>
-					<div class="post-content-entry">
-						<h3><a href="#">Arreglo de San Valentín</a></h3>
-						<div class="meta">
-							<span>Categoría: Flores</span>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		</div>
-	</div>
-</div>
-<!-- End Blog Section -->
 
 
