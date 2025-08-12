@@ -1,0 +1,332 @@
+@model DaPazWebApp.Models.HistorialActividadesViewModel
+@{
+    ViewData["Title"] = "Dashboard de Actividades del Sistema";
+    Layout = "_Layout";
+}
+
+<div class="container-fluid" style="margin-top: 20px;">
+    <div class="row mb-3">
+        <div class="col-6">
+            <h2><i class="fas fa-history"></i> Actividades del Sistema</h2>
+            <p class="text-muted">Registro de productos, arreglos, facturas de proveedor y ventas</p>
+        </div>
+        <div class="col-6 text-end">
+            <a href="@Url.Action("Index", "Dashboard")" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Volver al Centro de Control
+            </a>
+        </div>
+    </div>
+
+    <!-- Filtro de Fechas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-calendar"></i> Filtrar por Rango de Fechas</h5>
+                </div>
+                <div class="card-body">
+                    <form method="get" action="@Url.Action("HistorialActividades", "Dashboard")" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="fechaInicio" class="form-label">Fecha Inicio:</label>
+                            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" 
+                                   value="@Model.FiltroFechas.FechaInicioFormateada">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="fechaFin" class="form-label">Fecha Fin:</label>
+                            <input type="date" class="form-control" id="fechaFin" name="fechaFin" 
+                                   value="@Model.FiltroFechas.FechaFinFormateada">
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a href="@Url.Action("HistorialActividades", "Dashboard")" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </div>
+                    </form>
+                    @if (Model.FiltroFechas.AplicarFiltro)
+                    {
+                        <div class="mt-2">
+                            <small class="text-info">
+                                <i class="fas fa-info-circle"></i> 
+                                Mostrando actividades desde @Model.FiltroFechas.FechaInicio?.ToString("dd/MM/yyyy") 
+                                hasta @Model.FiltroFechas.FechaFin?.ToString("dd/MM/yyyy")
+                            </small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen Simple -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body text-center">
+                    <h3>@(Model.ActividadesPorTipo?.Where(a => a.TipoActividad == "Crear").Sum(a => a.CantidadActividades) ?? 0)</h3>
+                    <h6>Registros Creados</h6>
+                    <small>Productos, Arreglos, Facturas, Ventas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white">
+                <div class="card-body text-center">
+                    <h3>@(Model.ActividadesPorTipo?.Where(a => a.TipoActividad == "Editar").Sum(a => a.CantidadActividades) ?? 0)</h3>
+                    <h6>Registros Editados</h6>
+                    <small>Productos y Arreglos modificados</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white">
+                <div class="card-body text-center">
+                    <h3>@(Model.ActividadesRecientes?.Count ?? 0)</h3>
+                    <h6>Total Actividades</h6>
+                    <small>Últimas registradas</small>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body text-center">
+                    <h3>@(Model.ActividadesPorUsuario?.Count ?? 0)</h3>
+                    <h6>Usuarios Activos</h6>
+                    <small>Han realizado actividades</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Actividades Recientes -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-clock"></i> Actividades Recientes</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActividadesRecientes != null && Model.ActividadesRecientes.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Módulo</th>
+                                        <th>Descripción</th>
+                                        <th>Usuario</th>
+                                        <th>Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var actividad in Model.ActividadesRecientes.Take(20))
+                                    {
+                                        <tr>
+                                            <td>
+                                                <small>@actividad.FechaFormateada</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(actividad.TipoActividad == "Crear" ? "bg-success" : "bg-warning")">
+                                                    <i class="@actividad.IconoActividad"></i>
+                                                    @actividad.TipoActividad
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@actividad.Modulo</span>
+                                            </td>
+                                            <td>
+                                                <strong>@actividad.Descripcion</strong>
+                                            </td>
+                                            <td>
+                                                <i class="fas fa-user"></i> @actividad.Usuario
+                                            </td>
+                                            <td>
+                                                <small class="text-muted">@actividad.Detalles</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>No hay actividades registradas</p>
+                            <small>Las actividades aparecerán aquí cuando crees productos, arreglos, facturas de proveedor o realices ventas</small>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- Estadísticas por Módulo -->
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5><i class="fas fa-chart-pie"></i> Actividades por Módulo</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActividadesPorTipo != null && Model.ActividadesPorTipo.Any())
+                    {
+                        @foreach (var modulo in Model.ActividadesRecientes?.GroupBy(a => a.Modulo).Take(4) ?? Enumerable.Empty<IGrouping<string, DaPazWebApp.Models.ActividadRecienteModel>>())
+                        {
+                            var cantidad = modulo.Count();
+                            var icono = modulo.Key switch {
+                                "Producto" => "fas fa-box",
+                                "Arreglo" => "fas fa-leaf",
+                                "FacturaProveedor" => "fas fa-file-invoice",
+                                "Venta" => "fas fa-shopping-cart",
+                                _ => "fas fa-circle"
+                            };
+                            var color = modulo.Key switch {
+                                "Producto" => "primary",
+                                "Arreglo" => "success", 
+                                "FacturaProveedor" => "warning",
+                                "Venta" => "info",
+                                _ => "secondary"
+                            };
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3 p-3 border rounded">
+                                <div>
+                                    <i class="@icono text-@color fa-2x"></i>
+                                </div>
+                                <div class="text-end">
+                                    <h5 class="mb-0">@cantidad</h5>
+                                    <small class="text-muted">@modulo.Key</small>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No hay datos disponibles</p>
+                    }
+                </div>
+            </div>
+
+            <!-- Usuarios Activos -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h5><i class="fas fa-users"></i> Usuarios Más Activos</h5>
+                </div>
+                <div class="card-body">
+                    @if (Model.ActividadesPorUsuario != null && Model.ActividadesPorUsuario.Any())
+                    {
+                        @foreach (var usuario in Model.ActividadesPorUsuario.Take(5))
+                        {
+                            <div class="d-flex justify-content-between align-items-center mb-2 p-2 border-bottom">
+                                <div>
+                                    <i class="fas fa-user text-primary"></i>
+                                    <strong>@usuario.Usuario</strong>
+                                </div>
+                                <span class="badge bg-primary">@usuario.CantidadActividades</span>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted text-center">No hay datos de usuarios</p>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros y Búsqueda -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="fas fa-filter"></i> Filtrar Actividades</h5>
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-primary active" onclick="filtrarPor('todos')">Todos</button>
+                        <button type="button" class="btn btn-outline-success" onclick="filtrarPor('Producto')">Productos</button>
+                        <button type="button" class="btn btn-outline-warning" onclick="filtrarPor('Arreglo')">Arreglos</button>
+                        <button type="button" class="btn btn-outline-info" onclick="filtrarPor('FacturaProveedor')">Facturas</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="filtrarPor('Venta')">Ventas</button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (Model.DetalleActividades != null && Model.DetalleActividades.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped" id="tablaDetalles">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Fecha y Hora</th>
+                                        <th>Acción</th>
+                                        <th>Módulo</th>
+                                        <th>Descripción</th>
+                                        <th>Usuario</th>
+                                        <th>Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var detalle in Model.DetalleActividades.Take(50))
+                                    {
+                                        <tr data-modulo="@detalle.Modulo">
+                                            <td>
+                                                <small>@detalle.FechaFormateada</small>
+                                            </td>
+                                            <td>
+                                                <span class="badge @(detalle.TipoActividad == "Crear" ? "bg-success" : "bg-warning") text-white">
+                                                    @detalle.TipoActividad
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-secondary">@detalle.Modulo</span>
+                                            </td>
+                                            <td>@detalle.Descripcion</td>
+                                            <td>@detalle.Usuario</td>
+                                            <td>
+                                                <small class="text-muted">@detalle.Detalles</small>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-database fa-3x mb-3"></i>
+                            <p>No hay actividades detalladas registradas</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function filtrarPor(modulo) {
+            // Actualizar botones activos
+            document.querySelectorAll('.btn-group .btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filtrar filas de la tabla
+            const filas = document.querySelectorAll('#tablaDetalles tbody tr');
+            filas.forEach(fila => {
+                if (modulo === 'todos' || fila.dataset.modulo === modulo) {
+                    fila.style.display = '';
+                } else {
+                    fila.style.display = 'none';
+                }
+            });
+        }
+
+        // Auto-refresh cada 30 segundos para ver nuevas actividades
+        setInterval(function() {
+            location.reload();
+        }, 30000);
+    </script>
+}

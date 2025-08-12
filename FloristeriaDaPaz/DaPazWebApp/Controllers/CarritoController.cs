@@ -263,6 +263,18 @@ namespace DaPazWebApp.Controllers
                     }
                 }
             }
+
+            // Registrar actividad en el historial
+            var usuarioSesion = HttpContext.Session.GetString("Usuario") ?? "Sistema";
+            var totalFactura = carritoOk.Sum(x => x.Precio * x.Cantidad);
+            AuditoriaHelper.RegistrarActividad(
+                tipoActividad: "Crear",
+                modulo: "Venta",
+                descripcion: $"Nueva venta procesada - Factura #{idFactura}",
+                usuario: usuarioSesion,
+                detalles: $"Total: ₡{totalFactura:N0}, Items: {carritoOk.Count}, Entrega: {tipoEntrega}, Pago: {metodoPago}"
+            );
+
             // Limpiar el carrito después de confirmar
             HttpContext.Session.Remove("Carrito");
             return RedirectToAction("Factura", new { id = idFactura });

@@ -116,6 +116,18 @@ namespace DaPazWebApp.Controllers
                         model.IdProveedor
                     },
                     commandType: CommandType.StoredProcedure);
+
+                // Registrar actividad en el historial
+                var usuario = HttpContext.Session.GetString("Usuario") 
+                           ?? HttpContext.Session.GetString("Nombre") 
+                           ?? "Sistema";
+                AuditoriaHelper.RegistrarActividad(
+                    tipoActividad: "Crear",
+                    modulo: "Producto",
+                    descripcion: $"Nuevo producto creado: {model.NombreProducto}",
+                    usuario: usuario,
+                    detalles: $"Precio: ₡{model.Precio:N0}, Stock: {model.Stock}"
+                );
             }
 
             return RedirectToAction("Index");
@@ -211,6 +223,18 @@ namespace DaPazWebApp.Controllers
                         model.IdProveedor
                     },
                     commandType: CommandType.StoredProcedure
+                );
+
+                // Registrar actividad en el historial
+                var usuario = HttpContext.Session.GetString("Usuario") 
+                           ?? HttpContext.Session.GetString("Nombre") 
+                           ?? "Sistema";
+                AuditoriaHelper.RegistrarActividad(
+                    tipoActividad: "Editar",
+                    modulo: "Producto",
+                    descripcion: $"Producto actualizado: {model.NombreProducto}",
+                    usuario: usuario,
+                    detalles: $"ID: {model.IdProducto}, Precio: ₡{model.Precio:N0}, Stock: {model.Stock}"
                 );
             }
 

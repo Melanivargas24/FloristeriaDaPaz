@@ -118,6 +118,16 @@ namespace DaPazWebApp.Controllers
                         detalleParams.Add("@Subtotal", detalle.Subtotal);
                         connection.Execute("SP_InsertarDetalleFacturaProveedor", detalleParams, commandType: CommandType.StoredProcedure);
                     }
+
+                    // Registrar actividad en el historial
+                    var usuario = HttpContext.Session.GetString("Usuario") ?? "Sistema";
+                    AuditoriaHelper.RegistrarActividad(
+                        tipoActividad: "Crear",
+                        modulo: "FacturaProveedor",
+                        descripcion: $"Nueva factura de proveedor registrada",
+                        usuario: usuario,
+                        detalles: $"ID: {idFacturaProveedor}, Total: ₡{model.TotalFactura:N0}, Productos: {model.Detalles.Count}"
+                    );
                 } catch (Exception ex) {
                     Console.WriteLine($"ERROR al guardar factura: {ex.Message}");
                     ModelState.AddModelError("", "Error al guardar la factura: " + ex.Message);

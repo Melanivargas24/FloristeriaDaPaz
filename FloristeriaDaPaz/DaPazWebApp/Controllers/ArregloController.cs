@@ -1,4 +1,5 @@
 ﻿using DaPazWebApp.Models;
+using DaPazWebApp.Helpers;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -156,6 +157,16 @@ namespace DaPazWebApp.Controllers
                     );
                 }
             }
+
+            // Registrar actividad en el historial
+            var usuario = HttpContext.Session.GetString("Usuario") ?? "Sistema";
+            AuditoriaHelper.RegistrarActividad(
+                tipoActividad: "Crear",
+                modulo: "Arreglo",
+                descripcion: $"Nuevo arreglo creado: {model.nombreArreglo}",
+                usuario: usuario,
+                detalles: $"ID: {idArreglo}, Precio: ₡{model.precio:N0}, Productos: {productosArray.Length}"
+            );
 
             return RedirectToAction("Index");
         }
@@ -328,6 +339,16 @@ namespace DaPazWebApp.Controllers
                     );
                 }
             }
+
+            // Registrar actividad en el historial
+            var usuario = HttpContext.Session.GetString("Usuario") ?? "Sistema";
+            AuditoriaHelper.RegistrarActividad(
+                tipoActividad: "Editar",
+                modulo: "Arreglo",
+                descripcion: $"Arreglo actualizado: {model.nombreArreglo}",
+                usuario: usuario,
+                detalles: $"ID: {model.idArreglo}, Precio: ₡{model.precio:N0}"
+            );
 
             return RedirectToAction("Index");
         }

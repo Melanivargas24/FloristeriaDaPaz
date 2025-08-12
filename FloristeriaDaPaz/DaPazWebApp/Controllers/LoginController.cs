@@ -1,4 +1,5 @@
 ﻿using DaPazWebApp.Models;
+using DaPazWebApp.Helpers;
 using Dapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -115,6 +116,7 @@ namespace DaPazWebApp.Controllers
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
+                    HttpContext.Session.SetString("Usuario", result.nombre!);
                     HttpContext.Session.SetString("Nombre", result.nombre!);
                     // Guardar rol y usuario con las claves que usa el layout
                     HttpContext.Session.SetInt32("IdRol", result.idRol ?? 0);
