@@ -5,8 +5,6 @@
     Layout = "_Layout";
 }
 
-
-
 <div class="container" style="margin-top:35px; margin-bottom:135px">
     <div class="d-flex justify-between align-items-center encabezado-tablas">
         <h2 class="m-0">Inventario</h2>
@@ -18,7 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon1">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar producto..." aria-label="Buscar" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -27,8 +25,8 @@
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaProductos">
-        <thead>
+    <table class="table table-bordered table-hover" id="tablaProductos" style="min-width: 1500px; width: 100%;">
+        <thead class="table-dark">
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
@@ -59,9 +57,9 @@
                     <td>@producto.NombreCategoriaProducto</td>
                     <td>@producto.NombreSubcategoriaProducto</td>
                     <td>@producto.NombreProveedor</td>
-                    <td>
+                    <td class="text-center">
                         <a asp-controller="Producto" asp-action="Edit" asp-route-id="@producto.IdProducto" class="btn btn-sm btn-edit">
-                            <i class="fas fa-edit"></i> Editar
+                            Editar
                         </a>
                     </td>
                 </tr>
@@ -77,6 +75,7 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/fixedheader/3.4.0/js/dataTables.fixedHeader.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -95,8 +94,10 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-             
-                dom: 'lrtip'
+                dom: 'lrtip',
+                responsive: false, // mantenemos columnas
+                scrollX: true,     // activamos scroll horizontal
+                autoWidth: false,  // evita que se recalculen los anchos
             });
 
             $('#buscador').on('keyup', function () {

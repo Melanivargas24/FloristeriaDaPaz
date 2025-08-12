@@ -16,7 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon1">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar empleado..." aria-label="Buscar" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -25,45 +25,39 @@
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaEmpleados">
-    <thead>
-        <tr>
-            <th>ID Empleado</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Correo</th>
-            <th>Salario</th>
-            <th>Cargo</th>
-            <th>Telefono</th>
-            <th>Fecha Ingreso</th>
-            <th>ID Usuario</th>
-            <th>Acciones</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var empleado in Model)
-    {
-        <tr>
-            <td>@empleado.idEmpleado</td>
-            <td>@empleado.nombre</td>
-            <td>@empleado.apellido</td>
-            <td>@empleado.correo</td>
-            <td>@empleado.salario</td>
-            <td>@empleado.Cargo</td>
-            <td>@empleado.telefono</td>
-            <td>@empleado.fechaIngreso.ToString("yyyy-MM-dd")</td>
-            <td>@empleado.idUsuario</td>
-                    <td>
-
+    <table class="table table-bordered table-hover" id="tablaEmpleados">
+        <thead class="table-dark">
+            <tr>
+                <th><i class="fas fa-user"></i> Nombre</th>
+                <th><i class="fas fa-user"></i> Apellido</th>
+                <th><i class="fas fa-envelope"></i> Correo</th>
+                <th><i class="fas fa-dollar-sign"></i> Salario</th>
+                <th><i class="fas fa-briefcase"></i> Cargo</th>
+                <th><i class="fas fa-phone"></i> Teléfono</th>
+                <th><i class="fas fa-calendar-alt"></i> Fecha Ingreso</th>
+                <th ><i class="fas fa-tools"></i> Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empleado in Model)
+            {
+                <tr>
+                    <td>@empleado.nombre</td>
+                    <td>@empleado.apellido</td>
+                    <td>@empleado.correo</td>
+                    <td>?@empleado.salario.ToString("N2")</td>
+                    <td>@empleado.Cargo</td>
+                    <td>@empleado.telefono</td>
+                    <td>@empleado.fechaIngreso.ToString("yyyy-MM-dd")</td>
+                    <td class="text-center">
                         <a asp-controller="Empleado" asp-action="EditarE" asp-route-id="@empleado.idEmpleado" class="btn btn-sm btn-edit">
-                            Editar
+                            <i class="fas fa-edit"></i> Editar
                         </a>
-
                     </td>
-        </tr>
-    }
-    </tbody>
-</table>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
 
 @section Scripts {
@@ -89,8 +83,9 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-
-                dom: 'lrtip'
+                dom: 'lrtip',
+                order: [[0, 'asc']],
+                responsive: true
             });
 
             $('#buscador').on('keyup', function () {

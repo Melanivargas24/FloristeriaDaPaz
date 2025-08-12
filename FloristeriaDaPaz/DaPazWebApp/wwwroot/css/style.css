@@ -912,7 +912,7 @@ textarea {
         cursor: pointer;
     }
 
-.card {
+.custom-card {
     border-radius: 12px;
     border: none;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
@@ -921,13 +921,13 @@ textarea {
     background-color: #fff;
 }
 
-    .card:hover {
+    .custom-card:hover {
         transform: scale(1.04);
         box-shadow: 0 12px 20px rgba(0,0,0,0.15);
         cursor: pointer;
     }
 
-.card-img-top {
+.custom-card-img-top {
     width: 100%;
     height: 220px;
     object-fit: cover;
@@ -935,18 +935,18 @@ textarea {
     display: block;
 }
 
-
-.card-title {
+.custom-card-title {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: 700;
     color: #2c3e50;
     margin-bottom: 10px;
 }
 
-.card-text {
+.custom-card-text {
     color: #555;
     font-size: 0.9rem;
 }
+
 
 .badge {
     font-size: 0.8rem;
@@ -956,7 +956,7 @@ textarea {
     color: white;
 }
 
-.btn-guardar {
+.btn-guardar2 {
     background-color: #5cb85c;
     color: white;
     padding: 8px 18px;
@@ -967,7 +967,7 @@ textarea {
     display: inline-block;
 }
 
-    .btn-guardar:hover {
+    .btn-guardar2:hover {
         background-color: #218838;
         box-shadow: 0 4px 12px rgba(33, 136, 56, 0.6);
         color: white;
@@ -1071,15 +1071,12 @@ textarea {
     }
 
 
-    /******/
 
-/* Contenedor principal */
 .detalle-arreglo-container {
     max-width: 1200px;
     margin: 3rem auto;
 }
 
-/* Card */
 .detalle-arreglo-card {
     border-radius: 1rem;
     overflow: hidden;
@@ -1087,7 +1084,6 @@ textarea {
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
 
-/* Header */
 .detalle-arreglo-header {
     background: #5cb85c;
     padding: 1.2rem 1.5rem;
@@ -1099,7 +1095,6 @@ textarea {
         font-weight: 700;
     }
 
-/* Imagen */
 .detalle-arreglo-imagen {
     max-height: 400px;
     object-fit: contain;
@@ -1113,25 +1108,21 @@ textarea {
         transform: scale(1.05);
     }
 
-/* Título */
 .detalle-arreglo-titulo {
     font-size: 2rem;
     font-weight: bold;
 }
 
-/* Precio */
 .detalle-arreglo-precio {
     font-size: 1.5rem;
     font-weight: 700;
     color: #198754;
 }
 
-/* Lista de productos incluidos */
 .detalle-arreglo-lista {
     margin-bottom: 1rem;
 }
 
-/* Descripción */
 .detalle-arreglo-descripcion {
     font-size: 1rem;
     color: #555;
@@ -1139,7 +1130,6 @@ textarea {
     margin: 0.2rem 0 0.75rem 0;
 }
 
-/* Formulario cantidad */
 .detalle-arreglo-form {
     background-color: #f8f9fa;
     padding: 0.8rem;
@@ -1158,7 +1148,7 @@ textarea {
         text-align: center;
     }
 
-.btn-cancelar {
+.btn-cancelar2 {
     display: inline-block;
     background-color: #dc3545;
     color: white;
@@ -1168,12 +1158,12 @@ textarea {
     transition: background-color 0.3s ease;
 }
 
-    .btn-cancelar:hover {
+    .btn-cancelar2:hover {
         background-color: #bb2d3b;
         color: white;
     }
 
-    /****/
+  
 
 
 .btn-filtros {
@@ -1200,3 +1190,233 @@ textarea {
         transform: translateY(1px);
         box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
     }
+
+.footer-section {
+    color: black !important;
+}
+
+    .footer-section a {
+        color: black;
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .footer-section a:hover {
+            color: black;
+        }
+
+    .footer-section .custom-social a:hover,
+    .footer-section ul.list-unstyled li a:hover {
+        color: black !important;
+        cursor: pointer;
+    }
+
+        .footer-section .custom-social a:hover .fa {
+            color: black !important;
+        }
+
+.footer-logo, .footer-logo span {
+    color: black !important;
+}
+
+.sofa-img img {
+    filter: none !important;
+}
+
+.contact-info {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+}
+
+    .contact-info p {
+        margin-bottom: 0.5rem;
+    }
+
+
+/*Login y Registro*/
+
+.login-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.login-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: none;
+    max-width: 900px; 
+    margin: auto;
+}
+
+.login-card-header {
+    background: #5cb85c; 
+    color: #fff;
+    padding: 1.2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+    .login-card-header h3 {
+        font-weight: bold;
+    }
+
+    .login-card-header p {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+.login-card-body {
+    padding: 2rem;
+}
+
+.login-input {
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    padding: 0.6rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+    .login-input:focus {
+        border-color: #5cb85c;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+.login-btn {
+    background: #5cb85c;
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    transition: background 0.3s ease;
+    width: auto !important;
+    min-width: 250px;
+    display: inline-block;
+    justify-self: center; 
+}
+
+
+
+    .login-btn:hover {
+        background: #145c38;
+    }
+
+.login-card-footer {
+    background: #f8f9fa;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+.login-link {
+    color: #198754;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+    .login-link:hover {
+        text-decoration: underline;
+    }
+
+
+/* ====== Registro ====== */
+
+.register-card {
+    max-width: 900px;
+    margin: auto;
+    border-radius: 1rem;
+    overflow: hidden; 
+}
+
+    .register-card .card-header {
+        background-color: #5cb85c !important;
+        color: #fff;
+        padding: 1.5rem;
+    }
+
+    .register-card .form-control {
+        border-radius: 0.5rem;
+        border: 1px solid #ced4da;
+        padding: 0.65rem;
+        transition: border-color 0.2s ease;
+    }
+
+        .register-card .form-control:focus {
+            border-color: #198754;
+            box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+        }
+
+    .register-card .btn-success {
+        background: #5cb85c;
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 0.5rem;
+        font-size: 1.1rem;
+        transition: background 0.3s ease;
+        width: auto !important;
+        min-width: 250px;
+        display: inline-block;
+        justify-self: center;
+    }
+
+        .register-card .btn-success:hover {
+            background-color: #145c32;
+        }
+
+    .register-card .card-footer {
+        background: #f8f9fa;
+        font-size: 0.95rem;
+    }
+
+    .register-card a {
+        color: #198754;
+        font-weight: 500;
+    }
+
+        .register-card a:hover {
+            text-decoration: underline;
+        }
+
+
+
+.dropdown-submenu {
+    position: relative;
+}
+
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+
+
+.btn-detalle {
+    background-color: #0d6efd;
+    color: white;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.85rem;
+    border-radius: 0.3rem;
+    text-decoration: none;
+    border: 2px solid #0d6efd;
+    box-shadow: 0 2px 5px rgba(40, 167, 69, 0.4);
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+    display: inline-block;
+}
+
+    .btn-detalle:hover,
+    .btn-detalle:focus {
+        background-color: #0d6efd;
+        color: white;
+        border-color: #0d6efd;
+        box-shadow: 0 4px 12px rgba(33, 136, 56, 0.6);
+        text-decoration: none;
+        outline: none;
+    }
+
+    .btn-detalle:active {
+        background-color: #1c7430;
+        border-color: #0d6efd;
+        box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
+    }
+

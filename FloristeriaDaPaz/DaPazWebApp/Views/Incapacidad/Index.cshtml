@@ -16,7 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon1">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar incapacidad..." aria-label="Buscar" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -25,17 +25,17 @@
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaIncapacidades">
-        <thead>
+    <table class="table table-bordered table-hover" id="tablaIncapacidades">
+        <thead class="table-dark">
             <tr>
-                <th>Número</th>
-                <th>Empleado</th>
-                <th>Motivo</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th>Días</th>
-                <th>Entidad</th>
-                <th>Centro Médico</th>
+                <th><i class="fas fa-hashtag"></i> Número</th>
+                <th><i class="fas fa-user"></i> Empleado</th>
+                <th><i class="fas fa-notes-medical"></i> Motivo</th>
+                <th><i class="fas fa-calendar-day"></i> Inicio</th>
+                <th><i class="fas fa-calendar-check"></i> Fin</th>
+                <th><i class="fas fa-clock"></i> Días</th>
+                <th><i class="fas fa-hospital"></i> Entidad</th>
+                <th><i class="fas fa-clinic-medical"></i> Centro Médico</th>
             </tr>
         </thead>
         <tbody>
@@ -79,7 +79,9 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-                dom: 'lrtip'
+                dom: 'lrtip',
+                order: [[0, 'asc']], // Orden por número
+                responsive: true
             });
 
             $('#buscador').on('keyup', function () {

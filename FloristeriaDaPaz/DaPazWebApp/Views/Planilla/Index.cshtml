@@ -16,7 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar"
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar planilla..." aria-label="Buscar"
                        aria-describedby="basic-addon1">
             </div>
         </div>
@@ -26,17 +26,17 @@
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaPlanilla">
-        <thead>
+    <table class="table table-bordered table-hover" id="tablaPlanilla">
+        <thead class="table-dark">
             <tr>
-                <th>Fecha</th>
-                <th>Empleado</th>
-                <th>Fecha de Ingreso</th>
-                <th>Cargo</th>
-                <th>Salario Bruto</th>
-                <th>Total Deducciones</th>
-                <th>Salario Neto</th>
-                <th>Acciones</th>
+                <th><i class="fas fa-calendar"></i> Fecha</th>
+                <th><i class="fas fa-user"></i> Empleado</th>
+                <th><i class="fas fa-calendar-plus"></i> Fecha de Ingreso</th>
+                <th><i class="fas fa-briefcase"></i> Cargo</th>
+                <th><i class="fas fa-money-bill-wave"></i> Salario Bruto</th>
+                <th><i class="fas fa-minus-circle"></i> Total Deducciones</th>
+                <th><i class="fas fa-wallet"></i> Salario Neto</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -50,7 +50,7 @@
                     <td>₡@planilla.SalarioBruto.ToString("N2")</td>
                     <td>₡@planilla.Deducciones.ToString("N2")</td>
                     <td>₡@planilla.SalarioNeto.ToString("N2")</td>
-                    <td>
+                    <td class="text-center">
                         <a asp-controller="Planilla" asp-action="ImprimirPlanilla"
                            asp-route-id="@planilla.IdPlanilla" class="btn btn-sm btn-edit">Descargar</a>
                     </td>
@@ -59,39 +59,39 @@
         </tbody>
     </table>
 
-
     <div id="resultadoPlanilla"></div>
+</div>
 
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    @section Scripts {
-        <partial name="_ValidationScriptsPartial" />
-
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-
-        <script>
-            $(document).ready(function () {
-                const tabla = $('#tablaPlanilla').DataTable({
-                    language: {
-                        search: "Buscar:",
-                        lengthMenu: "Mostrar _MENU_ registros por página",
-                        zeroRecords: "No se encontraron resultados",
-                        info: "Mostrando página _PAGE_ de _PAGES_",
-                        infoEmpty: "No hay registros disponibles",
-                        infoFiltered: "(filtrado de _MAX_ registros totales)",
-                        paginate: {
-                            previous: "Anterior",
-                            next: "Siguiente"
-                        }
-                    },
-                    pageLength: 10,
-                    lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-                    dom: 'lrtip'
-                });
-
-                $('#buscador').on('keyup', function () {
-                    tabla.search(this.value).draw();
-                });
+    <script>
+        $(document).ready(function () {
+            const tabla = $('#tablaPlanilla').DataTable({
+                language: {
+                    search: "Buscar:",
+                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    zeroRecords: "No se encontraron resultados",
+                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    infoEmpty: "No hay registros disponibles",
+                    infoFiltered: "(filtrado de _MAX_ registros totales)",
+                    paginate: {
+                        previous: "Anterior",
+                        next: "Siguiente"
+                    }
+                },
+                pageLength: 10,
+                lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
+                dom: 'lrtip',
+                order: [[0, 'desc']], // Orden por fecha
+                responsive: true
             });
-        </script>
-    }
+
+            $('#buscador').on('keyup', function () {
+                tabla.search(this.value).draw();
+            });
+        });
+    </script>
+}

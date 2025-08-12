@@ -16,8 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar"
-                    aria-describedby="basic-addon1">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar arreglo..." aria-label="Buscar" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -26,8 +25,8 @@
         </a>
     </div>
 
-    <table class="table table-bordered" id="tablaArreglos">
-        <thead>
+    <table class="table table-bordered table-hover" id="tablaArreglos" style="min-width: 1300px; width: 100%;">
+        <thead class="table-dark">
             <tr>
                 <th>Nombre</th>
                 <th>Descripción</th>
@@ -45,7 +44,8 @@
                 <tr>
                     <td>@arreglo.nombreArreglo</td>
                     <td>@arreglo.descripcion</td>
-                    <td>@if (arreglo.Productos != null && arreglo.Productos.Any())
+                    <td>
+                        @if (arreglo.Productos != null && arreglo.Productos.Any())
                         {
                             <ul style="padding-left: 18px; margin: 0;">
                                 @foreach (var prod in arreglo.Productos)
@@ -54,7 +54,7 @@
                                 }
                             </ul>
                         }
-                                        else
+                        else
                         {
                             <span class="text-muted">Sin productos</span>
                         }
@@ -65,11 +65,9 @@
                     </td>
                     <td>@arreglo.estado</td>
                     <td>@arreglo.nombreCategoriaArreglo</td>
-
-                    <td>
-                        <a asp-controller="Arreglo" asp-action="Edit" asp-route-id="@arreglo.idArreglo"
-                            class="btn btn-sm btn-edit">
-                            <i class="fas fa-edit"></i> Editar
+                    <td class="text-center">
+                        <a asp-controller="Arreglo" asp-action="Edit" asp-route-id="@arreglo.idArreglo" class="btn btn-sm btn-edit">
+                            Editar
                         </a>
                     </td>
                 </tr>
@@ -103,8 +101,10 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-
-                dom: 'lrtip'
+                dom: 'lrtip',
+                responsive: false, // Mantiene todas las columnas
+                scrollX: true,     // Activa scroll horizontal
+                autoWidth: false   // Evita recálculo de anchos
             });
 
             $('#buscador').on('keyup', function () {

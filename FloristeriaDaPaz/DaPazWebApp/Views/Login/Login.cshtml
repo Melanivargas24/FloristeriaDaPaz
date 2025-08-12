@@ -3,16 +3,15 @@
 @{
     ViewData["Title"] = "Iniciar Sesión";
 }
-
-<div class="container mt-5">
+<div class="container mt-5 login-container">
     <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow rounded-4">
-                <div class="card-header text-center bg-success text-white rounded-top-4">
+        <div class="col-md-10 col-lg-8">
+            <div class="login-card shadow rounded-4">
+                <div class="login-card-header text-center">
                     <h3 class="mb-0">Floristería Da Paz</h3>
                     <p class="mb-0">Iniciar sesión</p>
                 </div>
-                <div class="card-body">
+                <div class="login-card-body">
 
                     @if (ViewBag.Error != null)
                     {
@@ -26,25 +25,25 @@
 
                         <div class="mb-3">
                             <label asp-for="correo" class="form-label">Correo electrónico</label>
-                            <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" autocomplete="email" />
+                            <input asp-for="correo" class="form-control login-input" placeholder="correo@ejemplo.com" autocomplete="email" />
                             <span asp-validation-for="correo" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
                             <label asp-for="contrasena" class="form-label">Contraseña</label>
-                            <input asp-for="contrasena" type="password" class="form-control" placeholder="******" autocomplete="current-password" />
+                            <input asp-for="contrasena" type="password" class="form-control login-input" placeholder="******" autocomplete="current-password" />
                             <span asp-validation-for="contrasena" class="text-danger"></span>
                         </div>
 
                         <div class="d-grid mt-3">
-                            <button type="submit" class="btn btn-success">Ingresar</button>
+                            <button type="submit" class="login-btn">Ingresar</button>
                         </div>
                     </form>
                 </div>
 
-                <div class="card-footer text-center">
-                    <div>¿No tienes cuenta? <a asp-action="Signin" class="text-decoration-none">Crea una aquí</a></div>
-                    <div class="mt-2">¿Olvidaste tu contraseña? <a asp-action="RecuperarContrasenna" class="text-decoration-none">Recupérala aquí</a></div>
+                <div class="login-card-footer text-center">
+                    <div>¿No tienes cuenta? <a asp-action="Signin" class="login-link">Crea una aquí</a></div>
+                    <div class="mt-2">¿Olvidaste tu contraseña? <a asp-action="RecuperarContrasenna" class="login-link">Recupérala aquí</a></div>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
                 <span class="input-group-text" id="basic-addon1">
                     <i class="fas fa-search"></i>
                 </span>
-                <input type="text" id="buscador" class="form-control" placeholder="Buscar" aria-label="Buscar" aria-describedby="basic-addon1">
+                <input type="text" id="buscador" class="form-control" placeholder="Buscar proveedor..." aria-label="Buscar" aria-describedby="basic-addon1">
             </div>
         </div>
 
@@ -25,16 +25,15 @@
         </a>
     </div>
 
-
-    <table class="table table-bordered" id="tablaProveedores">
-        <thead>
+    <table class="table table-bordered table-hover" id="tablaProveedores">
+        <thead class="table-dark">
             <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Teléfono</th>
-                <th>Dirección</th>
-                <th>Estado</th>
-                <th>Acciones</th>
+                <th><i class="fas fa-building"></i> Nombre</th>
+                <th><i class="fas fa-envelope"></i> Correo</th>
+                <th><i class="fas fa-phone"></i> Teléfono</th>
+                <th><i class="fas fa-map-marker-alt"></i> Dirección</th>
+                <th><i class="fas fa-toggle-on"></i> Estado</th>
+                <th><i class="fas fa-cogs"></i> Acciones</th>
             </tr>
         </thead>
         <tbody>
@@ -46,12 +45,10 @@
                     <td>@proveedor.telefonoProveedor</td>
                     <td>@proveedor.direccionProveedor</td>
                     <td>@proveedor.estado</td>
-                    <td>
-
+                    <td class="text-center">
                         <a asp-controller="Proveedor" asp-action="Edit" asp-route-id="@proveedor.IdProveedor" class="btn btn-sm btn-edit">
                             <i class="fas fa-edit"></i> Editar
                         </a>
-
                     </td>
                 </tr>
             }
@@ -61,7 +58,6 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
@@ -82,8 +78,9 @@
                 },
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
-
-                dom: 'lrtip'
+                dom: 'lrtip',
+                order: [[0, 'asc']], // Orden por nombre
+                responsive: true
             });
 
             $('#buscador').on('keyup', function () {
