@@ -4,15 +4,15 @@
     ViewData["Title"] = "Recuperar Contraseña";
 }
 
-<div class="container mt-5">
+<div class="container mt-5 recover-container">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card shadow rounded-4">
-                <div class="card-header text-center bg-success text-white rounded-top-4">
+        <div class="col-md-10 col-lg-8">
+            <div class="recover-card shadow rounded-4">
+                <div class="recover-card-header text-center">
                     <h3 class="mb-0">Floristería Da Paz</h3>
                     <p class="mb-0">Recuperar Contraseña</p>
                 </div>
-                <div class="card-body">
+                <div class="recover-card-body">
 
                     @if (ViewBag.Mensaje != null)
                     {
@@ -26,17 +26,18 @@
 
                         <div class="mb-3">
                             <label asp-for="correo" class="form-label">Correo electrónico</label>
-                            <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" autocomplete="email" />
+                            <input asp-for="correo" class="form-control recover-input" placeholder="correo@ejemplo.com" autocomplete="email" />
                             <span asp-validation-for="correo" class="text-danger"></span>
                         </div>
 
-                        <div class="d-grid mt-3">
-                            <button type="submit" class="btn btn-success">Enviar Código</button>
+                        <div class="d-grid mt-3 text-center">
+                            <button type="submit" class="recover-btn">Enviar Código</button>
                         </div>
                     </form>
                 </div>
-                <div class="card-footer text-center">
-                    ¿Ya tienes cuenta? <a asp-action="Login" class="text-decoration-none">Inicia sesión</a>
+
+                <div class="recover-card-footer text-center">
+                    ¿Ya tienes cuenta? <a asp-action="Login" class="recover-link">Inicia sesión</a>
                 </div>
             </div>
         </div>

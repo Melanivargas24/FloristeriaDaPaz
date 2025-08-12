@@ -50,61 +50,65 @@
 				</button>
 
 				<div class="collapse navbar-collapse" id="navbarsFurni">
-					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+					@{
+						var extraSpacingClass = (nombreUsuario == "Invitad@" || idRol == 2) ? "nav-spaced" : "";
+					}
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0 @extraSpacingClass">
 						<li><a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a></li>
 						<li><a class="nav-link" asp-controller="Catalogo" asp-action="Index">Catálogo</a></li>
 						<li><a class="nav-link" asp-controller="Home" asp-action="Services">Servicios</a></li>
 						<li><a class="nav-link" asp-controller="Home" asp-action="Contact">Contacto</a></li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle"
-							   href="#"
-							   id="adminDropdown"
-							   role="button"
-							   data-bs-toggle="dropdown"
-							   aria-expanded="false">
-								Administrador
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="adminDropdown">
 
-								<li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboards</a></li>
+						@if (idRol == 1)
+						{
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle"
+								   href="#"
+								   id="adminDropdown"
+								   role="button"
+								   data-bs-toggle="dropdown"
+								   aria-expanded="false">
+									Administrador
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="adminDropdown">
+									<li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboards</a></li>
+									<li class="dropdown-submenu">
+										<a class="dropdown-item dropdown-toggle" href="#">Categorías</a>
+										<ul class="dropdown-menu">
+											<li><a class="dropdown-item" asp-controller="CategoriaArreglo" asp-action="ConsultarCategoriasA">Categorías Arreglos</a></li>
+											<li><a class="dropdown-item" asp-controller="CategoriaProducto" asp-action="ConsultarCategoriasP">Categorías Productos</a></li>
+											<li><a class="dropdown-item" asp-controller="SubcategoriaProducto" asp-action="ConsultarSubcategoriasP">Subcategorías Productos</a></li>
+										</ul>
+									</li>
+									<li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Productos</a></li>
+									<li><a class="dropdown-item" asp-controller="Arreglo" asp-action="Index">Arreglos</a></li>
+									<li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Index">Proveedores</a></li>
+									<li><a class="dropdown-item" asp-controller="FacturaProveedor" asp-action="Index">Facturas Proveedor</a></li>
+									<li><a class="dropdown-item" asp-controller="Promociones" asp-action="Index">Promociones</a></li>
+									<li><a class="dropdown-item" asp-controller="Usuario" asp-action="ConsultarUsuarios">Usuarios</a></li>
+								</ul>
+							</li>
 
-								<!-- Submenú Categorías -->
-								<li class="dropdown-submenu">
-									<a class="dropdown-item dropdown-toggle" href="#">Categorías</a>
-									<ul class="dropdown-menu">
-										<li><a class="dropdown-item" asp-controller="CategoriaArreglo" asp-action="ConsultarCategoriasA">Categorías Arreglos</a></li>
-										<li><a class="dropdown-item" asp-controller="CategoriaProducto" asp-action="ConsultarCategoriasP">Categorías Productos</a></li>
-										<li><a class="dropdown-item" asp-controller="SubcategoriaProducto" asp-action="ConsultarSubcategoriasP">Subcategorías Productos</a></li>
-									</ul>
-								</li>
-
-
-								<li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Productos</a></li>
-								<li><a class="dropdown-item" asp-controller="Arreglo" asp-action="Index">Arreglos</a></li>
-								<li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Index">Proveedores</a></li>
-								<li><a class="dropdown-item" asp-controller="FacturaProveedor" asp-action="Index">Facturas Proveedor</a></li>
-								<li><a class="dropdown-item" asp-controller="Promociones" asp-action="Index">Promociones</a></li>
-								<li><a class="dropdown-item" asp-controller="Usuario" asp-action="ConsultarUsuarios">Usuarios</a></li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle"
-							   href="#"
-							   id="planillaDropdown"
-							   role="button"
-							   data-bs-toggle="dropdown"
-							   aria-expanded="false">
-								Planilla
-							</a>
-							<ul class="dropdown-menu" aria-labelledby="planillaDropdown">
-								<li><a class="dropdown-item" asp-controller="Empleado" asp-action="ConsultarEmpleados">Empleados</a></li>
-								<li><a class="dropdown-item" asp-controller="Planilla" asp-action="Index">Planilla</a></li>
-								<li><a class="dropdown-item" asp-controller="Incapacidad" asp-action="Index">Incapacidades</a></li>
-								<li><a class="dropdown-item" asp-controller="Vacacion" asp-action="Index">Vacaciones</a></li>
-								<li><a class="dropdown-item" asp-controller="Liquidacion" asp-action="Index">Liquidaciones</a></li>
-							</ul>
-						</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle"
+								   href="#"
+								   id="planillaDropdown"
+								   role="button"
+								   data-bs-toggle="dropdown"
+								   aria-expanded="false">
+									Planilla
+								</a>
+								<ul class="dropdown-menu" aria-labelledby="planillaDropdown">
+									<li><a class="dropdown-item" asp-controller="Empleado" asp-action="ConsultarEmpleados">Empleados</a></li>
+									<li><a class="dropdown-item" asp-controller="Planilla" asp-action="Index">Planilla</a></li>
+									<li><a class="dropdown-item" asp-controller="Incapacidad" asp-action="Index">Incapacidades</a></li>
+									<li><a class="dropdown-item" asp-controller="Vacacion" asp-action="Index">Vacaciones</a></li>
+									<li><a class="dropdown-item" asp-controller="Liquidacion" asp-action="Index">Liquidaciones</a></li>
+								</ul>
+							</li>
+						}
 					</ul>
+
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 						<li class="nav-item dropdown">
@@ -113,7 +117,6 @@
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="userDropdown">
 								@if (nombreUsuario != "Invitad@")
-								
 								{
 									<li>
 										<a class="dropdown-item"
@@ -123,11 +126,9 @@
 											Editar Usuario
 										</a>
 									</li>
-									
-									<li><a class="dropdown-item" href="#" data-value="CambiarContraseña">CambiarContraseña</a></li>
-									<li><a class="dropdown-item" href="#" data-value="CerrarSesion">CerrarSesion</a></li>
 
-									@* Historial de compras según rol *@
+									<li><a class="dropdown-item" asp-controller="Login" asp-action="RecuperarContrasenna">Cambiar Contraseña</a></li>
+
 									@if (idRol == 2)
 									{
 										<li><a class="dropdown-item" asp-controller="Carrito" asp-action="HistorialUsuario">Historial de Compras</a></li>
@@ -136,19 +137,27 @@
 									{
 										<li><a class="dropdown-item" asp-controller="Carrito" asp-action="HistorialGlobal">Historial de Compras (Global)</a></li>
 									}
+
+									<li><a class="dropdown-item" href="#" data-value="CerrarSesion">Cerrar Sesion</a></li>
 								}
-								@if (rol == "Invitad@")
+								else
 								{
 									<li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Iniciar Sesión</a></li>
 								}
 							</ul>
 						</li>
-						<li><a class="nav-link" asp-controller="Carrito" asp-action="Cart"><img src="~/images/cart.svg" width="20" height="20" /></a></li>
+						<li>
+							<a class="nav-link" asp-controller="Carrito" asp-action="Cart">
+								<img src="~/images/cart.svg" width="20" height="20" />
+							</a>
+						</li>
 					</ul>
+
 				</div>
 			</div>
 		</nav>
 	</header>
+
 
 	<main role="main" class="pb-3">
 		@RenderBody()
@@ -156,12 +165,12 @@
 	</main>
 
 	<!-- Start Footer Section -->
-	<footer class="footer-section">
+	<footer class="footer-section" style="margin-top:170px;">
 		<div class="container relative">
 
-			<!-- <div class="sofa-img">
+			 <div class="sofa-img">
 				<img src="/images/flowers-10.png" alt="Image" class="img-fluid">
-			</div> -->
+			</div> 
 
 			<div class="row g-5 mb-5">
 				<div class="col-lg-4">

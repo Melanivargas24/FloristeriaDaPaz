@@ -33,8 +33,8 @@
                             <td>@factura.idUsuario</td>
                             <td>@factura.fechaFactura.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>₡@factura.totalFactura.ToString("N2")</td>
-                            <td>
-                                <button class="btn btn-primary btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#detalle-@factura.idFactura" aria-expanded="false" aria-controls="detalle-@factura.idFactura">
+                            <td class="text-center">
+                                <button class="btn-detalle" type="button" data-bs-toggle="collapse" data-bs-target="#detalle-@factura.idFactura" aria-expanded="false" aria-controls="detalle-@factura.idFactura">
                                     Ver detalle
                                 </button>
                             </td>

@@ -1420,3 +1420,88 @@ textarea {
         box-shadow: inset 0 3px 5px rgba(0,0,0,0.2);
     }
 
+
+.nav-spaced > li {
+    margin-right: 3rem !important; 
+}
+
+
+.recover-container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.recover-card {
+    background: #fff;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: none;
+    max-width: 900px;
+    margin: auto;
+}
+
+.recover-card-header {
+    background: #5cb85c;
+    color: #fff;
+    padding: 1.2rem;
+    border-top-left-radius: 1rem;
+    border-top-right-radius: 1rem;
+}
+
+    .recover-card-header h3 {
+        font-weight: bold;
+    }
+
+    .recover-card-header p {
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+.recover-card-body {
+    padding: 2rem;
+}
+
+.recover-input {
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    padding: 0.6rem;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+}
+
+    .recover-input:focus {
+        border-color: #5cb85c;
+        box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.25);
+    }
+
+.recover-btn {
+    background: #5cb85c;
+    border: none;
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 0.5rem;
+    font-size: 1.1rem;
+    transition: background 0.3s ease;
+    width: auto !important;
+    min-width: 250px;
+    display: inline-block;
+}
+
+    .recover-btn:hover {
+        background: #145c38;
+    }
+
+.recover-card-footer {
+    background: #f8f9fa;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+.recover-link {
+    color: #198754;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+    .recover-link:hover {
+        text-decoration: underline;
+    }
