@@ -18,6 +18,17 @@ public class PromocionesController : Controller
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
         var promociones = connection.Query<Promociones>("SP_ConsultarPromociones", commandType: CommandType.StoredProcedure).ToList();
+        
+        // Cargar nombres de productos para mostrar en la vista
+        foreach (var promo in promociones)
+        {
+            var producto = connection.QuerySingleOrDefault<Producto>(
+                "SP_ObtenerProductoPorId", 
+                new { IdProducto = promo.idProducto }, 
+                commandType: CommandType.StoredProcedure);
+            promo.nombreProducto = producto?.NombreProducto ?? "Producto no encontrado";
+        }
+        
         return View(promociones);
     }
 
@@ -28,6 +39,11 @@ public class PromocionesController : Controller
         var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
 
         ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto");
+        ViewBag.Estados = new SelectList(new[] 
+        { 
+            new { Value = "Activa", Text = "Activa" }, 
+            new { Value = "Inactiva", Text = "Inactiva" } 
+        }, "Value", "Text");
 
         return View(new Promociones());
     }
@@ -41,6 +57,11 @@ public class PromocionesController : Controller
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
             ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto");
+            ViewBag.Estados = new SelectList(new[] 
+            { 
+                new { Value = "Activa", Text = "Activa" }, 
+                new { Value = "Inactiva", Text = "Inactiva" } 
+            }, "Value", "Text");
             return View(model);
         }
 
@@ -51,7 +72,8 @@ public class PromocionesController : Controller
             model.descuentoPorcentaje,
             model.fechaInicio,
             model.fechaFin,
-            model.idProducto
+            model.idProducto,
+            model.estado
         }, commandType: CommandType.StoredProcedure);
 
         return RedirectToAction("Index");
@@ -68,6 +90,11 @@ public class PromocionesController : Controller
 
         var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
         ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto", promo.idProducto);
+        ViewBag.Estados = new SelectList(new[] 
+        { 
+            new { Value = "Activa", Text = "Activa" }, 
+            new { Value = "Inactiva", Text = "Inactiva" } 
+        }, "Value", "Text", promo.estado);
 
         return View(promo);
     }
@@ -81,6 +108,11 @@ public class PromocionesController : Controller
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
             ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto", model.idProducto);
+            ViewBag.Estados = new SelectList(new[] 
+            { 
+                new { Value = "Activa", Text = "Activa" }, 
+                new { Value = "Inactiva", Text = "Inactiva" } 
+            }, "Value", "Text", model.estado);
             return View(model);
         }
 
@@ -92,7 +124,8 @@ public class PromocionesController : Controller
             model.descuentoPorcentaje,
             model.fechaInicio,
             model.fechaFin,
-            model.idProducto
+            model.idProducto,
+            model.estado
         }, commandType: CommandType.StoredProcedure);
 
         return RedirectToAction("Index");

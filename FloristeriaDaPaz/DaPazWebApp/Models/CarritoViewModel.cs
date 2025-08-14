@@ -10,11 +10,25 @@ namespace DaPazWebApp.Models
         public decimal Precio { get; set; }
         public int Cantidad { get; set; }
         public string Tipo { get; set; } // "producto" o "arreglo"
+        
+        // Campos para promociones
+        public decimal PrecioOriginal { get; set; }
+        public decimal PrecioConDescuento { get; set; }
+        public int? IdPromocion { get; set; }
+        public double? PorcentajeDescuento { get; set; }
+        public string? NombrePromocion { get; set; }
+        public decimal DescuentoAplicado { get; set; }
+        
+        // Propiedad calculada para mostrar el precio efectivo
+        public decimal PrecioEfectivo => IdPromocion.HasValue ? PrecioConDescuento : Precio;
+        public bool TienePromocion => IdPromocion.HasValue && PorcentajeDescuento > 0;
     }
 
     public class CarritoViewModel
     {
         public List<CarritoItem> Items { get; set; } = new List<CarritoItem>();
-        public decimal Total => Items.Sum(x => x.Precio * x.Cantidad);
+        public decimal Total => Items.Sum(x => x.PrecioEfectivo * x.Cantidad);
+        public decimal TotalDescuentos => Items.Sum(x => x.DescuentoAplicado);
+        public decimal TotalSinDescuentos => Items.Sum(x => x.PrecioOriginal * x.Cantidad);
     }
 }

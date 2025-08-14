@@ -91,21 +91,64 @@ namespace DaPazWebApp.Controllers
 
                 var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
                 var item = carrito.FirstOrDefault(x => x.IdProducto == id && x.NombreProducto == nombre && x.Tipo == tipo);
+                
                 if (item != null)
                 {
                     item.Cantidad += cantidad;
+                    // Recalcular promoción con nueva cantidad
+                    if (tipo == "producto")
+                    {
+                        var (precioOrig, precioDesc, descAplicado, idPromo) = PromocionHelper.CalcularPrecioConPromocion(id, item.Cantidad, _configuration);
+                        item.PrecioOriginal = precioOrig;
+                        item.PrecioConDescuento = precioDesc;
+                        item.DescuentoAplicado = descAplicado;
+                        item.IdPromocion = idPromo;
+                        
+                        if (idPromo.HasValue)
+                        {
+                            var promocion = PromocionHelper.ObtenerPromocionActiva(id, _configuration);
+                            item.PorcentajeDescuento = promocion?.descuentoPorcentaje;
+                            item.NombrePromocion = promocion?.nombrePromocion;
+                        }
+                    }
                 }
                 else
                 {
-                    carrito.Add(new CarritoItem
+                    var nuevoItem = new CarritoItem
                     {
                         IdProducto = id,
                         NombreProducto = nombre,
                         Imagen = imagen,
                         Precio = precio,
                         Cantidad = cantidad,
-                        Tipo = tipo // Guardar el tipo explícitamente
-                    });
+                        Tipo = tipo,
+                        PrecioOriginal = precio
+                    };
+
+                    // Aplicar promoción si es producto individual
+                    if (tipo == "producto")
+                    {
+                        var (precioOrig, precioDesc, descAplicado, idPromo) = PromocionHelper.CalcularPrecioConPromocion(id, cantidad, _configuration);
+                        nuevoItem.PrecioOriginal = precioOrig;
+                        nuevoItem.PrecioConDescuento = precioDesc;
+                        nuevoItem.DescuentoAplicado = descAplicado;
+                        nuevoItem.IdPromocion = idPromo;
+                        
+                        if (idPromo.HasValue)
+                        {
+                            var promocion = PromocionHelper.ObtenerPromocionActiva(id, _configuration);
+                            nuevoItem.PorcentajeDescuento = promocion?.descuentoPorcentaje;
+                            nuevoItem.NombrePromocion = promocion?.nombrePromocion;
+                        }
+                    }
+                    else
+                    {
+                        // Para arreglos, usar precio normal por ahora
+                        nuevoItem.PrecioConDescuento = precio;
+                        nuevoItem.DescuentoAplicado = 0;
+                    }
+
+                    carrito.Add(nuevoItem);
                 }
                 HttpContext.Session.SetObjectAsJson("Carrito", carrito);
             }
@@ -192,7 +235,7 @@ namespace DaPazWebApp.Controllers
                     new
                     {
                         fechaFactura = DateTime.Now,
-                        totalFactura = carritoOk.Sum(x => x.Precio * x.Cantidad),
+                        totalFactura = carritoOk.Sum(x => x.PrecioEfectivo * x.Cantidad),
                         idUsuario = idUsuario
                     },
                     commandType: System.Data.CommandType.StoredProcedure
@@ -207,13 +250,16 @@ namespace DaPazWebApp.Controllers
                         {
                             fechaVenta = DateTime.Now,
                             cantidad = item.Cantidad,
-                            total = item.Precio * item.Cantidad,
+                            total = item.PrecioEfectivo * item.Cantidad,
                             idUsuario = idUsuario,
                             idProducto = (item.Tipo == "producto") ? item.IdProducto : (int?)null,
                             idArreglo = (item.Tipo == "arreglo") ? item.IdProducto : (int?)null,
                             tipoEntrega = tipoEntrega,
                             metodoPago = metodoPago,
-                            idFactura = idFactura
+                            idFactura = idFactura,
+                            idPromocion = item.IdPromocion,
+                            precioOriginal = item.PrecioOriginal,
+                            descuentoAplicado = item.DescuentoAplicado
                         },
                         commandType: System.Data.CommandType.StoredProcedure
                     );
@@ -266,13 +312,14 @@ namespace DaPazWebApp.Controllers
 
             // Registrar actividad en el historial
             var usuarioSesion = HttpContext.Session.GetString("Usuario") ?? "Sistema";
-            var totalFactura = carritoOk.Sum(x => x.Precio * x.Cantidad);
+            var totalFactura = carritoOk.Sum(x => x.PrecioEfectivo * x.Cantidad);
+            var totalDescuentos = carritoOk.Sum(x => x.DescuentoAplicado);
             AuditoriaHelper.RegistrarActividad(
                 tipoActividad: "Crear",
                 modulo: "Venta",
                 descripcion: $"Nueva venta procesada - Factura #{idFactura}",
                 usuario: usuarioSesion,
-                detalles: $"Total: ₡{totalFactura:N0}, Items: {carritoOk.Count}, Entrega: {tipoEntrega}, Pago: {metodoPago}"
+                detalles: $"Total: ₡{totalFactura:N0}, Descuentos: ₡{totalDescuentos:N0}, Items: {carritoOk.Count}, Entrega: {tipoEntrega}, Pago: {metodoPago}"
             );
 
             // Limpiar el carrito después de confirmar

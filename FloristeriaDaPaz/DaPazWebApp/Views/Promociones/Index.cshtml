@@ -34,6 +34,7 @@
                 <th><i class="fas fa-calendar-day"></i> Fecha Inicio</th>
                 <th><i class="fas fa-calendar-day"></i> Fecha Fin</th>
                 <th><i class="fas fa-box"></i> Producto</th>
+                <th><i class="fas fa-toggle-on"></i> Estado</th>
                 <th><i class="fas fa-tools"></i> Acciones</th>
             </tr>
         </thead>
@@ -42,10 +43,24 @@
             {
                 <tr>
                     <td>@promo.nombrePromocion</td>
-                    <td>@promo.descuentoPorcentaje</td>
+                    <td>@promo.descuentoPorcentaje%</td>
                     <td>@promo.fechaInicio?.ToString("yyyy-MM-dd")</td>
                     <td>@promo.fechaFin?.ToString("yyyy-MM-dd")</td>
                     <td>@promo.nombreProducto</td>
+                    <td class="text-center">
+                        @if (promo.estado == "Activa")
+                        {
+                            <span class="badge bg-success">
+                                <i class="fas fa-check-circle"></i> Activa
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">
+                                <i class="fas fa-times-circle"></i> Inactiva
+                            </span>
+                        }
+                    </td>
                     <td class="text-center">
                         <a asp-controller="Promociones" asp-action="Edit" asp-route-id="@promo.idPromocion" class="btn btn-sm btn-edit">
                             <i class="fas fa-edit"></i> Editar

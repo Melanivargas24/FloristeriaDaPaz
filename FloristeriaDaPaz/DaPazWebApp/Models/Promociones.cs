@@ -26,5 +26,8 @@ namespace DaPazWebApp.Models
         public int? idProducto { get; set; }
 
         public string? nombreProducto { get; set; }
+
+        [Required(ErrorMessage = "El estado es obligatorio")]
+        public string? estado { get; set; } = "Activa";
     }
 }
