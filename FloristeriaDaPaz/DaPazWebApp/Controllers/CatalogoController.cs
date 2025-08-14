@@ -63,8 +63,27 @@ namespace DaPazWebApp.Controllers
                     Tipo = "Arreglo",
                     PrecioOriginal = a.precio,
                     PrecioConDescuento = a.precio,
-                    TienePromocion = false // Los arreglos por ahora no tienen promociones individuales
+                    TienePromocion = false
                 }).ToList();
+
+            // Aplicar promociones a arreglos basadas en sus productos
+            foreach (var arreglo in arreglos)
+            {
+                var promocionArreglo = PromocionHelper.CalcularPromocionArreglo(arreglo.Id, _configuration);
+                if (promocionArreglo.tienePromocion)
+                {
+                    arreglo.TienePromocion = true;
+                    arreglo.PrecioConDescuento = promocionArreglo.precioConDescuento;
+                    arreglo.NombrePromocion = $"Promociones en productos: {promocionArreglo.promocionesAplicadas}";
+                    
+                    // Calcular porcentaje de descuento total del arreglo
+                    if (promocionArreglo.precioOriginal > 0)
+                    {
+                        arreglo.PorcentajeDescuento = (double)Math.Round(
+                            (promocionArreglo.descuentoTotal / promocionArreglo.precioOriginal) * 100, 2);
+                    }
+                }
+            }
 
             // ViewBag categorías
             ViewBag.CategoriasArreglos = arreglos.Select(a => a.Categoria)

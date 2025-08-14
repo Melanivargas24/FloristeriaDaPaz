@@ -92,7 +92,7 @@
                                                         @if (item.TienePromocion)
                                                         {
                                                             <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                                                -@item.IdPromocion%
+                                                                -@item.PorcentajeDescuento.GetValueOrDefault().ToString("F0")%
                                                             </span>
                                                         }
                                                     </div>
@@ -116,7 +116,7 @@
                                                     }
                                                 </td>
                                                 <td>@item.Cantidad</td>
-                                                <td>₡@((item.TienePromocion ? item.PrecioConDescuento : item.Precio) * item.Cantidad).ToString("N2")</td>
+                                                <td>₡@((item.PrecioEfectivo * item.Cantidad).ToString("N2"))</td>
                                             </tr>
                                         }
                                     </tbody>

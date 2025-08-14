@@ -20,8 +20,9 @@ namespace DaPazWebApp.Models
         public decimal DescuentoAplicado { get; set; }
         
         // Propiedad calculada para mostrar el precio efectivo
-        public decimal PrecioEfectivo => IdPromocion.HasValue ? PrecioConDescuento : Precio;
-        public bool TienePromocion => IdPromocion.HasValue && PorcentajeDescuento > 0;
+        public decimal PrecioEfectivo => TienePromocion ? PrecioConDescuento : Precio;
+        public bool TienePromocion => (IdPromocion.HasValue && PorcentajeDescuento > 0) || 
+                                     (!string.IsNullOrEmpty(NombrePromocion) && PrecioConDescuento < Precio);
     }
 
     public class CarritoViewModel

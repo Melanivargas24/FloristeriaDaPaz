@@ -111,6 +111,28 @@ namespace DaPazWebApp.Controllers
                             item.NombrePromocion = promocion?.nombrePromocion;
                         }
                     }
+                    else if (tipo == "arreglo")
+                    {
+                        // Recalcular promoción del arreglo
+                        var promocionArreglo = PromocionHelper.CalcularPromocionArreglo(id, _configuration);
+                        if (promocionArreglo.tienePromocion)
+                        {
+                            item.PrecioOriginal = promocionArreglo.precioOriginal;
+                            item.PrecioConDescuento = promocionArreglo.precioConDescuento;
+                            item.DescuentoAplicado = promocionArreglo.descuentoTotal * item.Cantidad;
+                            item.NombrePromocion = promocionArreglo.promocionesAplicadas;
+                            item.PorcentajeDescuento = (double?)Math.Round(
+                                (promocionArreglo.descuentoTotal / promocionArreglo.precioOriginal) * 100, 2);
+                            item.IdPromocion = -1; // Indicador de promoción de arreglo
+                        }
+                        else
+                        {
+                            item.PrecioOriginal = item.Precio;
+                            item.PrecioConDescuento = item.Precio;
+                            item.DescuentoAplicado = 0;
+                            item.IdPromocion = null;
+                        }
+                    }
                 }
                 else
                 {
@@ -143,9 +165,25 @@ namespace DaPazWebApp.Controllers
                     }
                     else
                     {
-                        // Para arreglos, usar precio normal por ahora
-                        nuevoItem.PrecioConDescuento = precio;
-                        nuevoItem.DescuentoAplicado = 0;
+                        // Para arreglos, calcular promociones basadas en productos
+                        var promocionArreglo = PromocionHelper.CalcularPromocionArreglo(id, _configuration);
+                        if (promocionArreglo.tienePromocion)
+                        {
+                            nuevoItem.PrecioOriginal = promocionArreglo.precioOriginal;
+                            nuevoItem.PrecioConDescuento = promocionArreglo.precioConDescuento;
+                            nuevoItem.DescuentoAplicado = promocionArreglo.descuentoTotal * cantidad;
+                            nuevoItem.NombrePromocion = promocionArreglo.promocionesAplicadas;
+                            nuevoItem.PorcentajeDescuento = (double?)Math.Round(
+                                (promocionArreglo.descuentoTotal / promocionArreglo.precioOriginal) * 100, 2);
+                            // Para arreglos, no tenemos IdPromocion específico, así que usamos -1 para indicar que es promoción de arreglo
+                            nuevoItem.IdPromocion = -1;
+                        }
+                        else
+                        {
+                            nuevoItem.PrecioOriginal = precio;
+                            nuevoItem.PrecioConDescuento = precio;
+                            nuevoItem.DescuentoAplicado = 0;
+                        }
                     }
 
                     carrito.Add(nuevoItem);
@@ -257,7 +295,7 @@ namespace DaPazWebApp.Controllers
                             tipoEntrega = tipoEntrega,
                             metodoPago = metodoPago,
                             idFactura = idFactura,
-                            idPromocion = item.IdPromocion,
+                            idPromocion = (item.IdPromocion > 0) ? item.IdPromocion : (int?)null,
                             precioOriginal = item.PrecioOriginal,
                             descuentoAplicado = item.DescuentoAplicado
                         },

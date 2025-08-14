@@ -86,5 +86,39 @@ namespace DaPazWebApp.Helpers
             if (precioOriginal <= 0) return 0;
             return Math.Round(((precioOriginal - precioConDescuento) / precioOriginal) * 100, 2);
         }
+
+        public static (bool tienePromocion, decimal precioOriginal, decimal precioConDescuento, 
+                      decimal descuentoTotal, string promocionesAplicadas) 
+            CalcularPromocionArreglo(int idArreglo, IConfiguration configuration)
+        {
+            try
+            {
+                using var connection = new SqlConnection(configuration.GetConnectionString("BDConnection"));
+                
+                var resultado = connection.QuerySingleOrDefault(
+                    "SP_CalcularPromocionArreglo",
+                    new { idArreglo = idArreglo },
+                    commandType: CommandType.StoredProcedure);
+
+                if (resultado != null)
+                {
+                    return (
+                        tienePromocion: resultado.tienePromocion == 1,
+                        precioOriginal: resultado.precioOriginalArreglo,
+                        precioConDescuento: resultado.precioConDescuento,
+                        descuentoTotal: resultado.descuentoTotal,
+                        promocionesAplicadas: resultado.promocionesAplicadas ?? string.Empty
+                    );
+                }
+                
+                return (false, 0, 0, 0, string.Empty);
+            }
+            catch (Exception ex)
+            {
+                // Log error si es necesario
+                System.Diagnostics.Debug.WriteLine($"Error calculando promoción de arreglo: {ex.Message}");
+                return (false, 0, 0, 0, string.Empty);
+            }
+        }
     }
 }

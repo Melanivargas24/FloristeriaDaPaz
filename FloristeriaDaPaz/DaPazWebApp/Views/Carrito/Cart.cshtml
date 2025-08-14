@@ -84,13 +84,13 @@
             @if (item.TienePromocion)
             {
                 <div>
-                    <span class="text-muted text-decoration-line-through small">₡@(item.PrecioOriginal * item.Cantidad)</span><br>
-                    <span class="text-danger fw-bold">₡@(item.PrecioEfectivo * item.Cantidad)</span>
+                    <span class="text-muted text-decoration-line-through small">₡@((item.PrecioOriginal * item.Cantidad).ToString("N2"))</span><br>
+                    <span class="text-danger fw-bold">₡@((item.PrecioEfectivo * item.Cantidad).ToString("N2"))</span>
                 </div>
             }
             else
             {
-                <span>₡@(item.Precio * item.Cantidad)</span>
+                <span>₡@((item.Precio * item.Cantidad).ToString("N2"))</span>
             }
         </td>
         <td>
