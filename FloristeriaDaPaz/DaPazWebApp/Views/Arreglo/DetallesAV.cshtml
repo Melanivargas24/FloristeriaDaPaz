@@ -27,25 +27,7 @@
                         <div class="col-lg-7">
                             <div class="ps-lg-4">
                                 <h1 class="detalle-arreglo-titulo">@Model.nombreArreglo</h1>
-                                
-                                @if (Model.TienePromocion)
-                                {
-                                    <div class="detalle-arreglo-precio">
-                                        <span class="text-muted text-decoration-line-through fs-6">₡@Model.PrecioOriginal.ToString("N2")</span><br>
-                                        <span class="text-danger fw-bold fs-4">₡@Model.PrecioConDescuento.ToString("N2")</span>
-                                        <span class="badge bg-danger ms-2">-@Model.PorcentajeDescuento.GetValueOrDefault().ToString("F0")%</span>
-                                    </div>
-                                    @if (!string.IsNullOrEmpty(Model.NombrePromocion))
-                                    {
-                                        <div class="alert alert-success py-2 my-2">
-                                            <small><i class="bi bi-gift"></i> @Model.NombrePromocion</small>
-                                        </div>
-                                    }
-                                }
-                                else
-                                {
-                                    <div class="detalle-arreglo-precio">₡@Model.precio.ToString("N2")</div>
-                                }
+                                <div class="detalle-arreglo-precio">₡@Model.precio.ToString("N2")</div>
 
                                 <div class="detalle-arreglo-lista">
                                     <span class="fw-bold fs-5">Productos incluidos</span>

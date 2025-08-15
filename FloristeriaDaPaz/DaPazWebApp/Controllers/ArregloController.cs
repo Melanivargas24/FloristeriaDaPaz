@@ -365,7 +365,6 @@ namespace DaPazWebApp.Controllers
                 );
                 if (arreglo == null)
                     return NotFound();
-                
                 // Cargar nombre de la categoría si no viene
                 if (string.IsNullOrEmpty(arreglo.nombreCategoriaArreglo))
                 {
@@ -375,7 +374,6 @@ namespace DaPazWebApp.Controllers
                     );
                     arreglo.nombreCategoriaArreglo = categoria?.nombreCategoriaArreglo ?? "";
                 }
-                
                 // Cargar productos asociados
                 var productos = connection.Query<ArregloProductoModel>(
                     "SP_ObtenerProductosPorArreglo",
@@ -383,25 +381,6 @@ namespace DaPazWebApp.Controllers
                     commandType: System.Data.CommandType.StoredProcedure
                 ).ToList();
                 arreglo.Productos = productos;
-
-                // Aplicar promociones del arreglo basadas en sus productos
-                var promocionArreglo = PromocionHelper.CalcularPromocionArreglo(id, _configuration);
-                if (promocionArreglo.tienePromocion)
-                {
-                    arreglo.TienePromocion = true;
-                    arreglo.PrecioOriginal = (decimal)promocionArreglo.precioOriginal;
-                    arreglo.PrecioConDescuento = (decimal)promocionArreglo.precioConDescuento;
-                    arreglo.NombrePromocion = promocionArreglo.promocionesAplicadas;
-                    arreglo.PorcentajeDescuento = (double?)Math.Round(
-                        (promocionArreglo.descuentoTotal / promocionArreglo.precioOriginal) * 100, 2);
-                }
-                else
-                {
-                    arreglo.TienePromocion = false;
-                    arreglo.PrecioOriginal = (decimal)arreglo.precio;
-                    arreglo.PrecioConDescuento = (decimal)arreglo.precio;
-                }
-                
                 return View("DetallesAV", arreglo);
             }
         }

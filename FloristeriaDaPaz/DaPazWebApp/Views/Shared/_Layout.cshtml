@@ -57,7 +57,6 @@
 						<li><a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a></li>
 						<li><a class="nav-link" asp-controller="Catalogo" asp-action="Index">Catálogo</a></li>
 						<li><a class="nav-link" asp-controller="Home" asp-action="Services">Servicios</a></li>
-
 						@if (idRol == 1)
 						{
 							<li class="nav-item dropdown">
@@ -137,7 +136,7 @@
 										<li><a class="dropdown-item" asp-controller="Carrito" asp-action="HistorialGlobal">Historial de Compras (Global)</a></li>
 									}
 
-									<li><a class="dropdown-item" href="#" onclick="cerrarSesion()">Cerrar Sesion</a></li>
+									<li><a class="dropdown-item" href="#" data-value="CerrarSesion">Cerrar Sesion</a></li>
 								}
 								else
 								{
@@ -194,6 +193,7 @@
 						<div class="col-6 col-sm-6 col-md-3">
 							<ul class="list-unstyled">
 								<li><a href="#">Servicios</a></li>
+								<li><a href="#">Contacto</a></li>
 							</ul>
 						</div>
 					</div>
@@ -357,17 +357,6 @@
 	<script src="~/js/tiny-slider.js"></script>
 	<script src="~/js/custom.js"></script>
 	<script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
-
-	<!-- Formulario oculto para cerrar sesión -->
-	<form id="logout-form" action="@Url.Action("CerrarSesion", "Login")" method="post" style="display: none;">
-		@Html.AntiForgeryToken()
-	</form>
-
-	<script>
-		function cerrarSesion() {
-			document.getElementById('logout-form').submit();
-		}
-	</script>
 
 	<script>
 		// Habilitar submenús en Bootstrap 5
