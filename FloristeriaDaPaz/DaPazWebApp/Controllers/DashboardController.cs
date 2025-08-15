@@ -286,7 +286,7 @@ namespace DaPazWebApp.Controllers
                         commandType: CommandType.StoredProcedure
                     ).ToList();
 
-                    // 5. Resumen calculado en C# (más eficiente para datos simples)
+                    // 5. Resumen calculado
                     var actividades = historialData.ActividadesRecientes;
                     historialData.ResumenActividades = new ResumenActividadesModel
                     {
