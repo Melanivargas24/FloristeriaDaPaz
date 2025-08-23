@@ -1,4 +1,4 @@
-﻿using DaPazWebApp.Models;
+﻿﻿using DaPazWebApp.Models;
 using DaPazWebApp.Helpers;
 using Dapper;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -195,6 +195,22 @@ namespace DaPazWebApp.Controllers
             }
 
             return View();
+        }
+
+        #endregion
+
+        #region Cerrar Sesión
+
+        [HttpPost]
+        public async Task<IActionResult> CerrarSesion()
+        {
+            // Limpiar la sesión
+            HttpContext.Session.Clear();
+            
+            // Cerrar la autenticación por cookies
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            
+            return RedirectToAction("Index", "Home");
         }
 
         #endregion

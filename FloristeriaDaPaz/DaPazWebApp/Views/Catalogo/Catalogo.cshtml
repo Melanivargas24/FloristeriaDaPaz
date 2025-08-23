@@ -128,7 +128,17 @@
                 @foreach (var item in Model)
                 {
                     <div class="col-12 col-md-6 col-lg-4 mb-4 product-item-wrapper" data-category="@item.Categoria.ToLower()">
-                        <div class="custom-card h-100 border-success">
+                        <div class="custom-card h-100 border-success position-relative">
+                            @* Etiqueta de promoción *@
+                            @if (item.TienePromocion)
+                            {
+                                <div class="position-absolute top-0 start-0 m-2" style="z-index: 10;">
+                                    <span class="badge bg-danger fs-6 px-3 py-2">
+                                        -@item.PorcentajeDescuento.GetValueOrDefault().ToString("F0")% OFF
+                                    </span>
+                                </div>
+                            }
+                            
                             <img src="@item.Imagen" class="custom-card-img-top img-fluid rounded" alt="@item.Nombre" style="max-height:220px;object-fit:contain;">
                             <div class="card-body">
                                 <h5 class="custom-card-title fw-bold">@item.Nombre</h5>
@@ -136,9 +146,30 @@
                                     <span class="badge bg-secondary">@item.Tipo</span>
                                     <p class="mb-0"><strong>Categoría:</strong> @item.Categoria</p>
                                 </div>
-                                <p class="custom-card-text mb-1 text-center fs-3">
-                                    <strong class="text-success">₡@item.Precio.ToString("N2")</strong>
-                                </p>
+                                
+                                @* Mostrar precios con promoción *@
+                                <div class="text-center mb-2">
+                                    @if (item.TienePromocion)
+                                    {
+                                        <p class="mb-1">
+                                            <span class="text-muted text-decoration-line-through fs-5">₡@item.PrecioOriginal.ToString("N2")</span>
+                                        </p>
+                                        <p class="mb-1 fs-3">
+                                            <strong class="text-danger">₡@item.PrecioConDescuento.ToString("N2")</strong>
+                                        </p>
+                                        @if (!string.IsNullOrEmpty(item.NombrePromocion))
+                                        {
+                                            <p class="mb-0 text-success small fw-bold">🎉 @item.NombrePromocion</p>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <p class="custom-card-text mb-1 fs-3">
+                                            <strong class="text-success">₡@item.Precio.ToString("N2")</strong>
+                                        </p>
+                                    }
+                                </div>
+                                
                                 <div class="mt-3 text-center">
                                     @if (item.Tipo == "Producto")
                                     {

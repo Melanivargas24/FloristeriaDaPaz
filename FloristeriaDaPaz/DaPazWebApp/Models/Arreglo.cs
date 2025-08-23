@@ -1,4 +1,4 @@
-﻿namespace DaPazWebApp.Models
+﻿﻿namespace DaPazWebApp.Models
 {
     public class Arreglo
     {
@@ -20,6 +20,13 @@
 
         // Relación con productos
         public List<ArregloProductoModel>? Productos { get; set; }
+
+        // Propiedades para promociones
+        public bool TienePromocion { get; set; } = false;
+        public decimal PrecioOriginal { get; set; }
+        public decimal PrecioConDescuento { get; set; }
+        public string? NombrePromocion { get; set; }
+        public double? PorcentajeDescuento { get; set; }
 
     }
         public class ArregloProductoModel

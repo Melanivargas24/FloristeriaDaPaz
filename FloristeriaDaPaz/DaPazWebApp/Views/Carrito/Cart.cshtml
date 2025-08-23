@@ -36,9 +36,39 @@
 @foreach (var item in Model.Items)
 {
     <tr>
-        <td style="width:100px"><img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded border" style="max-width:80px;max-height:80px;object-fit:contain;"></td>
-        <td class="fw-bold">@item.NombreProducto</td>
-        <td>₡@item.Precio.ToString("N2")</td>
+        <td style="width:100px">
+            <div class="position-relative">
+                <img src="@item.Imagen" alt="@item.NombreProducto" class="img-fluid rounded border" style="max-width:80px;max-height:80px;object-fit:contain;">
+                @if (item.TienePromocion)
+                {
+                    <span class="position-absolute top-0 start-0 badge bg-danger small" style="font-size: 0.7rem;">
+                        -@item.PorcentajeDescuento.GetValueOrDefault().ToString("F0")%
+                    </span>
+                }
+            </div>
+        </td>
+        <td>
+            <div>
+                <span class="fw-bold">@item.NombreProducto</span>
+                @if (item.TienePromocion && !string.IsNullOrEmpty(item.NombrePromocion))
+                {
+                    <br><small class="text-success fw-bold">🎉 @item.NombrePromocion</small>
+                }
+            </div>
+        </td>
+        <td>
+            @if (item.TienePromocion)
+            {
+                <div>
+                    <span class="text-muted text-decoration-line-through small">₡@item.PrecioOriginal.ToString("N2")</span><br>
+                    <span class="text-danger fw-bold">₡@item.PrecioEfectivo.ToString("N2")</span>
+                </div>
+            }
+            else
+            {
+                <span>₡@item.Precio.ToString("N2")</span>
+            }
+        </td>
         <td>
             <form method="post" action="/Carrito/ActualizarCantidad" class="d-flex align-items-center" style="gap:4px;">
                 @Html.AntiForgeryToken()
@@ -50,7 +80,19 @@
 </button>
             </form>
         </td>
-        <td>₡@(item.Precio * item.Cantidad)</td>
+        <td>
+            @if (item.TienePromocion)
+            {
+                <div>
+                    <span class="text-muted text-decoration-line-through small">₡@((item.PrecioOriginal * item.Cantidad).ToString("N2"))</span><br>
+                    <span class="text-danger fw-bold">₡@((item.PrecioEfectivo * item.Cantidad).ToString("N2"))</span>
+                </div>
+            }
+            else
+            {
+                <span>₡@((item.Precio * item.Cantidad).ToString("N2"))</span>
+            }
+        </td>
         <td>
             <form method="post" action="/Carrito/EliminarDelCarrito" style="display:inline;">
                 @Html.AntiForgeryToken()
@@ -67,7 +109,19 @@
                             </table>
                         </div>
 <div class="text-end mt-3">
+    @if (Model.TotalDescuentos > 0)
+    {
+        <div class="mb-2">
+            <p class="mb-1 text-muted">Subtotal sin descuentos: <span>₡@Model.TotalSinDescuentos.ToString("N2")</span></p>
+            <p class="mb-1 text-success fw-bold">Total descuentos aplicados: <span>-₡@Model.TotalDescuentos.ToString("N2")</span></p>
+            <hr class="my-2">
+        </div>
+    }
     <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
+    @if (Model.TotalDescuentos > 0)
+    {
+        <p class="small text-success mb-2">¡Has ahorrado ₡@Model.TotalDescuentos.ToString("N2") con promociones! 🎉</p>
+    }
        <a href="/Carrito/Checkout" class="btn-guardar btn-lg mt-2">Proceder al Pago</a>
 </div>
                     }

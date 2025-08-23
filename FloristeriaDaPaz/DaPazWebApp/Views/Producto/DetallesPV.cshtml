@@ -22,13 +22,38 @@
                         </div>
                     }
                     <div class="row">
-                        <div class="col-lg-5 d-flex align-items-start justify-content-center mb-4 mb-lg-0">
+                        <div class="col-lg-5 d-flex align-items-start justify-content-center mb-4 mb-lg-0 position-relative">
+                            @* Etiqueta de promoción *@
+                            @if (Model.TienePromocion)
+                            {
+                                <div class="position-absolute top-0 start-0 m-2" style="z-index: 10;">
+                                    <span class="badge bg-danger fs-6 px-3 py-2">
+                                        -@Model.PorcentajeDescuento.GetValueOrDefault().ToString("F0")% OFF
+                                    </span>
+                                </div>
+                            }
                             <img src="@Model.Imagen" class="producto-detalle-imagen img-fluid" alt="@Model.NombreProducto">
                         </div>
                         <div class="col-lg-7">
                             <div class="ps-lg-4">
                                 <h1 class="producto-detalle-titulo">@Model.NombreProducto</h1>
-                                <div class="producto-detalle-precio">₡@Model.Precio?.ToString("N2")</div>
+                                
+                                @* Mostrar precios con promoción *@
+                                @if (Model.TienePromocion)
+                                {
+                                    <div class="producto-detalle-precio-container mb-3">
+                                        <div class="text-muted text-decoration-line-through fs-5">₡@Model.Precio?.ToString("N2")</div>
+                                        <div class="producto-detalle-precio text-danger">₡@Model.PrecioConDescuento.ToString("N2")</div>
+                                        @if (!string.IsNullOrEmpty(Model.NombrePromocion))
+                                        {
+                                            <div class="text-success small fw-bold">🎉 @Model.NombrePromocion</div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="producto-detalle-precio">₡@Model.Precio?.ToString("N2")</div>
+                                }
                                 <div class="producto-detalle-descripcion-wrap">
                                     <div class="fw-bold fs-5 mb-1">Descripción</div>
                                     <p class="producto-detalle-descripcion">@Model.Descripcion</p>

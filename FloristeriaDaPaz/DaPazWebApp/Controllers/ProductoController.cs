@@ -1,4 +1,4 @@
-﻿using DaPazWebApp.Helpers;
+﻿﻿using DaPazWebApp.Helpers;
 using DaPazWebApp.Models;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
@@ -279,10 +279,25 @@ namespace DaPazWebApp.Controllers
                     producto.NombreCategoriaProducto = categoria?.nombreCategoriaProducto;
                 }
 
+                // Aplicar promociones al producto
+                var promocion = PromocionHelper.ObtenerPromocionActiva(producto.IdProducto, _configuration);
+                if (promocion != null && promocion.descuentoPorcentaje.HasValue)
+                {
+                    producto.TienePromocion = true;
+                    producto.IdPromocion = promocion.idPromocion;
+                    producto.NombrePromocion = promocion.nombrePromocion;
+                    producto.PorcentajeDescuento = promocion.descuentoPorcentaje;
+                    producto.PrecioConDescuento = Math.Round((decimal)(producto.Precio ?? 0) * (1 - (decimal)(promocion.descuentoPorcentaje.Value / 100.0)), 2);
+                }
+                else
+                {
+                    producto.TienePromocion = false;
+                    producto.PrecioConDescuento = (decimal)(producto.Precio ?? 0);
+                }
+
                 return View("DetallesPV", producto);
             }
         }
 
     }
 }
-

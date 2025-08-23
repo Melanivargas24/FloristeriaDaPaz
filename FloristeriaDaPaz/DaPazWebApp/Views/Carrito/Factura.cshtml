@@ -35,6 +35,8 @@
                                             <tr>
                                                 <th>Producto/Arreglo</th>
                                                 <th>Cantidad</th>
+                                                <th>Precio Unitario</th>
+                                                <th>Promoción</th>
                                                 <th>Total</th>
                                             </tr>
                                         </thead>
@@ -44,14 +46,54 @@
                                                 foreach (var v in Model.Ventas)
                                                 {
                                                     <tr>
-                                                        <td class="fw-bold">@(v.idProducto != null ? $"Producto #{v.idProducto}" : $"Arreglo #{v.idArreglo}")</td>
+                                                        <td class="fw-bold">
+                                                            @(v.idProducto != null ? v.NombreProducto ?? $"Producto #{v.idProducto}" : $"Arreglo #{v.idArreglo}")
+                                                        </td>
                                                         <td>@v.cantidad</td>
+                                                        <td>
+                                                            @{
+                                                                var precioUnitario = v.cantidad > 0 ? v.total / v.cantidad : 0;
+                                                            }
+                                                            ₡@precioUnitario.ToString("N2")
+                                                        </td>
+                                                        <td>
+                                                            @if (v.idProducto != null)
+                                                            {
+                                                                // Aquí podrías verificar si el producto tenía promoción
+                                                                <span class="text-muted">-</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="text-muted">-</span>
+                                                            }
+                                                        </td>
                                                         <td>₡@v.total.ToString("N2")</td>
                                                     </tr>
                                                 }
                                             }
                                         </tbody>
                                     </table>
+                                    
+                                    @{
+                                        // Cálculo aproximado de ahorros - en un caso real esto vendría de la base de datos
+                                        var tieneDescuentos = false; // Esta lógica se mejoraría con datos reales
+                                    }
+                                    
+                                    @if (tieneDescuentos)
+                                    {
+                                        <div class="mt-4 p-3 bg-light rounded">
+                                            <h6 class="text-success">🎉 Resumen de ahorros en este pedido:</h6>
+                                            <div class="row">
+                                                <div class="col-sm-8">Descuentos por promociones aplicadas:</div>
+                                                <div class="col-sm-4 text-end text-success">-₡0.00</div>
+                                            </div>
+                                            <hr>
+                                            <div class="row fw-bold">
+                                                <div class="col-sm-8">Total ahorrado:</div>
+                                                <div class="col-sm-4 text-end text-success">₡0.00</div>
+                                            </div>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
