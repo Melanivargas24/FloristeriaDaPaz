@@ -18,6 +18,9 @@ namespace DaPazWebApp.Models
         public string?  estado { get; set; }
         public int?  idRol { get; set; }
         public string? direccion { get; set; }
+        public int? idDistrito { get; set; }
+        public int? idCanton { get; set; }
+        public int? idProvincia { get; set; }
 
     }
 }

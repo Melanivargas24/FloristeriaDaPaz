@@ -25,6 +25,38 @@
                                 <tr><th>Correo</th><td>@correo</td></tr>
                                 <tr><th>Dirección</th><td>@direccion</td></tr>
                                 <tr><th>Teléfono</th><td>@telefono</td></tr>
+                                @if (!string.IsNullOrEmpty(usuario?.nombreDistrito))
+                                {
+                                    <tr>
+                                        <th>Ubicación</th>
+                                        <td>
+                                            @usuario.nombreProvincia, @usuario.nombreCanton, @usuario.nombreDistrito
+                                            @if (Model.CostoEnvio > 0)
+                                            {
+                                                <br><small class="text-muted">Costo de envío: ₡@Model.CostoEnvio.ToString("N2")</small>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <th>Ubicación</th>
+                                        <td>
+                                            <span class="text-warning">
+                                                <i class="fas fa-exclamation-triangle"></i>
+                                                No tienes ubicación configurada
+                                            </span>
+                                            <br>
+                                            <small class="text-muted">
+                                                <a asp-controller="Usuario" asp-action="EditarUsuario" asp-route-id="@usuario?.idUsuario" class="text-primary">
+                                                    Configurar ubicación
+                                                </a> 
+                                                para habilitar envío a domicilio
+                                            </small>
+                                        </td>
+                                    </tr>
+                                }
                             </table>
                             <form method="post" action="/Carrito/ConfirmarPedido">
                                 @Html.AntiForgeryToken()
@@ -36,6 +68,12 @@
                                         <option value="retiro">Retiro en tienda</option>
                                     </select>
                                     <span class="text-danger" id="tipoEntregaError" style="display:none;">Seleccione el tipo de entrega.</span>
+                                    <span class="text-danger" id="ubicacionError" style="display:none;">
+                                        Debe configurar su ubicación para usar envío a domicilio.
+                                        <a asp-controller="Usuario" asp-action="EditarUsuario" asp-route-id="@usuario?.idUsuario" class="text-primary">
+                                            Configurar ahora
+                                        </a>
+                                    </span>
                                 </div>
                                 <div class="form-group mb-3">
                                     <label for="metodoPago" class="control-label fw-bold">Método de Pago</label>
@@ -48,23 +86,114 @@
                                 </div>
 <button type="submit" class="btn-guardar btn-lg w-100">Confirmar Pedido</button>
                                 <script>
+                                    // Variables para cálculos y validaciones
+                                    const subtotalProductos = @Model.Subtotal;
+                                    const costoEnvio = @Model.CostoEnvio;
+                                    const tieneUbicacion = @((!string.IsNullOrEmpty(usuario?.nombreDistrito)).ToString().ToLower());
+                                    
+                                    console.log('Debug - Subtotal productos:', subtotalProductos);
+                                    console.log('Debug - Costo envío:', costoEnvio);
+                                    console.log('Debug - Tiene ubicación:', tieneUbicacion);
+                                    
+                                    // Función para actualizar el total
+                                    function actualizarTotal() {
+                                        const tipoEntregaSelect = document.getElementById('tipoEntrega');
+                                        const costoEnvioRow = document.getElementById('costoEnvioRow');
+                                        const totalFinalElement = document.getElementById('totalFinal');
+                                        const ubicacionError = document.getElementById('ubicacionError');
+                                        
+                                        const tipoEntrega = tipoEntregaSelect.value;
+                                        let totalFinal = subtotalProductos;
+                                        
+                                        console.log('Debug - Tipo entrega seleccionado:', tipoEntrega);
+                                        
+                                        // Limpiar errores de ubicación
+                                        ubicacionError.style.display = 'none';
+                                        
+                                        if (tipoEntrega === 'domicilio') {
+                                            // Verificar si tiene ubicación configurada
+                                            if (!tieneUbicacion) {
+                                                ubicacionError.style.display = 'block';
+                                                costoEnvioRow.style.display = 'none';
+                                            } else {
+                                                costoEnvioRow.style.display = 'flex';
+                                                totalFinal = subtotalProductos + costoEnvio;
+                                                console.log('Debug - Total con envío:', totalFinal);
+                                            }
+                                        } else {
+                                            costoEnvioRow.style.display = 'none';
+                                        }
+                                        
+                                        totalFinalElement.textContent = '₡' + totalFinal.toLocaleString('es-CR', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                                        console.log('Debug - Total mostrado:', totalFinalElement.textContent);
+                                    }
+                                    
+                                    // Función que se ejecuta cuando la página está lista
+                                    function inicializar() {
+                                        const tipoEntregaSelect = document.getElementById('tipoEntrega');
+                                        if (tipoEntregaSelect) {
+                                            // Event listener para cambio en tipo de entrega
+                                            tipoEntregaSelect.addEventListener('change', actualizarTotal);
+                                            
+                                            // Actualizar inmediatamente
+                                            actualizarTotal();
+                                            
+                                            // Deshabilitar opción de domicilio si no tiene ubicación
+                                            if (!tieneUbicacion) {
+                                                const opcionDomicilio = tipoEntregaSelect.querySelector('option[value="domicilio"]');
+                                                if (opcionDomicilio) {
+                                                    opcionDomicilio.textContent = 'Envío a domicilio (Configure su ubicación primero)';
+                                                    opcionDomicilio.style.color = '#6c757d';
+                                                }
+                                            }
+                                        }
+                                    }
+                                    
+                                    // Ejecutar cuando el DOM esté listo
+                                    if (document.readyState === 'loading') {
+                                        document.addEventListener('DOMContentLoaded', inicializar);
+                                    } else {
+                                        inicializar();
+                                    }
+                                    
+                                    // Validación del formulario
                                     document.querySelector('form').addEventListener('submit', function(e) {
-                                        let tipoEntrega = document.getElementById('tipoEntrega').value;
+                                        let tipoEntrega = tipoEntregaSelect.value;
                                         let metodoPago = document.getElementById('metodoPago').value;
                                         let valid = true;
+                                        
+                                        // Validar tipo de entrega
                                         if (!tipoEntrega) {
                                             document.getElementById('tipoEntregaError').style.display = 'block';
                                             valid = false;
                                         } else {
                                             document.getElementById('tipoEntregaError').style.display = 'none';
                                         }
+                                        
+                                        // Validar ubicación para envío a domicilio
+                                        if (tipoEntrega === 'domicilio' && !tieneUbicacion) {
+                                            ubicacionError.style.display = 'block';
+                                            valid = false;
+                                        } else {
+                                            ubicacionError.style.display = 'none';
+                                        }
+                                        
+                                        // Validar método de pago
                                         if (!metodoPago) {
                                             document.getElementById('metodoPagoError').style.display = 'block';
                                             valid = false;
                                         } else {
                                             document.getElementById('metodoPagoError').style.display = 'none';
                                         }
-                                        if (!valid) e.preventDefault();
+                                        
+                                        if (!valid) {
+                                            e.preventDefault();
+                                            // Scroll hacia el primer error
+                                            const firstError = document.querySelector('.text-danger[style*="block"]');
+                                            if (firstError) {
+                                                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                            }
+                                        }
                                     });
                                 </script>
                             </form>
@@ -125,32 +254,41 @@
                             <div class="text-end mt-3">
                                 @{
                                     var totalSinDescuento = Model.Items.Sum(x => x.PrecioOriginal * x.Cantidad);
-                                    var totalConDescuento = Model.Total;
+                                    var totalConDescuento = Model.Subtotal;
                                     var ahorroTotal = totalSinDescuento - totalConDescuento;
                                 }
                                 
-                                @if (ahorroTotal > 0)
-                                {
-                                    <div class="border rounded p-3 bg-light">
+                                <div class="border rounded p-3 bg-light">
+                                    <!-- Subtotal de productos -->
+                                    @if (ahorroTotal > 0)
+                                    {
                                         <div class="d-flex justify-content-between mb-2">
-                                            <span>Subtotal:</span>
+                                            <span>Subtotal original:</span>
                                             <span>₡@totalSinDescuento.ToString("N2")</span>
                                         </div>
                                         <div class="d-flex justify-content-between mb-2 text-success">
                                             <span>🎉 Ahorros por promociones:</span>
                                             <span>-₡@ahorroTotal.ToString("N2")</span>
                                         </div>
-                                        <hr>
-                                        <div class="d-flex justify-content-between">
-                                            <h4>Total a pagar:</h4>
-                                            <h4 class="text-danger">₡@totalConDescuento.ToString("N2")</h4>
-                                        </div>
+                                    }
+                                    
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span>Subtotal productos:</span>
+                                        <span>₡@Model.Subtotal.ToString("N2")</span>
                                     </div>
-                                }
-                                else
-                                {
-                                    <h4>Total: <span class="text-danger">₡@Model.Total.ToString("N2")</span></h4>
-                                }
+                                    
+                                    <!-- Costo de envío -->
+                                    <div class="d-flex justify-content-between mb-2" id="costoEnvioRow" style="display: none;">
+                                        <span>Costo de envío (@Model.NombreDistrito):</span>
+                                        <span id="costoEnvioAmount">₡@Model.CostoEnvio.ToString("N2")</span>
+                                    </div>
+                                    
+                                    <hr>
+                                    <div class="d-flex justify-content-between">
+                                        <h4>Total a pagar:</h4>
+                                        <h4 class="text-danger" id="totalFinal">₡@Model.Subtotal.ToString("N2")</h4>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

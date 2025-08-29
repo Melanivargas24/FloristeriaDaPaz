@@ -64,6 +64,30 @@
             <span asp-validation-for="direccion" class="text-danger"></span>
         </div>
 
+        <div class="form-group">
+            <label asp-for="idProvincia" class="control-label">Provincia</label>
+            <select asp-for="idProvincia" class="form-control" asp-items="ViewBag.Provincias" id="provinciaSelect">
+                <option value="">-- Seleccione Provincia --</option>
+            </select>
+            <span asp-validation-for="idProvincia" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="idCanton" class="control-label">Cantón</label>
+            <select asp-for="idCanton" class="form-control" asp-items="ViewBag.Cantones" id="cantonSelect">
+                <option value="">-- Seleccione Cantón --</option>
+            </select>
+            <span asp-validation-for="idCanton" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="idDistrito" class="control-label">Distrito</label>
+            <select asp-for="idDistrito" class="form-control" asp-items="ViewBag.Distritos" id="distritoSelect">
+                <option value="">-- Seleccione Distrito --</option>
+            </select>
+            <span asp-validation-for="idDistrito" class="text-danger"></span>
+        </div>
+
         <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
 
         <div class="d-flex justify-content-end gap-2 mt-4">
@@ -114,6 +138,64 @@
         marker.on('dragend', function(e) {
             var position = marker.getLatLng();
             reverseGeocode(position.lat, position.lng);
+        });
+
+        // JavaScript para manejar los dropdowns de ubicación
+        $(document).ready(function() {
+            var cantonInicial = '@Model.idCanton';
+            var distritoInicial = '@Model.idDistrito';
+
+            // Cuando cambia la provincia, cargar cantones
+            $('#provinciaSelect').change(function() {
+                var provinciaId = $(this).val();
+                $('#cantonSelect').empty().append('<option value="">-- Seleccione Cantón --</option>');
+                $('#distritoSelect').empty().append('<option value="">-- Seleccione Distrito --</option>');
+                
+                if (provinciaId) {
+                    $.get('@Url.Action("GetCantonesByProvincia", "Usuario")', { idProvincia: provinciaId }, function(data) {
+                        $.each(data, function(index, item) {
+                            $('#cantonSelect').append('<option value="' + item.value + '">' + item.text + '</option>');
+                        });
+                    });
+                }
+            });
+            
+            // Cuando cambia el cantón, cargar distritos
+            $('#cantonSelect').change(function() {
+                var cantonId = $(this).val();
+                $('#distritoSelect').empty().append('<option value="">-- Seleccione Distrito --</option>');
+                
+                if (cantonId) {
+                    $.get('@Url.Action("GetDistritosByCanton", "Usuario")', { idCanton: cantonId }, function(data) {
+                        $.each(data, function(index, item) {
+                            $('#distritoSelect').append('<option value="' + item.value + '">' + item.text + '</option>');
+                        });
+                    });
+                }
+            });
+
+            // Cargar cantones y distritos iniciales si hay provincia seleccionada
+            var provinciaInicial = $('#provinciaSelect').val();
+            if (provinciaInicial) {
+                $.get('@Url.Action("GetCantonesByProvincia", "Usuario")', { idProvincia: provinciaInicial }, function(data) {
+                    $.each(data, function(index, item) {
+                        var selected = item.value == cantonInicial ? ' selected' : '';
+                        $('#cantonSelect').append('<option value="' + item.value + '"' + selected + '>' + item.text + '</option>');
+                    });
+                    
+                    // Si hay cantón inicial, cargar distritos
+                    if (cantonInicial && cantonInicial !== '') {
+                        setTimeout(function() { // Dar tiempo para que se cargue el cantón
+                            $.get('@Url.Action("GetDistritosByCanton", "Usuario")', { idCanton: cantonInicial }, function(data) {
+                                $.each(data, function(index, item) {
+                                    var selected = item.value == distritoInicial ? ' selected' : '';
+                                    $('#distritoSelect').append('<option value="' + item.value + '"' + selected + '>' + item.text + '</option>');
+                                });
+                            });
+                        }, 500);
+                    }
+                });
+            }
         });
     </script>
 }

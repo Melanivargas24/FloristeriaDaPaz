@@ -74,26 +74,39 @@
                                         </tbody>
                                     </table>
                                     
-                                    @{
-                                        // Cálculo aproximado de ahorros - en un caso real esto vendría de la base de datos
-                                        var tieneDescuentos = false; // Esta lógica se mejoraría con datos reales
-                                    }
-                                    
-                                    @if (tieneDescuentos)
-                                    {
-                                        <div class="mt-4 p-3 bg-light rounded">
-                                            <h6 class="text-success">🎉 Resumen de ahorros en este pedido:</h6>
-                                            <div class="row">
-                                                <div class="col-sm-8">Descuentos por promociones aplicadas:</div>
-                                                <div class="col-sm-4 text-end text-success">-₡0.00</div>
-                                            </div>
-                                            <hr>
-                                            <div class="row fw-bold">
-                                                <div class="col-sm-8">Total ahorrado:</div>
-                                                <div class="col-sm-4 text-end text-success">₡0.00</div>
-                                            </div>
+                                    <!-- Desglose de totales -->
+                                    <div class="mt-4 p-3 bg-light rounded">
+                                        <div class="row mb-2">
+                                            <div class="col-sm-8 fw-bold">Subtotal productos:</div>
+                                            <div class="col-sm-4 text-end">₡@Model.SubtotalProductos.ToString("N2")</div>
                                         </div>
-                                    }
+                                        
+                                        @if (Model.TieneEnvioADomicilio)
+                                        {
+                                            @if (Model.CostoEnvio > 0)
+                                            {
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-8">Costo de envío (@Model.NombreDistrito):</div>
+                                                    <div class="col-sm-4 text-end">₡@Model.CostoEnvio.ToString("N2")</div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="row mb-2">
+                                                    <div class="col-sm-8">Envío a domicilio:</div>
+                                                    <div class="col-sm-4 text-end text-muted">
+                                                        <small>(Información no disponible)</small>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                        
+                                        <hr>
+                                        <div class="row fw-bold">
+                                            <div class="col-sm-8">Total:</div>
+                                            <div class="col-sm-4 text-end text-danger">₡@Model.Factura?.totalFactura.ToString("N2")</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

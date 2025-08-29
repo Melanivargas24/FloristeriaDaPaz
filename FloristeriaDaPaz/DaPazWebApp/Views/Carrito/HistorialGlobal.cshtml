@@ -64,6 +64,14 @@
                                             }
                                         </tbody>
                                     </table>
+                                    
+                                    @* Mostrar información de envío si existe *@
+                                    @if (factura.costoEnvio > 0)
+                                    {
+                                        <div class="mt-3 p-2 bg-info text-white rounded">
+                                            <strong>Envío a domicilio:</strong> ₡@factura.costoEnvio.ToString("N2")
+                                        </div>
+                                    }
                                 </div>
                             </td>
                         </tr>

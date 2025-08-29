@@ -36,13 +36,39 @@ namespace DaPazWebApp.Controllers
             EditarUsuarioModel usuario;
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                usuario = context.QueryFirstOrDefault<EditarUsuarioModel>(
-                    "SP_ObtenerUsuarioPorId",
+                // Usar el SP que incluye informaci贸n de ubicaci贸n completa
+                var usuarioCompleto = context.QueryFirstOrDefault(
+                    "SP_ObtenerUsuarioConUbicacion",
                     new { idUsuario = id },
                     commandType: CommandType.StoredProcedure);
+
+                if (usuarioCompleto == null)
+                    return NotFound();
+
+                // Mapear a EditarUsuarioModel
+                usuario = new EditarUsuarioModel
+                {
+                    idUsuario = usuarioCompleto.idUsuario,
+                    nombre = usuarioCompleto.nombre,
+                    apellido = usuarioCompleto.apellido,
+                    correo = usuarioCompleto.correo,
+                    telefono = usuarioCompleto.telefono,
+                    direccion = usuarioCompleto.direccion,
+                    idDistrito = usuarioCompleto.idDistrito,
+                    idCanton = usuarioCompleto.idCanton,
+                    idProvincia = usuarioCompleto.idProvincia
+                };
+
+                // Cargar dropdowns de ubicaci贸n
+                var provincias = context.Query(
+                    "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                    commandType: CommandType.Text
+                ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text", usuario.idProvincia);
+                ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
             }
-            if (usuario == null)
-                return NotFound();
 
             return View(usuario);
         }
@@ -52,30 +78,74 @@ namespace DaPazWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // Recargar dropdowns en caso de error
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var provincias = connection.Query(
+                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                        commandType: CommandType.Text
+                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                    ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text");
+                    ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                }
                 ViewBag.Error = "Por favor, corrige los errores del formulario.";
                 return View(model);
             }
 
 
-            var nuevaContrasenaEncriptada = Encrypt(model.nuevaContrasena);
-
+            var nuevaContrasenaEncriptada = string.IsNullOrEmpty(model.nuevaContrasena) ? 
+                null : Encrypt(model.nuevaContrasena);
+            var contrasenaActualEncriptada = string.IsNullOrEmpty(model.contrasenaActual) ? 
+                null : Encrypt(model.contrasenaActual);
 
             int filasAfectadas = 0;
-            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            try
             {
-                filasAfectadas = context.Execute("SP_EditarPerfil",
-                    new
-                    {
-                        model.idUsuario,
-                        model.nombre,
-                        model.apellido,
-                        model.telefono,
-                        model.correo,
-                        contrasenaActual = Encrypt(model.contrasenaActual),
-                        nuevaContrasena = nuevaContrasenaEncriptada,
-                        model.direccion
-                    },
-                    commandType: CommandType.StoredProcedure);
+                using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    // Log para depuraci贸n
+                    Console.WriteLine($"Actualizando usuario ID: {model.idUsuario}");
+                    Console.WriteLine($"idDistrito: {model.idDistrito}");
+                    
+                    filasAfectadas = context.Execute("SP_EditarPerfil",
+                        new
+                        {
+                            idUsuario = model.idUsuario,
+                            nombre = model.nombre,
+                            apellido = model.apellido,
+                            telefono = model.telefono,
+                            correo = model.correo,
+                            contrasenaActual = contrasenaActualEncriptada,
+                            nuevaContrasena = nuevaContrasenaEncriptada,
+                            direccion = model.direccion,
+                            idDistrito = model.idDistrito  // Permitir NULL
+                        },
+                        commandType: CommandType.StoredProcedure);
+                        
+                    Console.WriteLine($"Filas afectadas: {filasAfectadas}");
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log del error para depuraci贸n
+                Console.WriteLine($"Error al actualizar usuario: {ex.Message}");
+                ViewBag.Error = $"Error al actualizar el perfil: {ex.Message}";
+                
+                // Recargar dropdowns
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var provincias = connection.Query(
+                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                        commandType: CommandType.Text
+                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                    ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text");
+                    ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                }
+                return View(model);
             }
 
             if (filasAfectadas > 0)
@@ -84,17 +154,32 @@ namespace DaPazWebApp.Controllers
             }
             else
             {
+                // Recargar dropdowns en caso de error
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var provincias = connection.Query(
+                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                        commandType: CommandType.Text
+                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                    ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text");
+                    ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                }
+
                 if (!string.IsNullOrEmpty(model.contrasenaActual) || !string.IsNullOrEmpty(model.nuevaContrasena))
-                    ViewBag.Error = "No se pudo actualizar la contrase馻. Verifica la contrase馻 actual.";
+                    ViewBag.Error = "No se pudo actualizar la contrase帽a. Verifica la contrase帽a actual.";
                 else
                     ViewBag.Error = "No se pudo actualizar el perfil. Intenta nuevamente.";
                 return View(model);
             }
         }
 
-
         private string Encrypt(string texto)
         {
+            if (string.IsNullOrEmpty(texto))
+                return string.Empty;
+                
             byte[] iv = new byte[16];
             byte[] array;
 
@@ -143,6 +228,36 @@ namespace DaPazWebApp.Controllers
                         }
                     }
                 }
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetCantonesByProvincia(int idProvincia)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var cantones = connection.Query(
+                    "SELECT idCanton, nombreCanton FROM Canton WHERE idProvincia = @idProvincia ORDER BY nombreCanton",
+                    new { idProvincia },
+                    commandType: CommandType.Text
+                ).Select(c => new { value = c.idCanton, text = c.nombreCanton }).ToList();
+
+                return Json(cantones);
+            }
+        }
+
+        [HttpGet]
+        public JsonResult GetDistritosByCanton(int idCanton)
+        {
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var distritos = connection.Query(
+                    "SELECT idDistrito, nombreDistrito FROM Distrito WHERE idCanton = @idCanton ORDER BY nombreDistrito",
+                    new { idCanton },
+                    commandType: CommandType.Text
+                ).Select(d => new { value = d.idDistrito, text = d.nombreDistrito }).ToList();
+
+                return Json(distritos);
             }
         }
     }
