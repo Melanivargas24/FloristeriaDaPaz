@@ -28,7 +28,12 @@ namespace DaPazWebApp.Models
     public class CarritoViewModel
     {
         public List<CarritoItem> Items { get; set; } = new List<CarritoItem>();
-        public decimal Total => Items.Sum(x => x.PrecioEfectivo * x.Cantidad);
+        public decimal CostoEnvio { get; set; } = 0;
+        public string NombreDistrito { get; set; } = "";
+        public bool RequiereEnvio { get; set; } = false;
+        
+        public decimal Subtotal => Items.Sum(x => x.PrecioEfectivo * x.Cantidad);
+        public decimal Total => Subtotal + (RequiereEnvio ? CostoEnvio : 0);
         public decimal TotalDescuentos => Items.Sum(x => x.DescuentoAplicado);
         public decimal TotalSinDescuentos => Items.Sum(x => x.PrecioOriginal * x.Cantidad);
     }

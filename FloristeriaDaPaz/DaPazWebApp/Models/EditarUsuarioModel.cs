@@ -21,5 +21,8 @@ namespace DaPazWebApp.Models
         public string? telefono { get; set; }
         public string? contrasenaActual { get; set; }
         public string? nuevaContrasena { get; set; }
+        public int? idDistrito { get; set; }
+        public int? idCanton { get; set; }
+        public int? idProvincia { get; set; }
     }
 }

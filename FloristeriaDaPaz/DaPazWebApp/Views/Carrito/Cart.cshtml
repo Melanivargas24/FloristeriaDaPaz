@@ -13,6 +13,22 @@
                     <h2 class="mb-0">Carrito de Compras</h2>
                 </div>
                 <div class="card-body">
+                    @if (TempData["ErrorMensaje"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["ErrorMensaje"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    
+                    @if (TempData["CarritoMensaje"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["CarritoMensaje"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    
                     @if (Model.Items.Count == 0)
                     {
                         <div class="alert alert-info">Tu carrito está vacío.</div>

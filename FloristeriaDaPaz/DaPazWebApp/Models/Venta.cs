@@ -12,5 +12,8 @@ namespace DaPazWebApp.Models
         public string tipoEntrega { get; set; }
         public string metodoPago { get; set; }
         public string NombreProducto { get; set; } // Para mostrar en historial
+        public int? idPromocion { get; set; }
+        public decimal? precioOriginal { get; set; }
+        public decimal? descuentoAplicado { get; set; }
     }
 }

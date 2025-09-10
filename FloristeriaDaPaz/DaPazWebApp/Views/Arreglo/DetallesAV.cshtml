@@ -20,6 +20,14 @@
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     }
+                    
+                    @if (TempData["ErrorMensaje"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="fas fa-exclamation-triangle me-2"></i>@TempData["ErrorMensaje"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
                     <div class="row">
                         <div class="col-lg-5 d-flex align-items-start justify-content-center mb-4 mb-lg-0">
                             <img src="@Model.imagen" class="detalle-arreglo-imagen img-fluid" alt="@Model.nombreArreglo">
@@ -73,10 +81,10 @@
                                         <label for="cantidad">Cantidad</label>
                                     </div>
                                     <div class="col-auto">
-                                        <input type="number" id="cantidad" name="cantidad" class="form-control" value="1" min="1">
+                                        <input type="number" id="cantidad" name="cantidad" class="form-control" value="1" min="1" />
                                     </div>
                                     <div class="col-auto">
-                                        <button type="submit" style="background: none; border: none; padding: 0;">
+                                        <button type="submit" style="background: none; border: none; padding: 0;" title="Añadir al carrito">
                                             <img src="~/images/cart.svg" alt="Añadir al carrito" style="width:32px;height:32px;">
                                         </button>
                                     </div>

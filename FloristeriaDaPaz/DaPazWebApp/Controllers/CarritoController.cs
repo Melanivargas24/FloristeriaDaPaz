@@ -21,8 +21,51 @@ namespace DaPazWebApp.Controllers
         {
             var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
             var item = carrito.FirstOrDefault(x => x.IdProducto == IdProducto && x.Tipo == Tipo);
+            
             if (item != null && Cantidad > 0)
             {
+                // Validar stock para productos
+                if (Tipo == "producto")
+                {
+                    using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                    {
+                        var producto = connection.QuerySingleOrDefault<Producto>(
+                            "SP_ObtenerProductoPorId",
+                            new { IdProducto = IdProducto },
+                            commandType: System.Data.CommandType.StoredProcedure
+                        );
+                        
+                        if (producto != null && Cantidad > (producto.Stock ?? 0))
+                        {
+                            TempData["ErrorMensaje"] = $"⚠️ Stock insuficiente. Solo quedan {producto.Stock ?? 0} unidades disponibles de '{item.NombreProducto}'. Reduce la cantidad en el carrito.";
+                            return RedirectToAction("Cart");
+                        }
+                    }
+                }
+                else if (Tipo == "arreglo")
+                {
+                    // Validar stock de productos del arreglo
+                    using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                    {
+                        var productosArreglo = connection.Query(
+                            "SELECT p.IdProducto, p.NombreProducto, p.Stock, ap.cantidadProducto as cantidad FROM ArregloProducto ap " +
+                            "INNER JOIN Producto p ON ap.idProducto = p.IdProducto " +
+                            "WHERE ap.idArreglo = @IdArreglo",
+                            new { IdArreglo = IdProducto }
+                        ).ToList();
+                        
+                        foreach (var prodArreglo in productosArreglo)
+                        {
+                            int cantidadNecesaria = prodArreglo.cantidad * Cantidad;
+                            if (prodArreglo.Stock < cantidadNecesaria)
+                            {
+                                TempData["ErrorMensaje"] = $"⚠️ Stock insuficiente para el arreglo '{item.NombreProducto}'. El producto '{prodArreglo.NombreProducto}' requiere {cantidadNecesaria} unidades pero solo quedan {prodArreglo.Stock} disponibles.";
+                                return RedirectToAction("Cart");
+                            }
+                        }
+                    }
+                }
+                
                 item.Cantidad = Cantidad;
                 HttpContext.Session.SetObjectAsJson("Carrito", carrito);
             }
@@ -59,6 +102,7 @@ namespace DaPazWebApp.Controllers
                 string imagen = string.Empty;
                 decimal precio = 0;
                 int id = idProducto;
+                int stockDisponible = 0;
 
                 if (tipo == "arreglo")
                 {
@@ -69,10 +113,30 @@ namespace DaPazWebApp.Controllers
                     );
                     if (arreglo == null)
                         return NotFound();
+                        
+                    // Validar stock de productos del arreglo
+                    var productosArreglo = connection.Query(
+                        "SELECT p.IdProducto, p.NombreProducto, p.Stock, ap.cantidadProducto as cantidad FROM ArregloProducto ap " +
+                        "INNER JOIN Producto p ON ap.idProducto = p.IdProducto " +
+                        "WHERE ap.idArreglo = @IdArreglo",
+                        new { IdArreglo = idProducto }
+                    ).ToList();
+                    
+                    foreach (var prodArreglo in productosArreglo)
+                    {
+                        int cantidadNecesaria = prodArreglo.cantidad * cantidad;
+                        if (prodArreglo.Stock < cantidadNecesaria)
+                        {
+                            TempData["ErrorMensaje"] = $"⚠️ Stock insuficiente para el arreglo. El producto '{prodArreglo.NombreProducto}' requiere {cantidadNecesaria} unidades pero solo quedan {prodArreglo.Stock} disponibles. Reduce la cantidad solicitada.";
+                            return RedirectToAction("DetallesAV", "Arreglo", new { id = idProducto });
+                        }
+                    }
+                    
                     nombre = arreglo.nombreArreglo;
                     imagen = arreglo.imagen ?? string.Empty;
                     precio = arreglo.precio;
                     id = arreglo.idArreglo;
+                    stockDisponible = int.MaxValue; // Para arreglos, ya validamos los componentes
                 }
                 else
                 {
@@ -83,14 +147,35 @@ namespace DaPazWebApp.Controllers
                     );
                     if (producto == null)
                         return NotFound();
+                        
                     nombre = producto.NombreProducto ?? string.Empty;
                     imagen = producto.Imagen ?? string.Empty;
                     precio = producto.Precio ?? 0;
                     id = producto.IdProducto;
+                    stockDisponible = producto.Stock ?? 0;
+                    
+                    // Validar stock disponible para productos
+                    var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+                    var itemExistente = carrito.FirstOrDefault(x => x.IdProducto == id && x.Tipo == tipo);
+                    int cantidadEnCarrito = itemExistente?.Cantidad ?? 0;
+                    int cantidadTotal = cantidadEnCarrito + cantidad;
+                    
+                    if (cantidadTotal > stockDisponible)
+                    {
+                        if (cantidadEnCarrito > 0)
+                        {
+                            TempData["ErrorMensaje"] = $"⚠️ Stock insuficiente. Solo quedan {stockDisponible} unidades disponibles de '{nombre}' y ya tienes {cantidadEnCarrito} en tu carrito. Solo puedes agregar {stockDisponible - cantidadEnCarrito} unidades más.";
+                        }
+                        else
+                        {
+                            TempData["ErrorMensaje"] = $"⚠️ Stock insuficiente. Solo quedan {stockDisponible} unidades disponibles de '{nombre}'. Reduce la cantidad solicitada.";
+                        }
+                        return RedirectToAction("DetallesPV", "Producto", new { id = idProducto });
+                    }
                 }
 
-                var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
-                var item = carrito.FirstOrDefault(x => x.IdProducto == id && x.NombreProducto == nombre && x.Tipo == tipo);
+                var carritoActual = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+                var item = carritoActual.FirstOrDefault(x => x.IdProducto == id && x.NombreProducto == nombre && x.Tipo == tipo);
                 
                 if (item != null)
                 {
@@ -186,9 +271,9 @@ namespace DaPazWebApp.Controllers
                         }
                     }
 
-                    carrito.Add(nuevoItem);
+                    carritoActual.Add(nuevoItem);
                 }
-                HttpContext.Session.SetObjectAsJson("Carrito", carrito);
+                HttpContext.Session.SetObjectAsJson("Carrito", carritoActual);
             }
             TempData["CarritoMensaje"] = tipo == "arreglo" ? "Arreglo agregado exitosamente" : "Producto agregado exitosamente";
             if (tipo == "arreglo")
@@ -219,17 +304,47 @@ namespace DaPazWebApp.Controllers
             {
                 return RedirectToAction("Login", "Login");
             }
+            
             UsuarioConsultaModel? usuario;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
+                // Usar el SP que incluye información de ubicación
                 usuario = connection.QuerySingleOrDefault<UsuarioConsultaModel>(
-                    "SP_ObtenerUsuarioPorId",
+                    "SP_ObtenerUsuarioConUbicacion",
                     new { idUsuario },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
             }
+            
             var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
             var viewModel = new CarritoViewModel { Items = carrito };
+            
+            // Si el usuario tiene distrito asignado, obtener el costo de envío
+            if (usuario?.idDistrito.HasValue == true)
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var costoEnvio = connection.QueryFirstOrDefault<decimal?>(
+                        "SELECT costoEnvio FROM dbo.Distrito WHERE idDistrito = @idDistrito",
+                        new { idDistrito = usuario.idDistrito },
+                        commandType: System.Data.CommandType.Text
+                    );
+                    
+                    viewModel.CostoEnvio = costoEnvio ?? 0;
+                    viewModel.NombreDistrito = usuario.nombreDistrito ?? "";
+                    
+                    // Log de debugging
+                    Console.WriteLine($"DEBUG - Usuario tiene distrito: {usuario.idDistrito}");
+                    Console.WriteLine($"DEBUG - Costo de envío consultado: {costoEnvio}");
+                    Console.WriteLine($"DEBUG - Costo asignado al modelo: {viewModel.CostoEnvio}");
+                }
+            }
+            else
+            {
+                Console.WriteLine($"DEBUG - Usuario NO tiene distrito configurado");
+                viewModel.CostoEnvio = 0;
+            }
+            
             ViewBag.Usuario = usuario;
             return View(viewModel);
         }
@@ -244,44 +359,156 @@ namespace DaPazWebApp.Controllers
                 return RedirectToAction("Login", "Login");
             }
 
+            var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+            
+            // VALIDACIÓN DE STOCK ANTES DE CONFIRMAR PEDIDO
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                foreach (var item in carrito)
+                {
+                    if (item.Tipo == "producto")
+                    {
+                        var producto = connection.QuerySingleOrDefault<Producto>(
+                            "SP_ObtenerProductoPorId",
+                            new { IdProducto = item.IdProducto },
+                            commandType: System.Data.CommandType.StoredProcedure
+                        );
+                        
+                        if (producto == null || item.Cantidad > (producto.Stock ?? 0))
+                        {
+                            TempData["ErrorMensaje"] = $"Stock insuficiente para '{item.NombreProducto}'. Solo hay {producto?.Stock ?? 0} unidades disponibles.";
+                            return RedirectToAction("Cart");
+                        }
+                    }
+                    else if (item.Tipo == "arreglo")
+                    {
+                        var productosArreglo = connection.Query(
+                            "SELECT p.IdProducto, p.NombreProducto, p.Stock, ap.cantidadProducto as cantidad FROM ArregloProducto ap " +
+                            "INNER JOIN Producto p ON ap.idProducto = p.IdProducto " +
+                            "WHERE ap.idArreglo = @IdArreglo",
+                            new { IdArreglo = item.IdProducto }
+                        ).ToList();
+                        
+                        foreach (var prodArreglo in productosArreglo)
+                        {
+                            int cantidadNecesaria = prodArreglo.cantidad * item.Cantidad;
+                            if (prodArreglo.Stock < cantidadNecesaria)
+                            {
+                                TempData["ErrorMensaje"] = $"Stock insuficiente para el arreglo '{item.NombreProducto}'. El producto '{prodArreglo.NombreProducto}' requiere {cantidadNecesaria} unidades pero solo hay {prodArreglo.Stock} disponibles.";
+                                return RedirectToAction("Cart");
+                            }
+                        }
+                    }
+                }
+            }
+
             // Validación backend para evitar error 400
             if (string.IsNullOrEmpty(tipoEntrega) || string.IsNullOrEmpty(metodoPago))
             {
                 ModelState.AddModelError("", "Debe seleccionar tipo de entrega y método de pago.");
-                var carrito = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
                 var viewModel = new CarritoViewModel { Items = carrito };
+                
                 UsuarioConsultaModel? usuario;
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
                     usuario = connection.QuerySingleOrDefault<UsuarioConsultaModel>(
-                        "SP_ObtenerUsuarioPorId",
+                        "SP_ObtenerUsuarioConUbicacion",
                         new { idUsuario },
                         commandType: System.Data.CommandType.StoredProcedure
                     );
+                    
+                    // Obtener costo de envío si tiene distrito
+                    if (usuario?.idDistrito.HasValue == true)
+                    {
+                        var costoEnvioTemp = connection.QueryFirstOrDefault<decimal?>(
+                            "SELECT costoEnvio FROM dbo.Distrito WHERE idDistrito = @idDistrito",
+                            new { idDistrito = usuario.idDistrito },
+                            commandType: System.Data.CommandType.Text
+                        );
+                        
+                        viewModel.CostoEnvio = costoEnvioTemp ?? 0;
+                        viewModel.NombreDistrito = usuario.nombreDistrito ?? "";
+                    }
                 }
                 ViewBag.Usuario = usuario;
                 return View("Checkout", viewModel);
             }
 
+            // Validación para requerir ubicación si selecciona envío a domicilio
+            if (tipoEntrega?.ToLower() == "domicilio")
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var usuario = connection.QuerySingleOrDefault<UsuarioConsultaModel>(
+                        "SP_ObtenerUsuarioConUbicacion",
+                        new { idUsuario },
+                        commandType: System.Data.CommandType.StoredProcedure
+                    );
+                    
+                    if (usuario?.idDistrito == null)
+                    {
+                        ModelState.AddModelError("", "Debe configurar su ubicación completa (provincia, cantón y distrito) para solicitar envío a domicilio.");
+                        var viewModel = new CarritoViewModel { Items = carrito };
+                        ViewBag.Usuario = usuario;
+                        return View("Checkout", viewModel);
+                    }
+                }
+            }
+
             var carritoOk = HttpContext.Session.GetObjectFromJson<List<CarritoItem>>("Carrito") ?? new List<CarritoItem>();
+            
+            // Calcular el costo de envío si es entrega a domicilio
+            decimal costoEnvio = 0;
+            if (tipoEntrega?.ToLower() == "domicilio")
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    // Obtener el distrito del usuario
+                    var usuario = connection.QuerySingleOrDefault(
+                        "SELECT idDistrito FROM dbo.Usuario WHERE idUsuario = @idUsuario",
+                        new { idUsuario },
+                        commandType: System.Data.CommandType.Text
+                    );
+                    
+                    if (usuario?.idDistrito != null)
+                    {
+                        costoEnvio = connection.QueryFirstOrDefault<decimal?>(
+                            "SELECT costoEnvio FROM dbo.Distrito WHERE idDistrito = @idDistrito",
+                            new { idDistrito = usuario.idDistrito },
+                            commandType: System.Data.CommandType.Text
+                        ) ?? 0;
+                    }
+                }
+            }
+            
+            decimal subtotalProductos = carritoOk.Sum(x => x.PrecioEfectivo * x.Cantidad);
+            decimal totalConEnvio = subtotalProductos + costoEnvio;
+            
             int idFactura = 0;
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                // 1. Insertar la factura y obtener el id generado
+                // DEBUG: Ver valores antes de insertar
+                System.Diagnostics.Debug.WriteLine($"DEBUG INSERTAR - Subtotal productos: {subtotalProductos}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG INSERTAR - Costo envío: {costoEnvio}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG INSERTAR - Total con envío: {totalConEnvio}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG INSERTAR - Tipo entrega: {tipoEntrega}");
+                
+                // 1. Insertar la factura con el total que incluye costo de envío
                 idFactura = connection.QuerySingle<int>(
                     "SP_InsertarFactura",
                     new
                     {
                         fechaFactura = DateTime.Now,
-                        totalFactura = carritoOk.Sum(x => x.PrecioEfectivo * x.Cantidad),
-                        idUsuario = idUsuario
+                        totalFactura = totalConEnvio,
+                        idUsuario = idUsuario,
+                        costoEnvio = costoEnvio
                     },
                     commandType: System.Data.CommandType.StoredProcedure
                 );
                 // 2. Insertar cada venta asociada a la factura
                 foreach (var item in carritoOk)
                 {
-                    // Insertar la venta y obtener el idVenta generado
+                    // Insertar la venta sin costo de envío (ahora está en Factura)
                     int idVenta = connection.QuerySingle<int>(
                         "SP_InsertarVenta",
                         new
@@ -381,10 +608,43 @@ namespace DaPazWebApp.Controllers
                     new { idFactura = id },
                     commandType: System.Data.CommandType.StoredProcedure
                 ).ToList();
+                
+                // Verificar si hay envío a domicilio
+                bool tieneEnvioADomicilio = ventas.Any(v => v.tipoEntrega?.ToLower() == "domicilio");
+                
+                // Obtener costo de envío y distrito desde la factura
+                decimal costoEnvio = factura?.costoEnvio ?? 0;
+                string? nombreDistrito = null;
+                
+                // DEBUG: Ver qué valores tenemos
+                System.Diagnostics.Debug.WriteLine($"DEBUG FACTURA - ID: {factura?.idFactura}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG FACTURA - Total: {factura?.totalFactura}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG FACTURA - Costo Envío desde BD: {factura?.costoEnvio}");
+                System.Diagnostics.Debug.WriteLine($"DEBUG FACTURA - Costo Envío calculado: {costoEnvio}");
+                
+                // Calcular subtotal de productos (total factura menos costo de envío)
+                decimal subtotalProductos = (factura?.totalFactura ?? 0) - costoEnvio;
+                
+                // Si hay costo de envío, obtener el nombre del distrito
+                if (costoEnvio > 0 && factura != null)
+                {
+                    var usuario = connection.QuerySingleOrDefault<UsuarioConsultaModel>(
+                        "SP_ObtenerUsuarioConUbicacion",
+                        new { idUsuario = factura.idUsuario },
+                        commandType: System.Data.CommandType.StoredProcedure
+                    );
+                    
+                    nombreDistrito = usuario?.nombreDistrito;
+                }
+                
                 var viewModel = new DaPazWebApp.Models.FacturaViewModel
                 {
                     Factura = factura,
-                    Ventas = ventas
+                    Ventas = ventas,
+                    CostoEnvio = costoEnvio,
+                    NombreDistrito = nombreDistrito,
+                    TieneEnvioADomicilio = tieneEnvioADomicilio,
+                    SubtotalProductos = subtotalProductos
                 };
                 return View(viewModel);
             }

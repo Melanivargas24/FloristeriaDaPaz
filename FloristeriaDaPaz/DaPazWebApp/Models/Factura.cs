@@ -6,5 +6,6 @@ namespace DaPazWebApp.Models
         public DateTime fechaFactura { get; set; }
         public decimal totalFactura { get; set; }
         public int idUsuario { get; set; } // Para historial global
+        public decimal costoEnvio { get; set; } = 0;
     }
 }
