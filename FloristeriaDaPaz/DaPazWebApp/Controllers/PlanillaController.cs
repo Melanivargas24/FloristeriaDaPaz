@@ -1,4 +1,5 @@
 ﻿using DaPazWebApp.Models;
+using DaPazWebApp.Helpers;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -14,10 +15,12 @@ namespace DaPazWebApp.Controllers
     {
 
         private readonly IConfiguration _configuration;
+        private readonly PdfHelper _pdfHelper;
 
-        public PlanillaController(IConfiguration configuration)
+        public PlanillaController(IConfiguration configuration, PdfHelper pdfHelper)
         {
             _configuration = configuration;
+            _pdfHelper = pdfHelper;
         }
 
         public IActionResult Index()
@@ -88,12 +91,10 @@ namespace DaPazWebApp.Controllers
 
                 viewModel.DeduccionesDetalle = deducciones;
 
-                return new ViewAsPdf("ImprimirPlanilla", viewModel)
-                {
-                    FileName = $"Planilla_{viewModel.Nombre}.pdf",
-                    PageSize = Rotativa.AspNetCore.Options.Size.A4,
-                    PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
-                };
+                // En lugar de generar PDF en el servidor, retornar una vista HTML optimizada
+                // que el usuario puede imprimir como PDF desde el navegador
+                ViewBag.EsParaImprimir = true;
+                return View("ImprimirPlanilla", viewModel);
             }
         }
 
@@ -207,10 +208,20 @@ namespace DaPazWebApp.Controllers
                 if (planilla == null)
                     return NotFound();
 
-                return new ViewAsPdf("Comprobante", planilla)
+                try
                 {
-                    FileName = $"Planilla_{planilla.NombreEmpleado}_{planilla.FechaPlanilla:yyyyMMdd}.pdf"
-                };
+                    return new ViewAsPdf("Comprobante", planilla)
+                    {
+                        FileName = $"Planilla_{planilla.NombreEmpleado}_{planilla.FechaPlanilla:yyyyMMdd}.pdf"
+                    };
+                }
+                catch (Exception ex)
+                {
+                    // Si Rotativa falla en Azure, mostrar un mensaje de error
+                    ViewBag.ErrorMessage = "Error al generar PDF: " + ex.Message;
+                    ViewBag.ErrorDetails = "Este error puede ocurrir en Azure App Service debido a restricciones de seguridad.";
+                    return View("Error");
+                }
             }
         }
         */

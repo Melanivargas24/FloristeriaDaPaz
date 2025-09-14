@@ -7,32 +7,74 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Boleta de Planilla</title>
+    <title>Boleta de Planilla - @Model.Nombre @Model.Apellido</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <style>
+        /* Estilos específicos para impresión PDF */
+        @@media print {
+            .no-print { display: none !important; }
+            body { margin: 0; }
+            .page-break { page-break-before: always; }
+        }
+
+        @@media screen {
+            .print-only { display: none; }
+        }
+
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             color: #333;
+            line-height: 1.4;
         }
 
-        .decorativo {
-            background: url('/ruta/imagen-fondo.png') no-repeat;
-            background-size: cover;
-            height: 180px;
-            color: #cc2f87;
+        .pdf-header {
             text-align: center;
-            font-size: 26px;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 3px solid #cc2f87;
+        }
+
+        .pdf-header h1 {
+            color: #cc2f87;
+            margin: 0;
+            font-size: 28px;
             font-weight: bold;
-            padding-top: 80px;
+        }
+
+        .pdf-header h2 {
+            color: #666;
+            margin: 5px 0;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        /* Botón para imprimir - solo visible en pantalla */
+        .print-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: #cc2f87;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .print-button:hover {
+            background: #a02569;
         }
 
         .boleta {
             max-width: 800px;
             margin: auto;
-            padding: 30px;
+            padding: 0;
         }
 
         .info-linea {
@@ -244,18 +286,20 @@
     </style>
 </head>
 <body>
+    <!-- Botón de imprimir - solo visible en pantalla -->
+    <button class="print-button no-print" onclick="window.print()">
+        🖨️ Imprimir como PDF
+    </button>
 
-    <div class="encabezado">
+    <!-- Encabezado optimizado para PDF -->
+    <div class="pdf-header">
         <h1>FLORISTERÍA DA'PAZ</h1>
-        <div class="subtitulo">Boleta de pago</div>
+        <h2>Boleta de Pago</h2>
+        <p style="margin: 10px 0; color: #666;">
+            <strong>No. Boleta:</strong> @Model.IdPlanilla &nbsp;&nbsp;&nbsp;
+            <strong>Fecha:</strong> @Model.FechaPlanilla.ToString("dd MMMM yyyy")
+        </p>
     </div>
-
-
-    <div class="boleta">
-        <div class="barra-boleta">
-            <div class="izquierda">No. Boleta : @Model.IdPlanilla</div>
-            <div class="derecha">Fecha : @Model.FechaPlanilla.ToString("dd MMMM yyyy")</div>
-        </div>
 
         <div class="nombre-empleado">
             <span class="label">NOMBRE:</span><br>
