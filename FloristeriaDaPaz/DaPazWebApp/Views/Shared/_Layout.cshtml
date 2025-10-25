@@ -1,5 +1,6 @@
 ﻿﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
@@ -39,13 +40,8 @@
 			<div class="container">
 				<a class="navbar-brand brand-home" asp-controller="Home" asp-action="Index">Floristería Da'Paz</a>
 
-				<button class="navbar-toggler"
-						type="button"
-						data-bs-toggle="collapse"
-						data-bs-target="#navbarsFurni"
-						aria-controls="navbarsFurni"
-						aria-expanded="false"
-						aria-label="Toggle navigation">
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+					aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 
@@ -61,49 +57,57 @@
 						@if (idRol == 1)
 						{
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle"
-								   href="#"
-								   id="adminDropdown"
-								   role="button"
-								   data-bs-toggle="dropdown"
-								   aria-expanded="false">
+								<a class="nav-link dropdown-toggle" href="#" id="adminDropdown" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
 									Administrador
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="adminDropdown">
-									<li><a class="dropdown-item" asp-controller="Dashboard" asp-action="Index">Dashboards</a></li>
+									<li><a class="dropdown-item" asp-controller="Dashboard"
+											asp-action="Index">Dashboards</a></li>
 									<li class="dropdown-submenu">
 										<a class="dropdown-item dropdown-toggle" href="#">Categorías</a>
 										<ul class="dropdown-menu">
-											<li><a class="dropdown-item" asp-controller="CategoriaArreglo" asp-action="ConsultarCategoriasA">Categorías Arreglos</a></li>
-											<li><a class="dropdown-item" asp-controller="CategoriaProducto" asp-action="ConsultarCategoriasP">Categorías Productos</a></li>
-											<li><a class="dropdown-item" asp-controller="SubcategoriaProducto" asp-action="ConsultarSubcategoriasP">Subcategorías Productos</a></li>
+											<li><a class="dropdown-item" asp-controller="CategoriaArreglo"
+													asp-action="ConsultarCategoriasA">Categorías Arreglos</a></li>
+											<li><a class="dropdown-item" asp-controller="CategoriaProducto"
+													asp-action="ConsultarCategoriasP">Categorías Productos</a></li>
+											<li><a class="dropdown-item" asp-controller="SubcategoriaProducto"
+													asp-action="ConsultarSubcategoriasP">Subcategorías Productos</a></li>
 										</ul>
 									</li>
-									<li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Productos</a></li>
-									<li><a class="dropdown-item" asp-controller="Arreglo" asp-action="Index">Arreglos</a></li>
-									<li><a class="dropdown-item" asp-controller="Proveedor" asp-action="Index">Proveedores</a></li>
-									<li><a class="dropdown-item" asp-controller="FacturaProveedor" asp-action="Index">Facturas Proveedor</a></li>
-									<li><a class="dropdown-item" asp-controller="Promociones" asp-action="Index">Promociones</a></li>
-									<li><a class="dropdown-item" asp-controller="Usuario" asp-action="ConsultarUsuarios">Usuarios</a></li>
-									<li><a class="dropdown-item" asp-controller="CostoEnvio" asp-action="Index">Costos de Envío</a></li>
+									<li><a class="dropdown-item" asp-controller="Producto" asp-action="Index">Productos</a>
+									</li>
+									<li><a class="dropdown-item" asp-controller="Arreglo" asp-action="Index">Arreglos</a>
+									</li>
+									<li><a class="dropdown-item" asp-controller="Proveedor"
+											asp-action="Index">Proveedores</a></li>
+									<li><a class="dropdown-item" asp-controller="FacturaProveedor"
+											asp-action="Index">Facturas Proveedor</a></li>
+									<li><a class="dropdown-item" asp-controller="Promociones"
+											asp-action="Index">Promociones</a></li>
+									<li><a class="dropdown-item" asp-controller="Usuario"
+											asp-action="ConsultarUsuarios">Usuarios</a></li>
+									<li><a class="dropdown-item" asp-controller="CostoEnvio" asp-action="Index">Costos de
+											Envío</a></li>
 								</ul>
 							</li>
 
 							<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle"
-								   href="#"
-								   id="planillaDropdown"
-								   role="button"
-								   data-bs-toggle="dropdown"
-								   aria-expanded="false">
+								<a class="nav-link dropdown-toggle" href="#" id="planillaDropdown" role="button"
+									data-bs-toggle="dropdown" aria-expanded="false">
 									Planilla
 								</a>
 								<ul class="dropdown-menu" aria-labelledby="planillaDropdown">
-									<li><a class="dropdown-item" asp-controller="Empleado" asp-action="ConsultarEmpleados">Empleados</a></li>
-									<li><a class="dropdown-item" asp-controller="Planilla" asp-action="Index">Planilla</a></li>
-									<li><a class="dropdown-item" asp-controller="Incapacidad" asp-action="Index">Incapacidades</a></li>
-									<li><a class="dropdown-item" asp-controller="Vacacion" asp-action="Index">Vacaciones</a></li>
-									<li><a class="dropdown-item" asp-controller="Liquidacion" asp-action="Index">Liquidaciones</a></li>
+									<li><a class="dropdown-item" asp-controller="Empleado"
+											asp-action="ConsultarEmpleados">Empleados</a></li>
+									<li><a class="dropdown-item" asp-controller="Planilla" asp-action="Index">Planilla</a>
+									</li>
+									<li><a class="dropdown-item" asp-controller="Incapacidad"
+											asp-action="Index">Incapacidades</a></li>
+									<li><a class="dropdown-item" asp-controller="Vacacion" asp-action="Index">Vacaciones</a>
+									</li>
+									<li><a class="dropdown-item" asp-controller="Liquidacion"
+											asp-action="Index">Liquidaciones</a></li>
 								</ul>
 							</li>
 						}
@@ -112,37 +116,40 @@
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
 						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+							<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+								data-bs-toggle="dropdown" aria-expanded="false">
 								<img src="~/images/user.svg" width="20" height="20" />
 							</a>
 							<ul class="dropdown-menu" aria-labelledby="userDropdown">
 								@if (nombreUsuario != "Invitad@")
 								{
 									<li>
-										<a class="dropdown-item"
-										   asp-controller="Usuario"
-										   asp-action="EditarUsuario"
-										   asp-route-id="@idUsuario">
+										<a class="dropdown-item" asp-controller="Usuario" asp-action="EditarUsuario"
+											asp-route-id="@idUsuario">
 											Editar Usuario
 										</a>
 									</li>
 
-									<li><a class="dropdown-item" asp-controller="Login" asp-action="RecuperarContrasenna">Cambiar Contraseña</a></li>
+									<li><a class="dropdown-item" asp-controller="Login"
+											asp-action="RecuperarContrasenna">Cambiar Contraseña</a></li>
 
 									@if (idRol == 2)
 									{
-										<li><a class="dropdown-item" asp-controller="Carrito" asp-action="HistorialUsuario">Historial de Compras</a></li>
+										<li><a class="dropdown-item" asp-controller="Carrito"
+												asp-action="HistorialUsuario">Historial de Compras</a></li>
 									}
 									@if (idRol == 1 || idRol == 3)
 									{
-										<li><a class="dropdown-item" asp-controller="Carrito" asp-action="HistorialGlobal">Historial de Compras (Global)</a></li>
+										<li><a class="dropdown-item" asp-controller="Carrito"
+												asp-action="HistorialGlobal">Historial de Compras (Global)</a></li>
 									}
 
 									<li><a class="dropdown-item" href="#" onclick="cerrarSesion()">Cerrar Sesion</a></li>
 								}
 								else
 								{
-									<li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Iniciar Sesión</a></li>
+									<li><a class="dropdown-item" asp-controller="Login" asp-action="Login">Iniciar
+											Sesión</a></li>
 								}
 							</ul>
 						</li>
@@ -161,25 +168,27 @@
 
 	<main role="main" class="pb-3">
 		@RenderBody()
-		
+
 	</main>
 
 	<!-- Start Footer Section -->
 	<footer class="footer-section" style="margin-top:170px;">
 		<div class="container relative">
 
-			 <div class="sofa-img">
+			<div class="sofa-img">
 				<img src="/images/flowers-10.png" alt="Image" class="img-fluid">
-			</div> 
+			</div>
 
 			<div class="row g-5 mb-5">
 				<div class="col-lg-4">
 					<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Da Paz<span>.</span></a></div>
-					<p class="mb-4">Encuentra arreglos florales y productos cuidadosamente seleccionados para llenar de vida y color tu hogar o evento.</p>
+					<p class="mb-4">Encuentra arreglos florales y productos cuidadosamente seleccionados para llenar de
+						vida y color tu hogar o evento.</p>
 
 					<div class="contact-info">
 						<p><strong>Teléfono:</strong>8921 4999</p>
-						<p><strong>Dirección:</strong> 50norte y 25 oeste de la plaza de Deportes Patarra, Desamparados, Costa Rica</p>
+						<p><strong>Dirección:</strong> 50norte y 25 oeste de la plaza de Deportes Patarra, Desamparados,
+							Costa Rica</p>
 					</div>
 				</div>
 
@@ -187,14 +196,14 @@
 					<div class="row links-wrap">
 						<div class="col-6 col-sm-6 col-md-3">
 							<ul class="list-unstyled">
-								<li><a href="#">Inicio</a></li>
-								<li><a href="#">Catálogo</a></li>
+								<li><a class="nav-link" asp-controller="Home" asp-action="Index">Inicio</a></li>
+								<li><a class="nav-link" asp-controller="Catalogo" asp-action="Index">Catálogo</a></li>
 							</ul>
 						</div>
 
 						<div class="col-6 col-sm-6 col-md-3">
 							<ul class="list-unstyled">
-								<li><a href="#">Servicios</a></li>
+								<li><a class="nav-link" asp-controller="Home" asp-action="Services">Servicios</a></li>
 							</ul>
 						</div>
 					</div>
@@ -206,7 +215,8 @@
 				<div class="row pt-4">
 					<div class="col-lg-6">
 						<p class="mb-2 text-center text-lg-start">
-							Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash;
+							Copyright &copy;
+							<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash;
 						</p>
 					</div>
 
@@ -226,13 +236,13 @@
 
 	<!-- Botón flotante -->
 	<button id="chatbot-button" class="btn btn-success rounded-circle shadow p-0"
-			style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1050; overflow: hidden;">
+		style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; z-index: 1050; overflow: hidden;">
 		<img src="/imagenes/Rosita.png" alt="Rosita" style="width: 100%; height: 100%; object-fit: cover;" />
 	</button>
 
 	<!-- Ventana del chatbot -->
 	<div id="chatbot-popup" class="card shadow"
-		 style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 420px; display: none; z-index: 1050;">
+		style="position: fixed; bottom: 90px; right: 20px; width: 320px; height: 420px; display: none; z-index: 1050;">
 
 
 		<!-- Encabezado -->
@@ -242,7 +252,8 @@
 		</div>
 
 		<!-- Mensajes -->
-		<div id="chatbot-messages" class="card-body overflow-auto d-flex flex-column" style="flex-grow: 1; font-size: 14px; gap: 8px;">
+		<div id="chatbot-messages" class="card-body overflow-auto d-flex flex-column"
+			style="flex-grow: 1; font-size: 14px; gap: 8px;">
 			<div class="text-muted small text-center">Escríbeme para ayudarte 🌸</div>
 		</div>
 
@@ -296,21 +307,21 @@
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify({ mensaje: mensaje })
 				})
-				.then(res => res.json())
-				.then(data => {
-					mostrarMensaje("bot", data.respuesta);
-				})
-				.catch(err => {
-					mostrarMensaje("bot", "Error al conectar con el servidor.");
-					console.error("Error:", err);
-				});
+					.then(res => res.json())
+					.then(data => {
+						mostrarMensaje("bot", data.respuesta);
+					})
+					.catch(err => {
+						mostrarMensaje("bot", "Error al conectar con el servidor.");
+						console.error("Error:", err);
+					});
 			}
 
 			btnOpen.addEventListener("click", function () {
-			popup.style.display = "flex";
+				popup.style.display = "flex";
 
-			if (!chatIniciado) {
-				const promptInicial =
+				if (!chatIniciado) {
+					const promptInicial =
 						`
 						Eres Rosita, el asistente virtual de la Floristería DaPaz. 
 						Tu objetivo es ayudar al cliente a elegir flores, arreglos y 
@@ -324,10 +335,10 @@
 						"Hola, soy Rosita, tu asistente virtual de Floristería DaPaz. ¿En qué te puedo ayudar hoy?"
 						`;
 
-				enviarMensaje(promptInicial);
-				chatIniciado = true;
-			}
-		});
+					enviarMensaje(promptInicial);
+					chatIniciado = true;
+				}
+			});
 
 			btnClose.addEventListener("click", function () {
 				popup.style.display = "none";
@@ -400,4 +411,5 @@
 
 	@RenderSection("Scripts", required: false)
 </body>
+
 </html>

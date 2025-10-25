@@ -93,25 +93,54 @@ namespace DaPazWebApp.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            context.Execute(
-                "SP_ActualizarEmpleado",
-                new
-                {
-                    model.idEmpleado,
-                    model.salario,
-                    model.fechaIngreso,
-                    model.Cargo,
-                    model.idUsuario,
-                    model.nombre,
-                    model.apellido,
-                    model.correo,
-                    model.telefono,
-                },
-                commandType: CommandType.StoredProcedure
-            );
+            // Validaciones adicionales para evitar errores del sistema
+            if (string.IsNullOrWhiteSpace(model.nombre))
+            {
+                ModelState.AddModelError("nombre", "El nombre es obligatorio");
+                return View(model);
+            }
 
-            return RedirectToAction("ConsultarEmpleados", "Empleado");
+            if (string.IsNullOrWhiteSpace(model.apellido))
+            {
+                ModelState.AddModelError("apellido", "El apellido es obligatorio");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.correo))
+            {
+                ModelState.AddModelError("correo", "El correo es obligatorio");
+                return View(model);
+            }
+
+            try
+            {
+                using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                
+                // Actualizar empleado y usuario en una sola operación
+                context.Execute(
+                    "SP_ActualizarEmpleado",
+                    new
+                    {
+                        model.idEmpleado,
+                        model.nombre,
+                        model.apellido,
+                        model.correo,
+                        model.salario,
+                        model.fechaIngreso,
+                        model.Cargo,
+                        model.telefono,
+                        model.idUsuario
+                    },
+                    commandType: CommandType.StoredProcedure
+                );
+
+                return RedirectToAction("ConsultarEmpleados", "Empleado");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", "Ocurrió un error al actualizar el empleado: " + ex.Message);
+                return View(model);
+            }
         }
     }
 }

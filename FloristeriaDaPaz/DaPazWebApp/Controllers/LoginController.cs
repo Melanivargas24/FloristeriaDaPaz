@@ -43,7 +43,19 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
-            var contrasena = Encrypt(model.contrasena);
+            // Validación adicional para asegurar que la contraseña no sea nula o vacía
+            if (string.IsNullOrWhiteSpace(model.contrasena))
+            {
+                ModelState.AddModelError("contrasena", "La contraseña es obligatoria");
+                return View(model);
+            }
+
+            // Validación adicional para la longitud mínima de la contraseña
+            if (model.contrasena.Length < 6)
+            {
+                ModelState.AddModelError("contrasena", "La contraseña debe tener al menos 6 caracteres");
+                return View(model);
+            }
 
             using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
@@ -85,11 +97,25 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
+            // Validación adicional para asegurar que la contraseña no sea nula o vacía
+            if (string.IsNullOrWhiteSpace(model.contrasena))
+            {
+                ViewBag.Error = "La contraseña es obligatoria";
+                return View(model);
+            }
+
+            // Validación adicional para el correo
+            if (string.IsNullOrWhiteSpace(model.correo))
+            {
+                ViewBag.Error = "El correo es obligatorio";
+                return View(model);
+            }
+
             try
             {
                 using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
-                    var contrasena = Encrypt(model.contrasena);
+                    var contrasena = Encrypt(model.contrasena!);
 
                     var result = context.QueryFirstOrDefault<UsersModel>(
                         "SP_IniciarSesion",
@@ -107,8 +133,8 @@ namespace DaPazWebApp.Controllers
                     var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, result.nombre!),
-                new Claim(ClaimTypes.NameIdentifier, result.idUsuario.ToString()),
-                new Claim(ClaimTypes.Role, result.idRol.ToString())
+                new Claim(ClaimTypes.NameIdentifier, result.idUsuario?.ToString() ?? "0"),
+                new Claim(ClaimTypes.Role, result.idRol?.ToString() ?? "0")
             };
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -146,9 +172,17 @@ namespace DaPazWebApp.Controllers
         [HttpPost]
         public IActionResult RecuperarContrasenna(UsersModel model)
         {
-            if (!ModelState.IsValid)
+            // Validación específica solo del correo para recuperación de contraseña
+            if (string.IsNullOrWhiteSpace(model.correo))
             {
-                ViewBag.Mensaje = "Debe ingresar un correo válido.";
+                ViewBag.Mensaje = "Debe ingresar un correo electrónico.";
+                return View();
+            }
+
+            // Validar formato de correo
+            if (!System.Text.RegularExpressions.Regex.IsMatch(model.correo, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                ViewBag.Mensaje = "Debe ingresar un correo electrónico válido.";
                 return View();
             }
 
@@ -166,22 +200,45 @@ namespace DaPazWebApp.Controllers
                     {
                         var codigo = GenerarCodigo();
                         var nuevaContrasenna = Encrypt(codigo);
-                        var contrasennaAnterior = string.Empty;
 
-                        context.Execute(
-                            "SP_ActualizarContrasenna",
-                            new
+                        try
+                        {
+                            context.Execute(
+                                "SP_ActualizarContrasenna",
+                                new
+                                {
+                                    Id = result.idUsuario,
+                                    Contrasenna = nuevaContrasenna,
+                                },
+                                commandType: CommandType.StoredProcedure
+                            );
+                        }
+                        catch (Exception dbEx)
+                        {
+                            ViewBag.Mensaje = $"Error al actualizar contraseña: {dbEx.Message}";
+                            return View();
+                        }
+
+                        try
+                        {
+                            var habilitarCorreo = _configuration.GetSection("Variables:HabilitarEnvioCorreo").Value;
+                            
+                            if (habilitarCorreo == "true")
                             {
-                                Id = result.idUsuario,
-                                Contrasenna = nuevaContrasenna,
-                            },
-                            commandType: CommandType.StoredProcedure
-                        );
-
-                        string contenido = $"Hola {result.nombre}, se ha generado el siguiente código de seguridad: {codigo}";
-                        EnviarCorreo(result.correo!, "Actualización de Acceso", contenido);
-
-                        ViewBag.Mensaje = "Se ha enviado un código de recuperación a su correo.";
+                                string contenido = $"Hola {result.nombre}, se ha generado el siguiente código de seguridad: {codigo}";
+                                EnviarCorreo(result.correo!, "Actualización de Acceso", contenido);
+                                ViewBag.Mensaje = "Se ha enviado un código de recuperación a su correo electrónico.";
+                            }
+                            else
+                            {
+                                ViewBag.Mensaje = $"Su contraseña se ha actualizado exitosamente. Su nuevo código es: {codigo}";
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            // Si falla el envío de correo, pero la contraseña se actualizó
+                            ViewBag.Mensaje = $"Su contraseña se ha actualizado exitosamente. Su nuevo código es: {codigo}. (No se pudo enviar por correo)";
+                        }
                     }
                     else
                     {
@@ -189,9 +246,9 @@ namespace DaPazWebApp.Controllers
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                ViewBag.Mensaje = "Ocurrió un error al procesar la solicitud. Intente nuevamente.";
+                ViewBag.Mensaje = $"Error en la operación: {ex.Message}";
             }
 
             return View();
@@ -285,25 +342,37 @@ namespace DaPazWebApp.Controllers
 
         private void EnviarCorreo(string destino, string asunto, string contenido)
         {
-            string cuenta = _configuration.GetSection("Variables:CorreoEmail").Value!;
-            string contrasenna = _configuration.GetSection("Variables:ClaveEmail").Value!;
-
-            MailMessage message = new MailMessage();
-            message.From = new MailAddress(cuenta);
-            message.To.Add(new MailAddress(destino));
-            message.Subject = asunto;
-            message.Body = contenido;
-            message.Priority = MailPriority.Normal;
-            message.IsBodyHtml = true;
-
-            SmtpClient client = new SmtpClient("smtp.office365.com", 587);
-            client.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
-            client.EnableSsl = true;
-
-            //Esto es para que no se intente enviar el correo si no hay una contraseña
-            if (!string.IsNullOrEmpty(contrasenna))
+            try
             {
+                string cuenta = _configuration.GetSection("Variables:CorreoEmail").Value!;
+                string contrasenna = _configuration.GetSection("Variables:ClaveEmail").Value!;
+
+                // Verificar si las credenciales están configuradas
+                if (string.IsNullOrEmpty(cuenta) || string.IsNullOrEmpty(contrasenna))
+                {
+                    throw new Exception("Credenciales de correo no configuradas");
+                }
+
+                MailMessage message = new MailMessage();
+                message.From = new MailAddress(cuenta);
+                message.To.Add(new MailAddress(destino));
+                message.Subject = asunto;
+                message.Body = contenido;
+                message.Priority = MailPriority.Normal;
+                message.IsBodyHtml = true;
+
+                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                client.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
+                client.EnableSsl = true;
+                client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                client.UseDefaultCredentials = false;
+
                 client.Send(message);
+            }
+            catch (Exception ex)
+            {
+                // Re-lanzar la excepción con más detalles
+                throw new Exception($"Error al enviar correo: {ex.Message}");
             }
         }
 

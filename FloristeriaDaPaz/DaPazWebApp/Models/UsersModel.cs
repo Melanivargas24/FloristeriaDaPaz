@@ -11,7 +11,11 @@ namespace DaPazWebApp.Models
         [Required(ErrorMessage = "El correo es obligatorio")]
         [EmailAddress(ErrorMessage = "Debe ingresar un correo válido")]
         public string? correo { get; set; }
+        [RegularExpression(@"^\d+$", ErrorMessage = "El teléfono debe contener solo números")]
+        [MaxLength(12, ErrorMessage = "El teléfono no puede tener más de 12 dígitos")]
         public string?  telefono { get; set; }
+        [Required(ErrorMessage = "La contraseña es obligatoria")]
+        [MinLength(6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
         public string?  contrasena { get; set; }
         public string? contrasenaActual { get; set; }
         public string? nuevaContrasena { get; set; }

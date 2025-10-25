@@ -18,6 +18,8 @@ namespace DaPazWebApp.Models
 
         public string? direccion { get; set; }
 
+        [RegularExpression(@"^\d+$", ErrorMessage = "El teléfono debe contener solo números")]
+        [MaxLength(12, ErrorMessage = "El teléfono no puede tener más de 12 dígitos")]
         public string? telefono { get; set; }
         public string? contrasenaActual { get; set; }
         public string? nuevaContrasena { get; set; }

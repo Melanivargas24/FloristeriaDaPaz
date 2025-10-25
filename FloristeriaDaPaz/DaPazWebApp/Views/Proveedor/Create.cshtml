@@ -24,7 +24,7 @@
 
         <div class="form-group">
             <label asp-for="telefonoProveedor" class="control-label">Teléfono</label>
-            <input asp-for="telefonoProveedor" class="form-control" />
+            <input asp-for="telefonoProveedor" class="form-control" pattern="[0-9]*" inputmode="numeric" maxlength="12" oninput="this.value = this.value.replace(/[^0-9]/g, '')" />
             <span asp-validation-for="telefonoProveedor" class="text-danger"></span>
         </div>
 
