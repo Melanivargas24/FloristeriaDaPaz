@@ -19,6 +19,26 @@ namespace DaPazWebApp.Helpers
                     new { idProducto = idProducto },
                     commandType: CommandType.StoredProcedure);
                 
+                // Verificar si la promoción ha vencido y actualizarla automáticamente
+                if (promocion != null && promocion.estado == "Activa" && 
+                    promocion.fechaFin.HasValue && promocion.fechaFin.Value.Date < DateTime.Now.Date)
+                {
+                    // Actualizar estado a inactiva
+                    connection.Execute("SP_ModificarPromocion", new
+                    {
+                        promocion.idPromocion,
+                        promocion.nombrePromocion,
+                        promocion.descuentoPorcentaje,
+                        promocion.fechaInicio,
+                        promocion.fechaFin,
+                        promocion.idProducto,
+                        estado = "Inactiva"
+                    }, commandType: CommandType.StoredProcedure);
+                    
+                    // Devolver null ya que la promoción ya no está activa
+                    return null;
+                }
+                
                 return promocion;
             }
             catch (Exception ex)
@@ -39,7 +59,32 @@ namespace DaPazWebApp.Helpers
                     commandType: CommandType.StoredProcedure
                 ).ToList();
                 
-                return promociones;
+                // Verificar y actualizar promociones vencidas
+                var fechaActual = DateTime.Now.Date;
+                var promocionesParaActualizar = promociones.Where(p => 
+                    p.estado == "Activa" && 
+                    p.fechaFin.HasValue && 
+                    p.fechaFin.Value.Date < fechaActual).ToList();
+                
+                // Actualizar promociones vencidas en la base de datos
+                foreach (var promo in promocionesParaActualizar)
+                {
+                    connection.Execute("SP_ModificarPromocion", new
+                    {
+                        promo.idPromocion,
+                        promo.nombrePromocion,
+                        promo.descuentoPorcentaje,
+                        promo.fechaInicio,
+                        promo.fechaFin,
+                        promo.idProducto,
+                        estado = "Inactiva"
+                    }, commandType: CommandType.StoredProcedure);
+                }
+                
+                // Retornar solo las promociones que siguen activas (no vencidas)
+                return promociones.Where(p => 
+                    p.estado == "Activa" && 
+                    (!p.fechaFin.HasValue || p.fechaFin.Value.Date >= fechaActual)).ToList();
             }
             catch (Exception ex)
             {

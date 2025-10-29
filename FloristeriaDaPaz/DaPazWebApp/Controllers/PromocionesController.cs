@@ -20,6 +20,38 @@ public class PromocionesController : Controller
         using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
         var promociones = connection.Query<Promociones>("SP_ConsultarPromociones", commandType: CommandType.StoredProcedure).ToList();
         
+        // Actualizar automáticamente el estado de promociones vencidas
+        var fechaActual = DateTime.Now.Date;
+        var promocionesParaActualizar = new List<Promociones>();
+        
+        foreach (var promo in promociones)
+        {
+            // Si la promoción está activa pero la fecha fin ya pasó, marcarla como inactiva
+            if (promo.estado == "Activa" && promo.fechaFin.HasValue && promo.fechaFin.Value.Date < fechaActual)
+            {
+                promo.estado = "Inactiva";
+                promocionesParaActualizar.Add(promo);
+            }
+        }
+        
+        // Actualizar en la base de datos las promociones que vencieron
+        if (promocionesParaActualizar.Any())
+        {
+            foreach (var promo in promocionesParaActualizar)
+            {
+                connection.Execute("SP_ModificarPromocion", new
+                {
+                    promo.idPromocion,
+                    promo.nombrePromocion,
+                    promo.descuentoPorcentaje,
+                    promo.fechaInicio,
+                    promo.fechaFin,
+                    promo.idProducto,
+                    estado = "Inactiva"
+                }, commandType: CommandType.StoredProcedure);
+            }
+        }
+        
         // Cargar nombres de productos para mostrar en la vista
         foreach (var promo in promociones)
         {
@@ -53,6 +85,20 @@ public class PromocionesController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(Promociones model)
     {
+        // Validaciones adicionales del servidor
+        if (model.fechaInicio.HasValue && model.fechaFin.HasValue)
+        {
+            if (model.fechaInicio.Value > model.fechaFin.Value)
+            {
+                ModelState.AddModelError("fechaInicio", "La fecha de inicio no puede ser posterior a la fecha de fin");
+            }
+
+            if (model.fechaInicio.Value.Date < DateTime.Now.Date)
+            {
+                ModelState.AddModelError("fechaInicio", "La fecha de inicio no puede ser anterior a la fecha actual");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
@@ -104,6 +150,15 @@ public class PromocionesController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(Promociones model)
     {
+        // Validaciones adicionales del servidor
+        if (model.fechaInicio.HasValue && model.fechaFin.HasValue)
+        {
+            if (model.fechaInicio.Value > model.fechaFin.Value)
+            {
+                ModelState.AddModelError("fechaInicio", "La fecha de inicio no puede ser posterior a la fecha de fin");
+            }
+        }
+
         if (!ModelState.IsValid)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));

@@ -27,13 +27,13 @@
 
         <div class="form-group">
             <label asp-for="fechaInicio" class="control-label">Fecha inicio</label>
-            <input asp-for="fechaInicio" class="form-control" type="date" />
+            <input asp-for="fechaInicio" class="form-control" type="date" id="fechaInicio" />
             <span asp-validation-for="fechaInicio" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="fechaFin" class="control-label">Fecha fin</label>
-            <input asp-for="fechaFin" class="form-control" type="date" />
+            <input asp-for="fechaFin" class="form-control" type="date" id="fechaFin" />
             <span asp-validation-for="fechaFin" class="text-danger"></span>
         </div>
 
@@ -61,3 +61,52 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    
+    <script>
+        $(document).ready(function() {
+            // Validar fechas cuando cambian
+            $('#fechaInicio, #fechaFin').on('change', function() {
+                var fechaInicio = $('#fechaInicio').val();
+                var fechaFin = $('#fechaFin').val();
+                
+                if (fechaInicio && fechaFin) {
+                    if (new Date(fechaInicio) > new Date(fechaFin)) {
+                        alert('La fecha de inicio no puede ser posterior a la fecha de fin');
+                        $(this).val('');
+                        $(this).focus();
+                    }
+                }
+                
+                // Actualizar fecha mínima de fin cuando cambia inicio
+                if (fechaInicio) {
+                    $('#fechaFin').attr('min', fechaInicio);
+                }
+            });
+            
+            // Establecer la fecha mínima de fin basada en inicio al cargar
+            var fechaInicioActual = $('#fechaInicio').val();
+            if (fechaInicioActual) {
+                $('#fechaFin').attr('min', fechaInicioActual);
+            }
+            
+            // NO establecer fecha mínima para edición - permitir fechas pasadas
+            
+            // Validar antes de enviar el formulario
+            $('form').on('submit', function(e) {
+                var fechaInicio = $('#fechaInicio').val();
+                var fechaFin = $('#fechaFin').val();
+                
+                if (fechaInicio && fechaFin) {
+                    if (new Date(fechaInicio) > new Date(fechaFin)) {
+                        e.preventDefault();
+                        alert('Por favor, corrija las fechas antes de continuar');
+                        return false;
+                    }
+                }
+            });
+        });
+    </script>
+}

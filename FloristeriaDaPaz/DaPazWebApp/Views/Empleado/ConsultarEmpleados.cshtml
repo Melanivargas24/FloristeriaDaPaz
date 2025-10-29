@@ -31,9 +31,9 @@
                 <th><i class="fas fa-user"></i> Nombre</th>
                 <th><i class="fas fa-user"></i> Apellido</th>
                 <th><i class="fas fa-envelope"></i> Correo</th>
-                <th><i class="fas fa-dollar-sign"></i> Salario</th>
+                <th>â‚¡ Salario</th>
                 <th><i class="fas fa-briefcase"></i> Cargo</th>
-                <th><i class="fas fa-phone"></i> Teléfono</th>
+                <th><i class="fas fa-phone"></i> Telï¿½fono</th>
                 <th><i class="fas fa-calendar-alt"></i> Fecha Ingreso</th>
                 <th ><i class="fas fa-tools"></i> Acciones</th>
             </tr>
@@ -45,7 +45,7 @@
                     <td>@empleado.nombre</td>
                     <td>@empleado.apellido</td>
                     <td>@empleado.correo</td>
-                    <td>?@empleado.salario.ToString("N2")</td>
+                    <td>â‚¡@empleado.salario.ToString("N2")</td>
                     <td>@empleado.Cargo</td>
                     <td>@empleado.telefono</td>
                     <td>@empleado.fechaIngreso.ToString("yyyy-MM-dd")</td>
@@ -71,9 +71,9 @@
             const tabla = $('#tablaEmpleados').DataTable({
                 language: {
                     search: "Buscar:",
-                    lengthMenu: "Mostrar _MENU_ registros por página",
+                    lengthMenu: "Mostrar _MENU_ registros por pï¿½gina",
                     zeroRecords: "No se encontraron resultados",
-                    info: "Mostrando página _PAGE_ de _PAGES_",
+                    info: "Mostrando pï¿½gina _PAGE_ de _PAGES_",
                     infoEmpty: "No hay registros disponibles",
                     infoFiltered: "(filtrado de _MAX_ registros totales)",
                     paginate: {

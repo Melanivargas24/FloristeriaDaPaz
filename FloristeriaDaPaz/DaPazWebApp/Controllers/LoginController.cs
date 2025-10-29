@@ -43,6 +43,25 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
+            // Validaciones adicionales para campos obligatorios
+            if (string.IsNullOrWhiteSpace(model.nombre))
+            {
+                ModelState.AddModelError("nombre", "El nombre es obligatorio");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.apellido))
+            {
+                ModelState.AddModelError("apellido", "El apellido es obligatorio");
+                return View(model);
+            }
+
+            if (string.IsNullOrWhiteSpace(model.correo))
+            {
+                ModelState.AddModelError("correo", "El correo es obligatorio");
+                return View(model);
+            }
+
             // Validación adicional para asegurar que la contraseña no sea nula o vacía
             if (string.IsNullOrWhiteSpace(model.contrasena))
             {
@@ -57,25 +76,35 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
-            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            try
             {
-                // Encriptar la contraseña antes de guardarla
-                var contrasenaEncriptada = Encrypt(model.contrasena!);
+                using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    // Encriptar la contraseña antes de guardarla
+                    var contrasenaEncriptada = Encrypt(model.contrasena!);
 
-                context.Execute("SP_RegistrarUsuario",
-                    new
-                    {
-                        model.nombre,
-                        model.apellido,
-                        model.correo,
-                        model.telefono,
-                        contrasena = contrasenaEncriptada
+                    context.Execute("SP_RegistrarUsuario",
+                        new
+                        {
+                            model.nombre,
+                            model.apellido,
+                            model.correo,
+                            model.telefono,
+                            contrasena = contrasenaEncriptada
 
-                    },
-                    commandType: CommandType.StoredProcedure);
+                        },
+                        commandType: CommandType.StoredProcedure);
+                }
+
+                ViewBag.Success = "Cuenta creada exitosamente. Ya puede iniciar sesión.";
+                return RedirectToAction("Login", "Login");
             }
-
-            return RedirectToAction("Login", "Login");
+            catch (Exception)
+            {
+                // En caso de error en la base de datos (por ejemplo, correo duplicado)
+                ModelState.AddModelError("", "Error al crear la cuenta. Es posible que el correo ya esté registrado.");
+                return View(model);
+            }
         }
 
         #endregion
@@ -91,9 +120,10 @@ namespace DaPazWebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(UsersModel model)
         {
-            if (!ModelState.IsValid)
+            // Validación adicional para el correo
+            if (string.IsNullOrWhiteSpace(model.correo))
             {
-                ViewBag.Error = "Por favor, complete todos los campos correctamente.";
+                ViewBag.Error = "El correo es obligatorio";
                 return View(model);
             }
 
@@ -101,13 +131,6 @@ namespace DaPazWebApp.Controllers
             if (string.IsNullOrWhiteSpace(model.contrasena))
             {
                 ViewBag.Error = "La contraseña es obligatoria";
-                return View(model);
-            }
-
-            // Validación adicional para el correo
-            if (string.IsNullOrWhiteSpace(model.correo))
-            {
-                ViewBag.Error = "El correo es obligatorio";
                 return View(model);
             }
 
@@ -151,9 +174,9 @@ namespace DaPazWebApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Aquí puedes hacer log de ex si quieres
+                // Aquí puedes hacer log si quieres
                 ViewBag.Error = "Ocurrió un error durante el inicio de sesión.";
                 return View(model);
             }
@@ -221,23 +244,13 @@ namespace DaPazWebApp.Controllers
 
                         try
                         {
-                            var habilitarCorreo = _configuration.GetSection("Variables:HabilitarEnvioCorreo").Value;
-                            
-                            if (habilitarCorreo == "true")
-                            {
-                                string contenido = $"Hola {result.nombre}, se ha generado el siguiente código de seguridad: {codigo}";
-                                EnviarCorreo(result.correo!, "Actualización de Acceso", contenido);
-                                ViewBag.Mensaje = "Se ha enviado un código de recuperación a su correo electrónico.";
-                            }
-                            else
-                            {
-                                ViewBag.Mensaje = $"Su contraseña se ha actualizado exitosamente. Su nuevo código es: {codigo}";
-                            }
+                            string contenido = $"Hola {result.nombre}, se ha generado el siguiente código de seguridad: {codigo}";
+                            EnviarCorreo(result.correo!, "Actualización de Acceso", contenido);
+                            ViewBag.Mensaje = "Se ha enviado un código de recuperación a su correo electrónico.";
                         }
                         catch (Exception)
                         {
-                            // Si falla el envío de correo, pero la contraseña se actualizó
-                            ViewBag.Mensaje = $"Su contraseña se ha actualizado exitosamente. Su nuevo código es: {codigo}. (No se pudo enviar por correo)";
+                            ViewBag.Mensaje = "No se pudo enviar el correo. Por favor, intente nuevamente más tarde.";
                         }
                     }
                     else
@@ -342,38 +355,24 @@ namespace DaPazWebApp.Controllers
 
         private void EnviarCorreo(string destino, string asunto, string contenido)
         {
-            try
-            {
-                string cuenta = _configuration.GetSection("Variables:CorreoEmail").Value!;
-                string contrasenna = _configuration.GetSection("Variables:ClaveEmail").Value!;
+            string cuenta = _configuration.GetSection("Variables:CorreoEmail").Value!;
+            string contrasenna = _configuration.GetSection("Variables:ClaveEmail").Value!;
 
-                // Verificar si las credenciales están configuradas
-                if (string.IsNullOrEmpty(cuenta) || string.IsNullOrEmpty(contrasenna))
-                {
-                    throw new Exception("Credenciales de correo no configuradas");
-                }
+            MailMessage message = new MailMessage();
+            message.From = new MailAddress(cuenta);
+            message.To.Add(new MailAddress(destino));
+            message.Subject = asunto;
+            message.Body = contenido;
+            message.Priority = MailPriority.Normal;
+            message.IsBodyHtml = true;
 
-                MailMessage message = new MailMessage();
-                message.From = new MailAddress(cuenta);
-                message.To.Add(new MailAddress(destino));
-                message.Subject = asunto;
-                message.Body = contenido;
-                message.Priority = MailPriority.Normal;
-                message.IsBodyHtml = true;
+            SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+            client.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
+            client.EnableSsl = true;
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.UseDefaultCredentials = false;
 
-                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-                client.Credentials = new System.Net.NetworkCredential(cuenta, contrasenna);
-                client.EnableSsl = true;
-                client.DeliveryMethod = SmtpDeliveryMethod.Network;
-                client.UseDefaultCredentials = false;
-
-                client.Send(message);
-            }
-            catch (Exception ex)
-            {
-                // Re-lanzar la excepción con más detalles
-                throw new Exception($"Error al enviar correo: {ex.Message}");
-            }
+            client.Send(message);
         }
 
         #endregion

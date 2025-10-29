@@ -48,10 +48,19 @@
                     <td>@promo.fechaFin?.ToString("yyyy-MM-dd")</td>
                     <td>@promo.nombreProducto</td>
                     <td class="text-center">
-                        @if (promo.estado == "Activa")
+                        @{
+                            var esVencida = promo.fechaFin.HasValue && promo.fechaFin.Value.Date < DateTime.Now.Date;
+                        }
+                        @if (promo.estado == "Activa" && !esVencida)
                         {
                             <span class="badge bg-success">
                                 <i class="fas fa-check-circle"></i> Activa
+                            </span>
+                        }
+                        else if (promo.estado == "Activa" && esVencida)
+                        {
+                            <span class="badge bg-warning">
+                                <i class="fas fa-clock"></i> Vencida
                             </span>
                         }
                         else

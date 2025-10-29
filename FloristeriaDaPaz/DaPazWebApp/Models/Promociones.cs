@@ -2,7 +2,7 @@
 
 namespace DaPazWebApp.Models
 {
-    public class Promociones
+    public class Promociones : IValidatableObject
     {
         public int? idPromocion { get; set; }
 
@@ -29,5 +29,30 @@ namespace DaPazWebApp.Models
 
         [Required(ErrorMessage = "El estado es obligatorio")]
         public string? estado { get; set; } = "Activa";
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var results = new List<ValidationResult>();
+
+            if (fechaInicio.HasValue && fechaFin.HasValue)
+            {
+                if (fechaInicio.Value > fechaFin.Value)
+                {
+                    results.Add(new ValidationResult(
+                        "La fecha de inicio no puede ser posterior a la fecha de fin",
+                        new[] { nameof(fechaInicio) }));
+                }
+
+                // Solo validar fecha anterior para nuevas promociones (cuando idPromocion es null)
+                if (!idPromocion.HasValue && fechaInicio.Value.Date < DateTime.Now.Date)
+                {
+                    results.Add(new ValidationResult(
+                        "La fecha de inicio no puede ser anterior a la fecha actual",
+                        new[] { nameof(fechaInicio) }));
+                }
+            }
+
+            return results;
+        }
     }
 }
