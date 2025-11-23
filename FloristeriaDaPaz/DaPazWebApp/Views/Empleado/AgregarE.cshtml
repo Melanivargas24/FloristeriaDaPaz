@@ -71,9 +71,18 @@
         // Validar formulario antes de enviar
         document.querySelector('form').addEventListener('submit', function(e) {
             var idUsuario = document.getElementById('idUsuario').value;
+            var resultadoDiv = document.getElementById('resultadoUsuario');
+            
             if (!idUsuario || idUsuario <= 0) {
                 e.preventDefault();
                 alert('Debe buscar y seleccionar un usuario válido antes de guardar.');
+                return false;
+            }
+            
+            // Verificar si el mensaje indica que ya es empleado
+            if (resultadoDiv.innerHTML.includes('ya es un empleado activo')) {
+                e.preventDefault();
+                alert('No se puede agregar este usuario porque ya es un empleado activo.');
                 return false;
             }
         });
@@ -88,10 +97,17 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.idUsuario) {
-                        document.getElementById('resultadoUsuario').innerHTML =
-                            '<div class="alert alert-success">Usuario: ' + data.nombre + ' ' + data.apellido +
-                            ' (ID: ' + data.idUsuario + ')</div>';
-                        document.getElementById('idUsuario').value = data.idUsuario;
+                        if (data.yaEsEmpleado) {
+                            document.getElementById('resultadoUsuario').innerHTML =
+                                '<div class="alert alert-warning">⚠️ Usuario: ' + data.nombre + ' ' + data.apellido +
+                                ' ya es un empleado activo. No se puede agregar nuevamente.</div>';
+                            document.getElementById('idUsuario').value = '';
+                        } else {
+                            document.getElementById('resultadoUsuario').innerHTML =
+                                '<div class="alert alert-success">✅ Usuario: ' + data.nombre + ' ' + data.apellido +
+                                ' (ID: ' + data.idUsuario + ') - Disponible para ser empleado</div>';
+                            document.getElementById('idUsuario').value = data.idUsuario;
+                        }
                     } else {
                         document.getElementById('resultadoUsuario').innerHTML =
                             '<span class="text-danger">Usuario no encontrado.</span>';

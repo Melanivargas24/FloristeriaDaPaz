@@ -5,8 +5,7 @@
     Layout = "_Layout";
 }
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
 
 <div class="container" style="margin-top:35px; margin-bottom:135px">
 
@@ -48,19 +47,22 @@
 
         <div class="form-group">
             <label asp-for="contrasenaActual" class="control-label">Contraseña Actual</label>
-            <input asp-for="contrasenaActual" type="password" class="form-control" />
+            <input asp-for="contrasenaActual" type="password" class="form-control" id="contrasenaActual" />
             <span asp-validation-for="contrasenaActual" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="nuevaContrasena" class="control-label">Nueva Contraseña</label>
-            <input asp-for="nuevaContrasena" type="password" class="form-control" />
+            <input asp-for="nuevaContrasena" type="password" class="form-control" id="nuevaContrasena" />
             <span asp-validation-for="nuevaContrasena" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="direccion" class="control-label">Dirección (haz click en el mapa)</label>
-            <input asp-for="direccion" id="direccion" class="form-control" readonly />
+            <label asp-for="direccion" class="control-label">Dirección</label>
+            <input asp-for="direccion" id="direccion" class="form-control" 
+                   placeholder="Ej: 200 metros norte del parque central, Casa #123" 
+                   maxlength="200" />
+            <small class="form-text text-muted">Ingrese su dirección completa incluyendo referencias</small>
             <span asp-validation-for="direccion" class="text-danger"></span>
         </div>
 
@@ -88,8 +90,6 @@
             <span asp-validation-for="idDistrito" class="text-danger"></span>
         </div>
 
-        <div id="map" style="height: 300px; width: 100%; margin-top: 10px;"></div>
-
         <div class="d-flex justify-content-end gap-2 mt-4">
             <button type="submit" class="btn-guardar">Guardar</button>
             <a asp-controller="Home" asp-action="Index" class="btn-cancelar">Cancelar</a>
@@ -103,45 +103,77 @@
     }
 
     <script>
-        var map = L.map('map').setView([9.9281, -84.0907], 13); // San José, CR
-
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-
-        var marker = L.marker([9.9281, -84.0907], {draggable: true}).addTo(map);
-
-        function reverseGeocode(lat, lon) {
-            fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.display_name) {
-                        document.getElementById('direccion').value = data.display_name;
-                    } else {
-                        document.getElementById('direccion').value = "Dirección no encontrada";
-                    }
-                })
-                .catch(error => {
-                    console.error('Error en reverse geocoding:', error);
-                    document.getElementById('direccion').value = "Error al obtener dirección";
-                });
+        // JavaScript para validación de contraseñas
+        function validarContraseñas() {
+            var contrasenaActual = $('#contrasenaActual').val();
+            var nuevaContrasena = $('#nuevaContrasena').val();
+            var esValido = true;
+            
+            // Limpiar mensajes previos
+            $('.password-validation-error').remove();
+            
+            // Si uno está lleno, ambos deben estarlo
+            if ((contrasenaActual && !nuevaContrasena) || (!contrasenaActual && nuevaContrasena)) {
+                var mensaje = '<div class="text-danger password-validation-error">Para cambiar la contraseña, debe completar tanto la contraseña actual como la nueva</div>';
+                if (contrasenaActual && !nuevaContrasena) {
+                    $('#nuevaContrasena').after(mensaje);
+                }
+                if (!contrasenaActual && nuevaContrasena) {
+                    $('#contrasenaActual').after(mensaje);
+                }
+                esValido = false;
+            }
+            
+            // Si ambas están llenas, validar longitud de la nueva contraseña
+            if (contrasenaActual && nuevaContrasena) {
+                if (nuevaContrasena.length < 6) {
+                    $('#nuevaContrasena').after('<div class="text-danger password-validation-error">La nueva contraseña debe tener al menos 6 caracteres</div>');
+                    esValido = false;
+                }
+            }
+            
+            return esValido;
         }
-
-        map.on('click', function(e) {
-            var lat = e.latlng.lat;
-            var lon = e.latlng.lng;
-
-            marker.setLatLng([lat, lon]);
-            reverseGeocode(lat, lon);
-        });
-
-        marker.on('dragend', function(e) {
-            var position = marker.getLatLng();
-            reverseGeocode(position.lat, position.lng);
-        });
-
+        
         // JavaScript para manejar los dropdowns de ubicación
         $(document).ready(function() {
+            // Validación en tiempo real de contraseñas
+            $('#contrasenaActual, #nuevaContrasena').on('input blur', function() {
+                validarContraseñas();
+            });
+            
+            // Validación básica de dirección
+            $('#direccion').on('blur', function() {
+                var direccion = $(this).val().trim();
+                var direccionSpan = $('span[data-valmsg-for="direccion"]');
+                
+                // Limpiar mensajes previos
+                direccionSpan.text('');
+                direccionSpan.removeClass('field-validation-error').addClass('field-validation-valid');
+                $('#direccion').removeClass('input-validation-error');
+                
+                if (direccion.length > 0 && direccion.length < 10) {
+                    direccionSpan.text('La dirección debe ser más descriptiva (mínimo 10 caracteres)');
+                    direccionSpan.removeClass('field-validation-valid').addClass('field-validation-error');
+                    $('#direccion').addClass('input-validation-error');
+                }
+            });
+            
+            // Validar antes del envío
+            $('form').on('submit', function(e) {
+                if (!validarContraseñas()) {
+                    e.preventDefault();
+                    return false;
+                }
+                
+                // Validar dirección si está presente
+                var direccion = $('#direccion').val().trim();
+                if (direccion.length > 0 && direccion.length < 10) {
+                    e.preventDefault();
+                    $('#direccion').focus();
+                    return false;
+                }
+            });
             var cantonInicial = '@Model.idCanton';
             var distritoInicial = '@Model.idDistrito';
 

@@ -80,6 +80,18 @@ namespace DaPazWebApp.Controllers
             {
                 using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
+                    // Verificar si el correo ya existe
+                    var usuarioExistente = context.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(*) FROM Usuario WHERE correo = @correo",
+                        new { correo = model.correo },
+                        commandType: CommandType.Text);
+
+                    if (usuarioExistente > 0)
+                    {
+                        ModelState.AddModelError("correo", "Este correo electrónico ya está registrado");
+                        return View(model);
+                    }
+
                     // Encriptar la contraseña antes de guardarla
                     var contrasenaEncriptada = Encrypt(model.contrasena!);
 
@@ -99,10 +111,18 @@ namespace DaPazWebApp.Controllers
                 ViewBag.Success = "Cuenta creada exitosamente. Ya puede iniciar sesión.";
                 return RedirectToAction("Login", "Login");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // En caso de error en la base de datos (por ejemplo, correo duplicado)
-                ModelState.AddModelError("", "Error al crear la cuenta. Es posible que el correo ya esté registrado.");
+                // En caso de error en la base de datos
+                if (ex.Message.Contains("UNIQUE") || ex.Message.Contains("duplicate") || 
+                    ex.Message.Contains("correo") || ex.Message.Contains("email"))
+                {
+                    ModelState.AddModelError("correo", "Este correo electrónico ya está registrado");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error al crear la cuenta. Por favor, intenta nuevamente.");
+                }
                 return View(model);
             }
         }
@@ -265,6 +285,31 @@ namespace DaPazWebApp.Controllers
             }
 
             return View();
+        }
+
+        #endregion
+
+        #region Verificación de Correo
+
+        [HttpPost]
+        public JsonResult VerificarCorreoExistente(string correo)
+        {
+            try
+            {
+                using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var usuarioExistente = context.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(*) FROM Usuario WHERE correo = @correo",
+                        new { correo = correo },
+                        commandType: CommandType.Text);
+
+                    return Json(new { existe = usuarioExistente > 0 });
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new { existe = false });
+            }
         }
 
         #endregion

@@ -10,58 +10,73 @@
         <h2>Registrar Incapacidad</h2>
     </div>
 
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
     <form asp-action="Create" method="post">
 
         <div class="form-group">
-            <label asp-for="IdEmpleado" class="control-label">Empleado</label>
-            <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleados">
-                <option value="">Seleccione un Empleado</option>
+            <label asp-for="IdEmpleado" class="control-label">Empleado <span class="text-danger">*</span></label>
+            <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleados" id="IdEmpleado">
+                <option value="">-- Seleccione un Empleado --</option>
             </select>
             <span asp-validation-for="IdEmpleado" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="NumeroIncapacidad" class="control-label">Número de Incapacidad</label>
-            <input asp-for="NumeroIncapacidad" class="form-control" />
+            <input asp-for="NumeroIncapacidad" class="form-control" readonly style="background-color: #f8f9fa;" id="numeroIncapacidad" placeholder="Generando automáticamente..." />
+            <small class="form-text text-muted">
+                <i class="fas fa-info-circle text-success"></i> <strong>Se genera automáticamente</strong> - No requiere acción del usuario
+            </small>
             <span asp-validation-for="NumeroIncapacidad" class="text-danger"></span>
+            <div id="resultado-verificacion" class="mt-2"></div>
         </div>
 
         <div class="form-group">
-            <label asp-for="MotivoIncapacidad" class="control-label">Motivo</label>
-            <textarea asp-for="MotivoIncapacidad" class="form-control"></textarea>
+            <label asp-for="MotivoIncapacidad" class="control-label">Motivo <span class="text-danger">*</span></label>
+            <textarea asp-for="MotivoIncapacidad" class="form-control" id="MotivoIncapacidad" placeholder="Describa el motivo de la incapacidad"></textarea>
             <span asp-validation-for="MotivoIncapacidad" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FechaInicio" class="control-label">Fecha de Inicio</label>
-            <input asp-for="FechaInicio" type="date" class="form-control" />
+            <label asp-for="FechaInicio" class="control-label">Fecha de Inicio <span class="text-danger">*</span></label>
+            <input asp-for="FechaInicio" type="date" class="form-control" id="FechaInicio" />
+            <small class="form-text text-muted">Se inicializa con fecha actual</small>
             <span asp-validation-for="FechaInicio" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="FechaFin" class="control-label">Fecha de Fin</label>
-            <input asp-for="FechaFin" type="date" class="form-control" />
+            <label asp-for="FechaFin" class="control-label">Fecha de Fin <span class="text-danger">*</span></label>
+            <input asp-for="FechaFin" type="date" class="form-control" id="FechaFin" />
+            <small class="form-text text-muted">Debe ser igual o posterior a fecha de inicio</small>
             <span asp-validation-for="FechaFin" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="CentroMedicoEmisor" class="control-label">Centro Médico Emisor</label>
-            <input asp-for="CentroMedicoEmisor" class="form-control" />
+            <label asp-for="CentroMedicoEmisor" class="control-label">Centro Médico Emisor <span class="text-danger">*</span></label>
+            <input asp-for="CentroMedicoEmisor" class="form-control" id="CentroMedicoEmisor" placeholder="Ej: Hospital Nacional, Clínica Bíblica" />
             <span asp-validation-for="CentroMedicoEmisor" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="EntidadEmisora" class="control-label">Entidad Emisora</label>
-            <select asp-for="EntidadEmisora" class="form-control">
-                <option value="">Seleccione Entidad </option>
-                <option value="CSS">CSS</option>
-                <option value="CSS">INS</option>
+            <label asp-for="EntidadEmisora" class="control-label">Entidad Emisora <span class="text-danger">*</span></label>
+            <select asp-for="EntidadEmisora" class="form-control" id="EntidadEmisora">
+                <option value="">-- Seleccione Entidad --</option>
+                <option value="CCSS">CCSS</option>
+                <option value="INS">INS</option>
                 <option value="Otra">Otra</option>
             </select>
             <span asp-validation-for="EntidadEmisora" class="text-danger"></span>
         </div>
 
         <br />
+        
+        <div class="alert alert-info">
+            <small><i class="fas fa-info-circle"></i> Los campos marcados con <span class="text-danger">*</span> son obligatorios</small>
+        </div>
 
         <div class="d-flex justify-content-end gap-2 mt-4">
             <button type="submit" class="btn-guardar">Guardar</button>
@@ -69,3 +84,249 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <style>
+        .alert-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        
+        .input-group-append .btn {
+            border-left: 0;
+        }
+        
+        #resultado-verificacion {
+            max-height: 60px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-info:hover {
+            background-color: #17a2b8;
+            border-color: #17a2b8;
+        }
+
+        /* Estilos para campos de fecha */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            cursor: pointer;
+        }
+    </style>
+    
+    <script>
+        $(document).ready(function() {
+            // Inicializar fechas con la fecha actual
+            function inicializarFechas() {
+                var fechaActual = new Date();
+                var fechaFormateada = fechaActual.toISOString().split('T')[0];
+                
+                // Si los campos están vacíos, asignar fecha actual
+                if (!$('#FechaInicio').val()) {
+                    $('#FechaInicio').val(fechaFormateada);
+                }
+                if (!$('#FechaFin').val()) {
+                    $('#FechaFin').val(fechaFormateada);
+                }
+            }
+
+            // Ejecutar al cargar la página
+            inicializarFechas();
+            
+            // Generar número de incapacidad automáticamente - SIEMPRE
+            generarNumeroAutomaticoSiempre();
+
+            // Función para generar número automáticamente - SIEMPRE
+            function generarNumeroAutomaticoSiempre() {
+                // Mostrar indicador de generación
+                $('#numeroIncapacidad').val('').attr('placeholder', 'Generando número automáticamente...');
+                
+                $.ajax({
+                    url: '@Url.Action("GenerarNuevoNumero", "Incapacidad")',
+                    type: 'GET',
+                    success: function(response) {
+                        if (response.numero) {
+                            $('#numeroIncapacidad').val(response.numero).attr('placeholder', '');
+                            
+                            // Mostrar confirmación temporal
+                            var mensajeDiv = $('<div class="alert alert-success alert-sm mt-2"><i class="fas fa-check-circle"></i> Número generado: <strong>' + response.numero + '</strong></div>');
+                            $('#resultado-verificacion').html(mensajeDiv);
+                            
+                            setTimeout(function() {
+                                $('#resultado-verificacion').html('');
+                            }, 3000);
+                        } else {
+                            $('#numeroIncapacidad').attr('placeholder', 'Error al generar - Se generará al guardar');
+                            console.error('Error: No se pudo generar el número');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        $('#numeroIncapacidad').attr('placeholder', 'Se generará automáticamente al guardar');
+                        console.error('Error AJAX:', error);
+                    }
+                });
+            }
+
+            // Validación en tiempo real para el empleado
+            $('#IdEmpleado').change(function() {
+                var empleadoId = $(this).val();
+                var empleadoSpan = $('span[data-valmsg-for="IdEmpleado"]');
+                
+                if (!empleadoId || empleadoId === '' || empleadoId === '0') {
+                    empleadoSpan.text('Debe seleccionar un empleado');
+                    empleadoSpan.removeClass('field-validation-valid').addClass('field-validation-error');
+                    $(this).addClass('input-validation-error');
+                } else {
+                    empleadoSpan.text('');
+                    empleadoSpan.removeClass('field-validation-error').addClass('field-validation-valid');
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            // Validación en tiempo real para campos requeridos
+            $('#MotivoIncapacidad, #CentroMedicoEmisor').on('blur', function() {
+                var valor = $(this).val().trim();
+                var fieldName = $(this).attr('id');
+                var span = $('span[data-valmsg-for="' + fieldName + '"]');
+                
+                if (!valor) {
+                    var mensaje = fieldName === 'MotivoIncapacidad' ? 'El motivo es obligatorio' : 'El centro médico emisor es obligatorio';
+                    span.text(mensaje);
+                    span.removeClass('field-validation-valid').addClass('field-validation-error');
+                    $(this).addClass('input-validation-error');
+                } else {
+                    span.text('');
+                    span.removeClass('field-validation-error').addClass('field-validation-valid');
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            $('#EntidadEmisora').change(function() {
+                var valor = $(this).val();
+                var span = $('span[data-valmsg-for="EntidadEmisora"]');
+                
+                if (!valor) {
+                    span.text('Debe seleccionar una entidad emisora');
+                    span.removeClass('field-validation-valid').addClass('field-validation-error');
+                    $(this).addClass('input-validation-error');
+                } else {
+                    span.text('');
+                    span.removeClass('field-validation-error').addClass('field-validation-valid');
+                    $(this).removeClass('input-validation-error');
+                }
+            });
+
+            // Manejar eventos de fecha
+            $('#FechaInicio, #FechaFin').on('focus', function() {
+                // Si el campo está vacío al hacer focus, asignar fecha actual
+                if (!$(this).val()) {
+                    var fechaActual = new Date();
+                    var fechaFormateada = fechaActual.toISOString().split('T')[0];
+                    $(this).val(fechaFormateada);
+                }
+            });
+
+            // Validar fechas cuando cambian
+            $('#FechaInicio').change(function() {
+                var fechaInicio = new Date($('#FechaInicio').val());
+                var fechaFin = new Date($('#FechaFin').val());
+                
+                // Si la fecha de fin es anterior a la fecha de inicio, ajustarla
+                if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+                    $('#FechaFin').val($('#FechaInicio').val());
+                    mostrarMensajeTemporal('Fecha de fin ajustada automáticamente', 'info');
+                }
+            });
+
+            $('#FechaFin').change(function() {
+                var fechaInicio = new Date($('#FechaInicio').val());
+                var fechaFin = new Date($('#FechaFin').val());
+                
+                if (fechaInicio && fechaFin && fechaInicio > fechaFin) {
+                    alert('La fecha de fin no puede ser anterior a la fecha de inicio');
+                    $(this).val($('#FechaInicio').val());
+                }
+            });
+
+
+
+            // Función para mostrar mensajes temporales
+            function mostrarMensajeTemporal(mensaje, tipo) {
+                var alertClass = 'alert-' + (tipo || 'info');
+                var mensajeDiv = $('<div class="alert ' + alertClass + ' alert-dismissible fade show mt-2" role="alert">' +
+                    '<i class="fas fa-info-circle"></i> ' + mensaje +
+                    '</div>');
+                
+                // Mostrar después del campo de fecha de fin
+                $('[asp-for="FechaFin"]').closest('.form-group').after(mensajeDiv);
+                
+                setTimeout(function() {
+                    mensajeDiv.fadeOut(500, function() {
+                        $(this).remove();
+                    });
+                }, 3000);
+            }
+
+            // Validar antes del envío del formulario
+            $('form').on('submit', function(e) {
+                var numeroIncapacidad = $('#NumeroIncapacidad').val();
+                var idEmpleado = $('#IdEmpleado').val();
+                var fechaInicio = $('#FechaInicio').val();
+                var fechaFin = $('#FechaFin').val();
+                var motivoIncapacidad = $('#MotivoIncapacidad').val().trim();
+                var centroMedico = $('#CentroMedicoEmisor').val().trim();
+                var entidadEmisora = $('#EntidadEmisora').val();
+                
+                // Validar campos obligatorios
+                var errores = [];
+                
+                if (!numeroIncapacidad || numeroIncapacidad.trim() === '') {
+                    // El número se generará automáticamente en el servidor
+                    console.log('El número se generará automáticamente en el servidor');
+                }
+                
+                if (!idEmpleado || idEmpleado === '' || idEmpleado === '0') {
+                    errores.push('Debe seleccionar un empleado');
+                }
+                
+                if (!fechaInicio) {
+                    errores.push('Debe seleccionar la fecha de inicio');
+                }
+                
+                if (!fechaFin) {
+                    errores.push('Debe seleccionar la fecha de fin');
+                }
+                
+                if (!motivoIncapacidad) {
+                    errores.push('Debe ingresar el motivo de la incapacidad');
+                }
+                
+                if (!centroMedico) {
+                    errores.push('Debe ingresar el centro médico emisor');
+                }
+                
+                if (!entidadEmisora) {
+                    errores.push('Debe seleccionar la entidad emisora');
+                }
+                
+                // Validar fechas
+                if (fechaInicio && fechaFin) {
+                    var inicio = new Date(fechaInicio);
+                    var fin = new Date(fechaFin);
+                    if (inicio > fin) {
+                        errores.push('La fecha de inicio no puede ser posterior a la fecha de fin');
+                    }
+                }
+                
+                if (errores.length > 0) {
+                    e.preventDefault();
+                    alert('Por favor corrija los siguientes errores:\n\n• ' + errores.join('\n• '));
+                    return false;
+                }
+
+                // El servidor se encargará de generar el número automáticamente si es necesario
+                return true;
+            });
+        });
+    </script>
+}

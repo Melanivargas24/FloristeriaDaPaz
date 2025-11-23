@@ -64,6 +64,18 @@ namespace DaPazWebApp.Controllers
             {
                 using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
+                    // Verificar si el usuario ya es empleado activo
+                    var yaEsEmpleado = context.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(*) FROM Empleado WHERE idUsuario = @idUsuario AND fechaSalida IS NULL",
+                        new { idUsuario = model.idUsuario },
+                        commandType: CommandType.Text);
+
+                    if (yaEsEmpleado > 0)
+                    {
+                        ModelState.AddModelError("idUsuario", "Este usuario ya es un empleado activo");
+                        return View(model);
+                    }
+
                     var result = context.Execute("SP_AgregarEmpleado",
                         new
                         {
@@ -79,7 +91,16 @@ namespace DaPazWebApp.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error al agregar el empleado: " + ex.Message);
+                // Detectar errores específicos de base de datos
+                if (ex.Message.Contains("UNIQUE") || ex.Message.Contains("duplicate") || 
+                    ex.Message.Contains("empleado") || ex.Message.Contains("usuario"))
+                {
+                    ModelState.AddModelError("idUsuario", "Este usuario ya es un empleado o hay un conflicto con los datos");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Error al agregar el empleado. Por favor, intenta nuevamente.");
+                }
                 return View(model);
             }
         }
@@ -93,7 +114,25 @@ namespace DaPazWebApp.Controllers
                 new { correo },
                 commandType: CommandType.StoredProcedure
             );
-            return Json(usuario);
+            
+            if (usuario != null)
+            {
+                // Verificar si ya es empleado activo
+                var yaEsEmpleado = context.QueryFirstOrDefault<bool>(
+                    "SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM Empleado WHERE idUsuario = @idUsuario AND fechaSalida IS NULL",
+                    new { idUsuario = usuario.idUsuario },
+                    commandType: CommandType.Text);
+                    
+                return Json(new { 
+                    idUsuario = usuario.idUsuario,
+                    nombre = usuario.nombre,
+                    apellido = usuario.apellido,
+                    correo = usuario.correo,
+                    yaEsEmpleado = yaEsEmpleado
+                });
+            }
+            
+            return Json(null);
         }
 
         [HttpGet]
@@ -162,6 +201,18 @@ namespace DaPazWebApp.Controllers
             {
                 using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
                 
+                // Validar si el correo ya existe para otro empleado/usuario
+                var correoExistente = context.QueryFirstOrDefault<int>(
+                    "SELECT COUNT(*) FROM Usuario WHERE correo = @correo AND idUsuario != @idUsuario",
+                    new { correo = model.correo, idUsuario = model.idUsuario },
+                    commandType: CommandType.Text);
+
+                if (correoExistente > 0)
+                {
+                    ModelState.AddModelError("correo", "Este correo electrónico ya está registrado por otro usuario");
+                    return View(model);
+                }
+                
                 // Actualizar empleado y usuario en una sola operación
                 context.Execute(
                     "SP_ActualizarEmpleado",
@@ -184,7 +235,16 @@ namespace DaPazWebApp.Controllers
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Ocurrió un error al actualizar el empleado: " + ex.Message);
+                // Detectar errores específicos de base de datos
+                if (ex.Message.Contains("UNIQUE") || ex.Message.Contains("duplicate") || 
+                    ex.Message.Contains("correo") || ex.Message.Contains("email"))
+                {
+                    ModelState.AddModelError("correo", "Este correo electrónico ya está registrado por otro usuario");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Ocurrió un error al actualizar el empleado. Por favor, intenta nuevamente.");
+                }
                 return View(model);
             }
         }

@@ -95,10 +95,73 @@ namespace DaPazWebApp.Controllers
             }
 
 
-            var nuevaContrasenaEncriptada = string.IsNullOrEmpty(model.nuevaContrasena) ? 
-                null : Encrypt(model.nuevaContrasena);
-            var contrasenaActualEncriptada = string.IsNullOrEmpty(model.contrasenaActual) ? 
-                null : Encrypt(model.contrasenaActual);
+            // Validar si el correo ya existe para otro usuario
+            using (var context = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var usuarioExistente = context.QueryFirstOrDefault<int>(
+                    "SELECT COUNT(*) FROM Usuario WHERE correo = @correo AND idUsuario != @idUsuario",
+                    new { correo = model.correo, idUsuario = model.idUsuario },
+                    commandType: CommandType.Text);
+
+                if (usuarioExistente > 0)
+                {
+                    ModelState.AddModelError("correo", "Este correo electrónico ya está registrado por otro usuario");
+                    
+                    // Recargar dropdowns
+                    var provincias = context.Query(
+                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                        commandType: CommandType.Text
+                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                    ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text");
+                    ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    
+                    return View(model);
+                }
+            }
+
+            // Manejo de contraseñas: solo procesar si ambas están presentes o ninguna está presente
+            string? nuevaContrasenaEncriptada = null;
+            string? contrasenaActualEncriptada = null;
+            
+            // Si el usuario quiere cambiar la contraseña, debe proporcionar ambas
+            if (!string.IsNullOrEmpty(model.nuevaContrasena) || !string.IsNullOrEmpty(model.contrasenaActual))
+            {
+                // Validar que ambas contraseñas estén presentes si se quiere cambiar
+                if (string.IsNullOrEmpty(model.contrasenaActual) || string.IsNullOrEmpty(model.nuevaContrasena))
+                {
+                    ModelState.AddModelError("contrasenaActual", "Para cambiar la contraseña, debe proporcionar tanto la contraseña actual como la nueva");
+                    ModelState.AddModelError("nuevaContrasena", "Para cambiar la contraseña, debe proporcionar tanto la contraseña actual como la nueva");
+                }
+                // Validar longitud mínima de la nueva contraseña
+                else if (model.nuevaContrasena.Length < 6)
+                {
+                    ModelState.AddModelError("nuevaContrasena", "La nueva contraseña debe tener al menos 6 caracteres");
+                }
+                
+                // Si hay errores de validación, mostrar el formulario
+                if (!ModelState.IsValid)
+                {
+                    // Recargar dropdowns
+                    using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                    {
+                        var provincias = connection.Query(
+                            "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
+                            commandType: CommandType.Text
+                        ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
+
+                        ViewBag.Provincias = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(provincias, "Value", "Text");
+                        ViewBag.Cantones = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                        ViewBag.Distritos = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(new List<object>(), "Value", "Text");
+                    }
+                    return View(model);
+                }
+                
+                // Encriptar ambas contraseñas (ya validamos que no son null)
+                contrasenaActualEncriptada = Encrypt(model.contrasenaActual!);
+                nuevaContrasenaEncriptada = Encrypt(model.nuevaContrasena!);
+            }
 
             int filasAfectadas = 0;
             try
@@ -131,7 +194,23 @@ namespace DaPazWebApp.Controllers
             {
                 // Log del error para depuración
                 Console.WriteLine($"Error al actualizar usuario: {ex.Message}");
-                ViewBag.Error = $"Error al actualizar el perfil: {ex.Message}";
+                
+                // Detectar errores específicos de base de datos
+                string mensajeError = "Error al actualizar el perfil.";
+                
+                if (ex.Message.Contains("UNIQUE") || ex.Message.Contains("duplicate") || 
+                    ex.Message.Contains("correo") || ex.Message.Contains("email"))
+                {
+                    ModelState.AddModelError("correo", "Este correo electrónico ya está registrado por otro usuario");
+                }
+                else if (ex.Message.Contains("contraseña") || ex.Message.Contains("password"))
+                {
+                    ModelState.AddModelError("contrasenaActual", "La contraseña actual no es correcta");
+                }
+                else
+                {
+                    ViewBag.Error = mensajeError + " Por favor, intenta nuevamente.";
+                }
                 
                 // Recargar dropdowns
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))

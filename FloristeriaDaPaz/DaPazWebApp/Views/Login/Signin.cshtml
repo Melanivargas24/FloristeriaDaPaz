@@ -41,8 +41,16 @@
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label asp-for="correo" class="form-label">Correo</label>
-                                <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" autocomplete="email" />
+                                <div class="position-relative">
+                                    <input asp-for="correo" class="form-control" placeholder="correo@ejemplo.com" autocomplete="email" id="correo" />
+                                    <div id="correo-loading" class="spinner-border spinner-border-sm position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%); display: none;" role="status">
+                                        <span class="visually-hidden">Verificando...</span>
+                                    </div>
+                                </div>
                                 <span asp-validation-for="correo" class="text-danger"></span>
+                                <div id="correo-success" class="text-success" style="display: none;">
+                                    <i class="fas fa-check-circle"></i> Correo disponible
+                                </div>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label asp-for="telefono" class="form-label">Teléfono</label>
@@ -77,4 +85,86 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    
+    <script>
+        $(document).ready(function() {
+            var timeoutId;
+            
+            // Función para verificar correo
+            function verificarCorreo() {
+                var correo = $('#correo').val();
+                var correoSpan = $('span[data-valmsg-for="correo"]');
+                var loadingIndicator = $('#correo-loading');
+                var successMessage = $('#correo-success');
+                
+                // Limpiar mensajes previos
+                correoSpan.text('');
+                correoSpan.removeClass('field-validation-error').addClass('field-validation-valid');
+                $('#correo').removeClass('input-validation-error');
+                successMessage.hide();
+                
+                if (correo && correo.length > 0) {
+                    // Verificar formato de correo primero
+                    var emailRegex = /^[^\\s@@]+@@[^\\s@@]+\\.[^\\s@@]+$/;
+                    if (!emailRegex.test(correo)) {
+                        correoSpan.text('Debe ingresar un correo válido');
+                        correoSpan.removeClass('field-validation-valid').addClass('field-validation-error');
+                        $('#correo').addClass('input-validation-error');
+                        return;
+                    }
+                    
+                    // Mostrar indicador de carga
+                    loadingIndicator.show();
+                    
+                    // Verificar si el correo ya existe
+                    $.ajax({
+                        url: '@Url.Action("VerificarCorreoExistente", "Login")',
+                        type: 'POST',
+                        data: { correo: correo },
+                        success: function(response) {
+                            loadingIndicator.hide();
+                            if (response.existe) {
+                                correoSpan.text('Este correo electrónico ya está registrado');
+                                correoSpan.removeClass('field-validation-valid').addClass('field-validation-error');
+                                $('#correo').addClass('input-validation-error');
+                            } else {
+                                successMessage.show();
+                            }
+                        },
+                        error: function() {
+                            loadingIndicator.hide();
+                            // No hacer nada en caso de error de conexión
+                        }
+                    });
+                } else {
+                    loadingIndicator.hide();
+                }
+            }
+            
+            // Validación de correo duplicado en tiempo real (con retraso)
+            $('#correo').on('input', function() {
+                clearTimeout(timeoutId);
+                $('#correo-success').hide();
+                
+                timeoutId = setTimeout(function() {
+                    verificarCorreo();
+                }, 1000); // Esperar 1 segundo después de que el usuario deje de escribir
+            });
+            
+            // Validación inmediata al perder el foco
+            $('#correo').on('blur', function() {
+                clearTimeout(timeoutId);
+                verificarCorreo();
+            });
+            
+            // Validación antes del envío del formulario
+            $('form').on('submit', function(e) {
+                var correoError = $('span[data-valmsg-for="correo"]').hasClass('field-validation-error');
+                if (correoError) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+        });
+    </script>
 }

@@ -28,56 +28,65 @@
                 <tbody>
                     @foreach (var factura in Model.Facturas)
                     {
-                        <tr>
+                        <tr data-factura-id="@factura.idFactura">
                             <td>@factura.idFactura</td>
                             <td>@factura.idUsuario</td>
                             <td>@factura.fechaFactura.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>₡@factura.totalFactura.ToString("N2")</td>
                             <td class="text-center">
-                                <button class="btn-detalle" type="button" data-bs-toggle="collapse" data-bs-target="#detalle-@factura.idFactura" aria-expanded="false" aria-controls="detalle-@factura.idFactura">
+                                <button class="btn-detalle" type="button" data-factura-id="@factura.idFactura">
                                     Ver detalle
                                 </button>
-                            </td>
-                        </tr>
-                        <tr class="collapse" id="detalle-@factura.idFactura">
-                            <td colspan="5">
-                                <div class="p-3 bg-light rounded">
-                                    <h5 class="mb-3">Productos/Arreglos comprados</h5>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Tipo</th>
-                                                <th>Nombre</th>
-                                                <th>Cantidad</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var venta in Model.VentasPorFactura[factura.idFactura])
-                                            {
-                                                <tr>
-                                                    <td>@(venta.idProducto != null ? "Producto" : "Arreglo")</td>
-                                                    <td>@(string.IsNullOrEmpty(venta.NombreProducto) ? "Sin nombre" : venta.NombreProducto)</td>
-                                                    <td>@venta.cantidad</td>
-                                                    <td>₡@venta.total.ToString("N2")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                    
-                                    @* Mostrar información de envío si existe *@
-                                    @if (factura.costoEnvio > 0)
-                                    {
-                                        <div class="mt-3 p-2 bg-info text-white rounded">
-                                            <strong>Envío a domicilio:</strong> ₡@factura.costoEnvio.ToString("N2")
-                                        </div>
-                                    }
-                                </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+        }
+    </div>
+    
+    <!-- Sección de detalles fuera de la tabla de DataTables -->
+    @if (Model.Facturas.Count > 0)
+    {
+        <div id="detalles-container">
+                @foreach (var factura in Model.Facturas)
+                {
+                    <div class="detalle-factura collapse mt-3" id="detalle-@factura.idFactura">
+                        <div class="p-3 bg-light rounded border">
+                            <h5 class="mb-3">Detalle de Factura #@factura.idFactura</h5>
+                            <table class="table table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Nombre</th>
+                                        <th>Cantidad</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var venta in Model.VentasPorFactura[factura.idFactura])
+                                    {
+                                        <tr>
+                                            <td>@(venta.idProducto != null ? "Producto" : "Arreglo")</td>
+                                            <td>@(string.IsNullOrEmpty(venta.NombreProducto) ? "Sin nombre" : venta.NombreProducto)</td>
+                                            <td>@venta.cantidad</td>
+                                            <td>₡@venta.total.ToString("N2")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            
+                            @* Mostrar información de envío si existe *@
+                            @if (factura.costoEnvio > 0)
+                            {
+                                <div class="mt-3 p-2 bg-info text-white rounded">
+                                    <strong>Envío a domicilio:</strong> ₡@factura.costoEnvio.ToString("N2")
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
         }
     </div>
     <div id="resultadoHistorialGlobal"></div>
@@ -87,6 +96,58 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    
+    <style>
+        .detalle-factura {
+            display: none;
+            margin-top: 15px;
+        }
+        
+        .btn-detalle, .btn-ocultar {
+            padding: 4px 12px;
+            border: 1px solid #28a745;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-detalle:hover, .btn-ocultar:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+        
+        .btn-ocultar {
+            background-color: #dc3545;
+            border-color: #dc3545;
+        }
+        
+        .btn-ocultar:hover {
+            background-color: #c82333;
+            border-color: #bd2130;
+        }
+        
+        #detalles-container .p-3 {
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-left: 4px solid #28a745;
+        }
+        
+        #detalles-container .table-sm {
+            margin-bottom: 0;
+        }
+        
+        /* Mejorar la apariencia de la tabla principal */
+        #tablaHistorialGlobal tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* DataTables responsive */
+        .dataTables_wrapper {
+            margin-top: 20px;
+        }
+    </style>
     <script>
         $(document).ready(function () {
             const tabla = $('#tablaHistorialGlobal').DataTable({
@@ -105,6 +166,26 @@
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
                 dom: 'lrtip'
+            });
+
+            // Manejar el toggle de filas de detalle
+            $('#tablaHistorialGlobal tbody').on('click', '.btn-detalle, .btn-ocultar', function() {
+                var facturaId = $(this).data('factura-id');
+                var detalleDiv = $('#detalle-' + facturaId);
+                var button = $(this);
+                
+                // Toggle la visibilidad con animación
+                if (detalleDiv.is(':visible')) {
+                    detalleDiv.slideUp(300, function() {
+                        button.text('Ver detalle');
+                        button.removeClass('btn-ocultar').addClass('btn-detalle');
+                    });
+                } else {
+                    detalleDiv.slideDown(300, function() {
+                        button.text('Ocultar detalle');
+                        button.removeClass('btn-detalle').addClass('btn-ocultar');
+                    });
+                }
             });
         });
     </script>
