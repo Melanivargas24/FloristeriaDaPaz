@@ -113,6 +113,42 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
+            // Validación: verificar que no existan vacaciones superpuestas para el mismo empleado
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var sqlVerificacion = @"
+                    SELECT COUNT(*) 
+                    FROM dbo.Vacacion 
+                    WHERE idEmpleado = @IdEmpleado 
+                    AND (
+                        (@FechaInicio BETWEEN fechaInicio AND fechaFin) OR
+                        (@FechaFin BETWEEN fechaInicio AND fechaFin) OR
+                        (fechaInicio BETWEEN @FechaInicio AND @FechaFin) OR
+                        (fechaFin BETWEEN @FechaInicio AND @FechaFin)
+                    )";
+
+                var vacacionesSuperpuestas = connection.QueryFirstOrDefault<int>(sqlVerificacion, new
+                {
+                    IdEmpleado = model.IdEmpleado,
+                    FechaInicio = model.FechaInicio,
+                    FechaFin = model.FechaFin
+                });
+
+                if (vacacionesSuperpuestas > 0)
+                {
+                    ModelState.AddModelError("", "Ya existe una vacación registrada para este empleado en el rango de fechas seleccionado. Por favor seleccione fechas diferentes.");
+
+                    var sql = "SELECT idEmpleado, nombre, apellido FROM dbo.Empleado WHERE fechaSalida IS NULL";
+
+                    var empleados = connection.Query<EmpleadoModel>(sql)
+                        .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido })
+                        .ToList();
+
+                    ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
+                    return View(model);
+                }
+            }
+
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
                 try
@@ -143,6 +179,72 @@ namespace DaPazWebApp.Controllers
                     ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
                     return View(model);
                 }
+            }
+        }
+
+        [HttpPost]
+        public JsonResult VerificarDisponibilidadFechas(int idEmpleado, DateTime fechaInicio, DateTime fechaFin)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var sqlVerificacion = @"
+                        SELECT COUNT(*) 
+                        FROM dbo.Vacacion 
+                        WHERE idEmpleado = @IdEmpleado 
+                        AND (
+                            (@FechaInicio BETWEEN fechaInicio AND fechaFin) OR
+                            (@FechaFin BETWEEN fechaInicio AND fechaFin) OR
+                            (fechaInicio BETWEEN @FechaInicio AND @FechaFin) OR
+                            (fechaFin BETWEEN @FechaInicio AND @FechaFin)
+                        )";
+
+                    var vacacionesSuperpuestas = connection.QueryFirstOrDefault<int>(sqlVerificacion, new
+                    {
+                        IdEmpleado = idEmpleado,
+                        FechaInicio = fechaInicio,
+                        FechaFin = fechaFin
+                    });
+
+                    // Obtener detalles de las vacaciones superpuestas si existen
+                    if (vacacionesSuperpuestas > 0)
+                    {
+                        var sqlDetalles = @"
+                            SELECT fechaInicio, fechaFin 
+                            FROM dbo.Vacacion 
+                            WHERE idEmpleado = @IdEmpleado 
+                            AND (
+                                (@FechaInicio BETWEEN fechaInicio AND fechaFin) OR
+                                (@FechaFin BETWEEN fechaInicio AND fechaFin) OR
+                                (fechaInicio BETWEEN @FechaInicio AND @FechaFin) OR
+                                (fechaFin BETWEEN @FechaInicio AND @FechaFin)
+                            )";
+
+                        var vacacionesExistentes = connection.Query(sqlDetalles, new
+                        {
+                            IdEmpleado = idEmpleado,
+                            FechaInicio = fechaInicio,
+                            FechaFin = fechaFin
+                        }).ToList();
+
+                        return Json(new 
+                        { 
+                            disponible = false, 
+                            mensaje = "Ya existe una vacación registrada en estas fechas",
+                            vacacionesExistentes = vacacionesExistentes.Select(v => new {
+                                fechaInicio = ((DateTime)v.fechaInicio).ToString("dd/MM/yyyy"),
+                                fechaFin = ((DateTime)v.fechaFin).ToString("dd/MM/yyyy")
+                            })
+                        });
+                    }
+
+                    return Json(new { disponible = true, mensaje = "Fechas disponibles" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { disponible = false, mensaje = "Error al verificar disponibilidad: " + ex.Message });
             }
         }
     }

@@ -16,7 +16,7 @@ namespace DaPazWebApp.Models
         public DateTime FechaLiquidacion { get; set; }
 
         [Required(ErrorMessage = "El monto de liquidación es requerido")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "El monto debe ser mayor a 0")]
+        [Range(0.01, 999999999.99, ErrorMessage = "El monto debe ser mayor a 0 y menor a 1,000,000,000")]
         [Display(Name = "Monto de Liquidación")]
         [DisplayFormat(DataFormatString = "{0:C}", ApplyFormatInEditMode = false)]
         public decimal MontoLiquidacion { get; set; }
@@ -42,7 +42,7 @@ namespace DaPazWebApp.Models
         }
 
         public string MontoFormateado => $"₡{MontoLiquidacion:N2}";
-        public string SalarioBaseFormateado => $"₡{Empleado?.salario:N2 ?? 0:N2}";
+        public string SalarioBaseFormateado => $"₡{(Empleado?.salario ?? 0):N2}";
         public string NombreCompleto => Empleado != null ? $"{Empleado.nombre} {Empleado.apellido}" : "Sin empleado";
     }
 }

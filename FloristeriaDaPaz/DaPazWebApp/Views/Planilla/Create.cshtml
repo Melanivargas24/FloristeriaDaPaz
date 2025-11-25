@@ -11,45 +11,74 @@
 <h2>Registrar Planilla</h2>
 </div>
 
-<form asp-action="Create" method="post">
+<form asp-action="Create" method="post" id="planillaForm">
+    @Html.AntiForgeryToken()
+    <!-- Mostrar errores generales -->
+    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+    
+    <!-- Mostrar advertencias -->
+    @if (ViewBag.WarningMessage != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <strong>Advertencia:</strong> @ViewBag.WarningMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    
+
+
     <div class="mb-3">
-        <label asp-for="IdEmpleado" class="form-label">Empleado</label>
-            <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleados">
-            <option value="">Seleccione un empleado</option>
+        <label asp-for="IdEmpleado" class="form-label">Empleado <span class="text-danger">*</span></label>
+        <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleados" id="empleadoSelect">
+            <option value="">-- Seleccione un empleado --</option>
         </select>
+        <span asp-validation-for="IdEmpleado" class="text-danger"></span>
     </div>
 
         <div class="mb-3">
-            <label for="fechaInicioSemana" class="form-label">Inicio de semana</label>
+            <label for="fechaInicioSemana" class="form-label">Fecha de inicio (Lunes) <span class="text-danger">*</span></label>
             <input type="date" id="fechaInicioSemana" name="FechaInicioSemana" class="form-control" required />
+            <small class="form-text text-muted">Seleccione el lunes que inicia la semana laboral. Las fechas de los demás días se calcularán automáticamente.</small>
         </div>
 
+        <div class="alert alert-info mb-3">
+            <h6><i class="fas fa-clock"></i> Límites de horas laborales</h6>
+            <ul class="mb-0 small">
+                <li><strong>Máximo por día:</strong> 12 horas regulares</li>
+                <li><strong>Máximo por semana:</strong> 48 horas regulares</li>
+                <li><strong>Horas extra:</strong> Máximo 4 por día (se pagan con recargo del 50%)</li>
+            </ul>
+        </div>
+        
         <table class="table">
             <thead>
                 <tr>
                     <th>Día</th>
                     <th>Fecha</th>
-                    <th>Horas regulares</th>
-                    <th>Horas extra</th>
+                    <th>Horas regulares <small class="text-muted">(0-12h)</small></th>
+                    <th>Horas extra <small class="text-muted">(0-4h)</small></th>
                     <th>Porcentaje extra</th>
                 </tr>
             </thead>
             <tbody id="tabla-horas">
                 @{
-                    var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" };
+                    var dias = new[] { "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo" };
                 }
                 @for (int i = 0; i < dias.Length; i++)
                 {
                     <tr>
                         <td>@dias[i]</td>
                         <td>
-                            <input type="date" name="DetallesHoras[@i].Fecha" class="form-control fecha-dia" required readonly />
+                            <input type="text" class="form-control fecha-dia-display" readonly style="background-color: #f8f9fa; cursor: not-allowed;" placeholder="Seleccione fecha de inicio" />
+                            <input type="hidden" name="DetallesHoras[@i].Fecha" class="fecha-dia-hidden" />
                         </td>
                         <td>
-                            <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control" min="0" value="0" />
+                            <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control horas-regulares" min="0" max="12" step="0.5" value="0" />
+                            <small class="text-muted">Máx: 12h/día</small>
                         </td>
                         <td>
-                            <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control" min="0" value="0" />
+                            <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control horas-extra" min="0" max="4" step="0.5" value="0" />
+                            <small class="text-muted">Máx: 4h/día</small>
                         </td>
                         <td>
                             <select name="DetallesHoras[@i].Porcentaje" class="form-control" required>
@@ -63,11 +92,12 @@
 
    
 
-    <input type="hidden" asp-for="SalarioBruto" />
-    <input type="hidden" asp-for="SalarioNeto" />
+    <input type="hidden" asp-for="SalarioBruto" value="0" />
+    <input type="hidden" asp-for="Deducciones" value="0" />
+    <input type="hidden" asp-for="SalarioNeto" value="0" />
 
         <div style="display: flex; justify-content: center; gap: 1rem;">
-            <button type="submit" class="btn-guardar">Guardar</button>
+            <button type="submit" class="btn-guardar" id="btnGuardar">Guardar</button>
             <a asp-action="Index" class="btn-cancelar">Cancelar</a>
         </div>
 
@@ -76,15 +106,265 @@
 
 @section Scripts {
     <script>
-        document.getElementById("fechaInicioSemana").addEventListener("change", function () {
-            const fechaInicio = new Date(this.value);
-            const inputsFecha = document.querySelectorAll(".fecha-dia");
-
-            inputsFecha.forEach((input, index) => {
-                const fecha = new Date(fechaInicio);
-                fecha.setDate(fecha.getDate() + index);
-                input.value = fecha.toISOString().split('T')[0];
+        $(document).ready(function() {
+            // Configurar fecha de inicio por defecto (lunes de esta semana)
+            const hoy = new Date();
+            const diaSemana = hoy.getDay(); // 0 = domingo, 1 = lunes, etc.
+            
+            let lunesActual;
+            if (diaSemana === 1) {
+                // Hoy es lunes
+                lunesActual = new Date(hoy);
+            } else if (diaSemana === 0) {
+                // Hoy es domingo, el lunes es mañana
+                lunesActual = new Date(hoy);
+                lunesActual.setDate(hoy.getDate() + 1);
+            } else {
+                // Buscar el lunes de esta semana (hacia atrás)
+                lunesActual = new Date(hoy);
+                lunesActual.setDate(hoy.getDate() - (diaSemana - 1));
+            }
+            
+            $('#fechaInicioSemana').val(lunesActual.toISOString().split('T')[0]);
+            
+            // Llenar fechas automáticamente
+            llenarFechasSemana();
+            
+            // Forzar recalculo del total varias veces para asegurar que funcione
+            setTimeout(function() {
+                if (window.validarTotalSemanal) {
+                    window.validarTotalSemanal();
+                }
+            }, 100);
+            
+            setTimeout(function() {
+                if (window.validarTotalSemanal) {
+                    window.validarTotalSemanal();
+                }
+            }, 500);
+            
+            // También recalcular cuando el usuario haga clic en cualquier campo
+            $(document).on('focus', 'input[name*="Horas"]', function() {
+                if (window.validarTotalSemanal) {
+                    window.validarTotalSemanal();
+                }
             });
+            
+            // Función para mostrar total de horas semanales
+            window.validarTotalSemanal = function() {
+                var totalHoras = 0;
+                
+                // Recalcular el total sumando todos los campos de horas regulares
+                $('input[name*="HorasRegulares"]').each(function() {
+                    var valor = parseFloat($(this).val()) || 0;
+                    totalHoras += valor;
+                    console.log('Campo:', $(this).attr('name'), 'Valor:', valor, 'Total acumulado:', totalHoras);
+                });
+                
+                console.log('Total final calculado:', totalHoras);
+                
+                var $totalDisplay = $('#total-horas-semanales');
+                if ($totalDisplay.length === 0) {
+                    $('table').after('<div id="total-horas-semanales" class="mt-3 text-center"></div>');
+                    $totalDisplay = $('#total-horas-semanales');
+                }
+                
+                var mensaje = `<strong>Total horas regulares semanales: ${totalHoras.toFixed(1)} / 48 horas</strong>`;
+                
+                if (totalHoras > 48) {
+                    $totalDisplay.attr('class', 'mt-3 text-center alert alert-danger');
+                    mensaje += `<br><small class="text-danger"><i class="fas fa-exclamation-triangle"></i> ¡EXCEDE EL LÍMITE! Sobrepasa por ${(totalHoras - 48).toFixed(1)} horas</small>`;
+                } else if (totalHoras > 40) {
+                    $totalDisplay.attr('class', 'mt-3 text-center alert alert-warning');
+                    mensaje += '<br><small class="text-warning"><i class="fas fa-info-circle"></i> Acercándose al límite semanal</small>';
+                } else if (totalHoras > 0) {
+                    $totalDisplay.attr('class', 'mt-3 text-center alert alert-success');
+                    mensaje += '<br><small class="text-success"><i class="fas fa-check-circle"></i> Dentro del rango permitido</small>';
+                } else {
+                    $totalDisplay.attr('class', 'mt-3 text-center alert alert-info');
+                    mensaje += '<br><small class="text-info"><i class="fas fa-info-circle"></i> No hay horas registradas</small>';
+                }
+                
+                $totalDisplay.html(mensaje);
+            };
+            
+            // Inicializar validación de horas
+            validarTotalSemanal();
         });
+
+        document.getElementById("fechaInicioSemana").addEventListener("change", function() {
+            const fechaSeleccionada = new Date(this.value + 'T00:00:00');
+            const diaSemana = fechaSeleccionada.getDay();
+            
+            if (diaSemana !== 1) { // No es lunes (1 = lunes)
+                const diasHastaLunes = diaSemana === 0 ? 1 : (8 - diaSemana);
+                const lunesCercano = new Date(fechaSeleccionada);
+                lunesCercano.setDate(fechaSeleccionada.getDate() + diasHastaLunes);
+                
+                alert(`La fecha seleccionada no es lunes. Se ajustará automáticamente al lunes más cercano: ${lunesCercano.toLocaleDateString('es-CR')}.`);
+                this.value = lunesCercano.toISOString().split('T')[0];
+            }
+            
+            llenarFechasSemana();
+        });
+        
+        function llenarFechasSemana() {
+            const fechaInicioInput = document.getElementById("fechaInicioSemana");
+            if (!fechaInicioInput.value) return;
+            
+            const fechaInicio = new Date(fechaInicioInput.value + 'T00:00:00');
+            const inputsDisplay = document.querySelectorAll(".fecha-dia-display");
+            const inputsHidden = document.querySelectorAll(".fecha-dia-hidden");
+            const diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+            inputsDisplay.forEach((inputDisplay, index) => {
+                const fecha = new Date(fechaInicio);
+                fecha.setDate(fechaInicio.getDate() + index);
+                
+                // Formatear la fecha para mostrar
+                const dia = diasSemana[index];
+                const fechaStr = fecha.toLocaleDateString('es-CR', {
+                    day: '2-digit',
+                    month: '2-digit', 
+                    year: 'numeric'
+                });
+                
+                inputDisplay.value = `${dia} ${fechaStr}`;
+                
+                // Guardar la fecha en formato ISO en el campo oculto
+                if (inputsHidden[index]) {
+                    inputsHidden[index].value = fecha.toISOString().split('T')[0];
+                }
+            });
+        }
+        
+        // Validación del formulario
+        $('#planillaForm').off('submit').on('submit', function(e) {
+            const empleadoId = $('#empleadoSelect').val();
+            const fechaInicio = $('#fechaInicioSemana').val();
+            
+            // Validaciones básicas
+            if (!empleadoId || empleadoId === '' || empleadoId === '0') {
+                alert('Por favor seleccione un empleado.');
+                return false;
+            }
+            
+            if (!fechaInicio) {
+                alert('Por favor seleccione la fecha de inicio.');
+                return false;
+            }
+            
+            // Asegurar fechas antes del envío
+            llenarFechasSemana();
+            
+            // Validar total de horas antes del envío
+            var totalHorasSemanales = 0;
+            var erroresHoras = false;
+            
+            $('input[name*="HorasRegulares"]').each(function(index) {
+                var horas = parseFloat($(this).val()) || 0;
+                totalHorasSemanales += horas;
+                
+                if (horas > 12) {
+                    erroresHoras = true;
+                    $(this).addClass('is-invalid');
+                }
+            });
+            
+            $('input[name*="HorasExtra"]').each(function(index) {
+                var horasExtra = parseFloat($(this).val()) || 0;
+                
+                if (horasExtra > 4) {
+                    erroresHoras = true;
+                    $(this).addClass('is-invalid');
+                }
+            });
+            
+            if (erroresHoras) {
+                alert('Error: Algunos días exceden los límites permitidos:\n- Máximo 12 horas regulares por día\n- Máximo 4 horas extra por día');
+                return false;
+            }
+            
+            if (totalHorasSemanales > 48) {
+                alert(`Error: El total de horas regulares semanales (${totalHorasSemanales.toFixed(1)}h) excede el máximo legal de 48 horas.\n\nPor favor reduzca las horas antes de continuar.`);
+                return false;
+            }
+            
+            // Si pasa todas las validaciones, proceder con el envío
+            $('button[type="submit"]').prop('disabled', true).text('Guardando...');
+            return true;
+        });
+        
+        // Remover clase de error cuando se seleccione empleado
+        $('#empleadoSelect').change(function() {
+            if ($(this).val() && $(this).val() !== '') {
+                $(this).removeClass('is-invalid');
+            }
+        });
+        
+        // Validación en tiempo real para horas regulares
+        $(document).on('input change blur', 'input[name*="HorasRegulares"]', function() {
+            var valor = parseFloat($(this).val()) || 0;
+            
+            // Validación visual por día
+            if (valor > 12) {
+                $(this).addClass('is-invalid');
+                $(this).siblings('.error-message').remove();
+                $(this).after('<small class="text-danger d-block error-message">Máximo 12 horas por día</small>');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).siblings('.error-message').remove();
+            }
+            
+            // Actualizar el total semanal
+            if (window.validarTotalSemanal) {
+                window.validarTotalSemanal();
+            }
+        });
+        
+        // Validación en tiempo real para horas extra
+        $(document).on('input change blur', 'input[name*="HorasExtra"]', function() {
+            var valor = parseFloat($(this).val()) || 0;
+            
+            if (valor > 4) {
+                $(this).addClass('is-invalid');
+                $(this).siblings('.error-message').remove();
+                $(this).after('<small class="text-danger d-block error-message">Máximo 4 horas extra por día</small>');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).siblings('.error-message').remove();
+            }
+        });
+        
+        // Rehabilitar el botón si hay errores de servidor
+        if ($('.alert-danger').length > 0) {
+            $('button[type="submit"]').prop('disabled', false).text('Guardar');
+        }
     </script>
+    
+    <style>
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        
+        .text-danger {
+            font-size: 0.875em;
+        }
+        
+        #total-horas-semanales {
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        
+        .horas-regulares.is-invalid,
+        .horas-extra.is-invalid {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+        }
+    </style>
 }

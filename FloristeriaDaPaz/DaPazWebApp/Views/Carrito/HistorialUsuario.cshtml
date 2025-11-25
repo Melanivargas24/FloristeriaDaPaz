@@ -27,55 +27,69 @@
                 <tbody>
                     @foreach (var factura in Model.Facturas)
                     {
-                        <tr>
+                        <tr data-factura="@factura.idFactura">
                             <td>@factura.idFactura</td>
                             <td>@factura.fechaFactura.ToString("dd/MM/yyyy HH:mm")</td>
                             <td>₡@factura.totalFactura.ToString("N2")</td>
                             <td class="text-center">
-                                <button class="btn-detalle" type="button" data-bs-toggle="collapse" data-bs-target="#detalle-@factura.idFactura" aria-expanded="false" aria-controls="detalle-@factura.idFactura">
-                                    Ver detalle
+                                <button class="btn-detalle" type="button" data-factura="@factura.idFactura" aria-expanded="false">
+                                    <i class="fas fa-eye"></i> Ver detalle
                                 </button>
-                            </td>
-                        </tr>
-                        <tr class="collapse datatable-ignore" id="detalle-@factura.idFactura">
-                            <td colspan="4">
-                                <div class="p-3 bg-light rounded">
-                                    <h5 class="mb-3">Productos/Arreglos comprados</h5>
-                                    <table class="table table-sm">
-                                        <thead>
-                                            <tr>
-                                                <th>Tipo</th>
-                                                <th>Nombre</th>
-                                                <th>Cantidad</th>
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach (var venta in Model.VentasPorFactura[factura.idFactura])
-                                            {
-                                                <tr>
-                                                    <td>@(venta.idProducto != null ? "Producto" : "Arreglo")</td>
-                                                    <td>@(string.IsNullOrEmpty(venta.NombreProducto) ? "Sin nombre" : venta.NombreProducto)</td>
-                                                    <td>@venta.cantidad</td>
-                                                    <td>₡@venta.total.ToString("N2")</td>
-                                                </tr>
-                                            }
-                                        </tbody>
-                                    </table>
-                                    
-                                    @* Mostrar información de envío si existe *@
-                                    @if (factura.costoEnvio > 0)
-                                    {
-                                        <div class="mt-3 p-2 bg-info text-white rounded">
-                                            <strong>Envío a domicilio:</strong> ₡@factura.costoEnvio.ToString("N2")
-                                        </div>
-                                    }
-                                </div>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
+
+            <!-- Contenedor para los detalles fuera de la tabla -->
+            @foreach (var factura in Model.Facturas)
+            {
+                <div class="detalle-factura" id="detalle-@factura.idFactura" style="display: none;">
+                    <div class="card mt-2 mb-3">
+                        <div class="card-header bg-primary text-white">
+                            <h6 class="mb-0"><i class="fas fa-receipt"></i> Detalle de Factura #@factura.idFactura</h6>
+                        </div>
+                        <div class="card-body p-3">
+                            <h6 class="mb-3">Productos/Arreglos comprados</h6>
+                            <div class="table-responsive">
+                                <table class="table table-sm table-striped">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Tipo</th>
+                                            <th>Nombre</th>
+                                            <th>Cantidad</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var venta in Model.VentasPorFactura[factura.idFactura])
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <span class="badge @(venta.idProducto != null ? "bg-success" : "bg-info")">
+                                                        @(venta.idProducto != null ? "Producto" : "Arreglo")
+                                                    </span>
+                                                </td>
+                                                <td>@(string.IsNullOrEmpty(venta.NombreProducto) ? "Sin nombre" : venta.NombreProducto)</td>
+                                                <td><span class="badge bg-secondary">@venta.cantidad</span></td>
+                                                <td><strong>₡@venta.total.ToString("N2")</strong></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                            @* Mostrar información de envío si existe *@
+                            @if (factura.costoEnvio > 0)
+                            {
+                                <div class="alert alert-info mt-3 mb-0">
+                                    <i class="fas fa-truck"></i> <strong>Envío a domicilio:</strong> ₡@factura.costoEnvio.ToString("N2")
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
         }
     </div>
     <div id="resultadoHistorialUsuario"></div>
@@ -87,7 +101,7 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
-            // Inicializar DataTable solo sobre las filas que no tienen la clase datatable-ignore
+            // Inicializar DataTable con la estructura simplificada
             $('#tablaHistorialUsuario').DataTable({
                 language: {
                     search: "Buscar:",
@@ -104,10 +118,35 @@
                 pageLength: 10,
                 lengthMenu: [[5, 10, 25, 50, -1], [5, 10, 25, 50, "Todos"]],
                 dom: 'lrtip',
-                rowCallback: function(row, data, index){
-                    if($(row).hasClass('datatable-ignore')){
-                        $(row).hide();
+                order: [[1, 'desc']], // Ordenar por fecha descendente
+                responsive: true,
+                columnDefs: [
+                    {
+                        targets: 3, // Columna de detalle
+                        orderable: false,
+                        searchable: false
                     }
+                ]
+            });
+
+            // Manejar el clic en los botones de detalle
+            $(document).on('click', '.btn-detalle', function() {
+                var facturaId = $(this).data('factura');
+                var detalleDiv = $('#detalle-' + facturaId);
+                var isExpanded = $(this).attr('aria-expanded') === 'true';
+                
+                // Ocultar todos los otros detalles primero
+                $('.detalle-factura').not(detalleDiv).slideUp();
+                $('.btn-detalle').not(this).attr('aria-expanded', 'false').html('<i class="fas fa-eye"></i> Ver detalle');
+                
+                if (isExpanded) {
+                    $(this).html('<i class="fas fa-eye"></i> Ver detalle');
+                    detalleDiv.slideUp();
+                    $(this).attr('aria-expanded', 'false');
+                } else {
+                    $(this).html('<i class="fas fa-eye-slash"></i> Ocultar detalle');
+                    detalleDiv.slideDown();
+                    $(this).attr('aria-expanded', 'true');
                 }
             });
         });

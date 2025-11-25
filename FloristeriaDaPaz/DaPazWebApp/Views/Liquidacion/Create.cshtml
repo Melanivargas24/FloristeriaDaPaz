@@ -1,207 +1,120 @@
 ﻿@model DaPazWebApp.Models.Liquidacion
+
 @{
-    ViewData["Title"] = "Nueva Liquidación";
+    ViewData["Title"] = "Registrar Liquidación";
     Layout = "_Layout";
 }
 
-<div class="container" style="margin-top: 35px; margin-bottom: 50px; padding-bottom: 30px;">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow" style="min-height: auto; position: relative; z-index: 1;">
-                <div class="card-header bg-danger text-white">
-                    <h3 class="mb-0">
-                        <i class="fas fa-hand-holding-usd"></i> Registrar Nueva Liquidación
-                    </h3>
-                </div>
-                <div class="card-body" style="padding: 2rem; position: relative;">
-                    <form asp-action="Create" method="post" style="position: relative; z-index: 2;">
-                        <div asp-validation-summary="All" class="alert alert-danger" style="display: none; margin-bottom: 1.5rem;"></div>
+<div class="container" style="margin-top:35px; margin-bottom:135px">
+    <div class="d-flex justify-between align-items-center encabezado-proveedores">
+        <h2>Registrar Liquidación</h2>
+    </div>
 
-                        <!-- Sección Empleado -->
-                        <div class="mb-4" style="margin-bottom: 2rem !important;">
-                            <label asp-for="IdEmpleado" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
-                                <i class="fas fa-user"></i> Empleado
-                            </label>
-                            <select asp-for="IdEmpleado"
-                                    class="form-select"
-                                    asp-items="ViewBag.Empleados"
-                                    id="empleadoSelect"
-                                    style="height: 45px; font-size: 1rem; position: relative; z-index: 10;">
-                                <option value="">-- Seleccione un empleado --</option>
-                            </select>
-                            <span asp-validation-for="IdEmpleado" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
-                        </div>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
 
-                        <!-- Información del Empleado -->
-                        <div class="row" id="infoEmpleado" style="display: none; margin-bottom: 2rem;">
-                            <div class="col-md-12">
-                                <div class="alert alert-info border-0" style="padding: 1.5rem; margin-bottom: 0; position: relative; z-index: 1;">
-                                    <h6 class="alert-heading" style="margin-bottom: 1rem;">
-                                        <i class="fas fa-user-circle"></i> Información del Empleado
-                                    </h6>
-                                    <div class="row">
-                                        <div class="col-md-3" style="margin-bottom: 0.75rem;">
-                                            <strong>Fecha de Ingreso:</strong>
-                                            <div id="fechaIngreso" class="text-muted" style="margin-top: 0.25rem;">-</div>
-                                        </div>
-                                        <div class="col-md-3" style="margin-bottom: 0.75rem;">
-                                            <strong>Años de Servicio:</strong>
-                                            <div id="antiguedad" class="text-primary fw-bold" style="margin-top: 0.25rem;">-</div>
-                                        </div>
-                                        <div class="col-md-3" style="margin-bottom: 0.75rem;">
-                                            <strong>Salario Base:</strong>
-                                            <div id="salarioBase" class="text-success fw-bold" style="margin-top: 0.25rem;">-</div>
-                                        </div>
-                                        <div class="col-md-3" style="margin-bottom: 0.75rem;">
-                                            <strong>Liquidación Sugerida:</strong>
-                                            <div id="liquidacionSugerida" class="text-warning fw-bold" style="margin-top: 0.25rem;">-</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+    <form asp-action="Create" method="post">
 
-                        <!-- Sección Fecha y Monto -->
-                        <div class="row" style="margin-bottom: 2rem;">
-                            <div class="col-md-6">
-                                <div class="mb-4" style="margin-bottom: 1.5rem !important;">
-                                    <label asp-for="FechaLiquidacion" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
-                                        <i class="fas fa-calendar-alt"></i> Fecha de Liquidación
-                                    </label>
-                                    <input asp-for="FechaLiquidacion"
-                                           type="date"
-                                           class="form-control"
-                                           style="height: 45px; font-size: 1rem; position: relative; z-index: 10;" />
-                                    <span asp-validation-for="FechaLiquidacion" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="mb-4" style="margin-bottom: 1.5rem !important;">
-                                    <label asp-for="MontoLiquidacion" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
-                                        <i class="fas fa-dollar-sign"></i> Monto de Liquidación (₡)
-                                    </label>
-                                    <div class="input-group" style="position: relative; z-index: 10;">
-                                        <span class="input-group-text" style="height: 45px; display: flex; align-items: center;">₡</span>
-                                        <input asp-for="MontoLiquidacion"
-                                               type="number"
-                                               step="0.01"
-                                               min="0"
-                                               class="form-control"
-                                               placeholder="0.00"
-                                               style="height: 45px; font-size: 1rem; position: relative; z-index: 10;" />
-                                        <button type="button"
-                                                class="btn btn-outline-warning"
-                                                id="btnUsarSugerencia"
-                                                disabled
-                                                style="height: 45px;
-                                                       padding: 0.5rem 1rem;
-                                                       font-size: 0.9rem;
-                                                       white-space: nowrap;
-                                                       position: relative;
-                                                       z-index: 11;
-                                                       cursor: pointer;">
-                                            <i class="fas fa-lightbulb"></i> Usar Sugerencia
-                                        </button>
-                                    </div>
-                                    <span asp-validation-for="MontoLiquidacion" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
-                                </div>
-                            </div>
-                        </div>
+        <div class="form-group">
+            <label asp-for="IdEmpleado" class="control-label">Empleado <span class="text-danger">*</span></label>
+            <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleados" id="empleadoSelect">
+                <option value="">-- Seleccione un Empleado --</option>
+            </select>
+            <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+        </div>
 
-                        <!-- Sección Motivo -->
-                        <div class="mb-4" style="margin-bottom: 2rem !important;">
-                            <label asp-for="Motivo" class="form-label fw-bold" style="display: block; margin-bottom: 0.75rem;">
-                                <i class="fas fa-comment"></i> Motivo (Opcional)
-                            </label>
-                            <textarea asp-for="Motivo"
-                                      class="form-control"
-                                      rows="3"
-                                      placeholder="Ingrese el motivo de la liquidación (opcional)..."
-                                      style="font-size: 1rem; position: relative; z-index: 10; resize: vertical;"></textarea>
-                            <span asp-validation-for="Motivo" class="text-danger" style="display: block; margin-top: 0.5rem;"></span>
-                        </div>
-
-                        <!-- Resumen de Liquidación -->
-                        <div class="mb-4" id="resumenLiquidacion" style="display: none; margin-bottom: 2rem !important; position: relative; z-index: 1;">
-                            <div class="alert alert-warning border-0" style="padding: 1.5rem; margin-bottom: 0;">
-                                <h6 class="alert-heading" style="margin-bottom: 1rem;">
-                                    <i class="fas fa-clipboard-check"></i> Resumen de Liquidación
-                                </h6>
-                                <div class="row">
-                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
-                                        <strong>Empleado:</strong>
-                                        <div id="empleadoResumen" class="text-muted" style="margin-top: 0.25rem;">-</div>
-                                    </div>
-                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
-                                        <strong>Monto a Liquidar:</strong>
-                                        <div id="montoResumen" class="text-success fw-bold" style="margin-top: 0.25rem;">-</div>
-                                    </div>
-                                    <div class="col-md-4" style="margin-bottom: 0.75rem;">
-                                        <strong>Fecha de Salida:</strong>
-                                        <div id="fechaResumen" class="text-muted" style="margin-top: 0.25rem;">-</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Advertencias Importantes -->
-                        <div class="alert alert-danger border-0 mb-4" style="margin-bottom: 2.5rem !important; padding: 1.5rem; position: relative; z-index: 1;">
-                            <div style="display: flex; align-items: flex-start;">
-                                <i class="fas fa-exclamation-triangle" style="margin-right: 0.75rem; margin-top: 0.25rem; flex-shrink: 0;"></i>
-                                <div>
-                                    <strong>¡Importante!</strong>
-                                    <ul class="mb-0 mt-2" style="padding-left: 1.25rem; margin-bottom: 0 !important;">
-                                        <li style="margin-bottom: 0.5rem;">Al registrar esta liquidación, se actualizará automáticamente la fecha de salida del empleado.</li>
-                                        <li style="margin-bottom: 0.5rem;">Esta acción <strong>no se puede deshacer</strong> fácilmente.</li>
-                                        <li style="margin-bottom: 0.5rem;">Verifique que todos los datos sean correctos antes de continuar.</li>
-                                        <li style="margin-bottom: 0;">El empleado será marcado como inactivo después de la liquidación.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Botones de Acción -->
-                        <div class="d-grid gap-3 d-md-flex justify-content-md-center"
-                             style="margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #dee2e6; position: relative; z-index: 100;">
-                            <button type="submit"
-                                    class="btn btn-danger btn-lg me-md-3"
-                                    id="btnGuardar"
-                                    style="min-height: 50px;
-                                           padding: 0.75rem 2rem;
-                                           font-size: 1.1rem;
-                                           font-weight: 600;
-                                           position: relative;
-                                           z-index: 101;
-                                           cursor: pointer;
-                                           border: none;
-                                           box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <i class="fas fa-save" style="margin-right: 0.5rem;"></i> Procesar Liquidación
-                            </button>
-                            <a asp-action="Index"
-                               class="btn btn-secondary btn-lg"
-                               style="min-height: 50px;
-                                      padding: 0.75rem 2rem;
-                                      font-size: 1.1rem;
-                                      font-weight: 600;
-                                      position: relative;
-                                      z-index: 101;
-                                      cursor: pointer;
-                                      text-decoration: none;
-                                      display: inline-flex;
-                                      align-items: center;
-                                      justify-content: center;
-                                      box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                                <i class="fas fa-times" style="margin-right: 0.5rem;"></i> Cancelar
-                            </a>
-                        </div>
-                    </form>
-                </div>
+        <!-- Información del Empleado -->
+        <div class="form-group" id="infoEmpleado" style="display: none;">
+            <div class="alert alert-info">
+                <strong><i class="fas fa-user-circle"></i> Información del Empleado</strong><br>
+                <small>
+                    <strong>Fecha de Ingreso:</strong> <span id="fechaIngreso">-</span><br>
+                    <strong>Años de Servicio:</strong> <span id="antiguedad">-</span><br>
+                    <strong>Salario Base:</strong> <span id="salarioBase">-</span><br>
+                    <strong>Liquidación Sugerida:</strong> <span id="liquidacionSugerida">-</span>
+                </small>
+                <br>
+                <button type="button" class="btn btn-sm btn-outline-success" id="btnUsarSugerencia" disabled>
+                    <i class="fas fa-magic"></i> Usar Monto Sugerido
+                </button>
             </div>
         </div>
-    </div>
+
+        <div class="form-group">
+            <label asp-for="FechaLiquidacion" class="control-label">Fecha de Liquidación <span class="text-danger">*</span></label>
+            <input asp-for="FechaLiquidacion" type="date" class="form-control" id="FechaLiquidacion" />
+            <small class="form-text text-muted">Fecha en que se efectuará la liquidación</small>
+            <span asp-validation-for="FechaLiquidacion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="MontoLiquidacion" class="control-label">Monto de Liquidación <span class="text-danger">*</span></label>
+            <input asp-for="MontoLiquidacion" type="number" step="0.01" min="0.01" max="999999999.99" class="form-control" id="MontoLiquidacion" placeholder="Ingrese el monto de la liquidación" />
+            <small class="form-text text-muted">Monto total a pagar al empleado</small>
+            <span asp-validation-for="MontoLiquidacion" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Motivo" class="control-label">Motivo de Liquidación (Opcional)</label>
+            <textarea asp-for="Motivo" class="form-control" id="Motivo" rows="3" placeholder="Describa el motivo de la liquidación (opcional)"></textarea>
+            <small class="form-text text-muted">Este campo es opcional pero recomendado para el historial</small>
+            <span asp-validation-for="Motivo" class="text-danger"></span>
+        </div>
+
+        <!-- Resumen de Liquidación -->
+        <div class="form-group" id="resumenLiquidacion" style="display: none;">
+            <div class="alert alert-warning">
+                <strong><i class="fas fa-exclamation-triangle"></i> Resumen de Liquidación</strong><br>
+                <small>
+                    <strong>Empleado:</strong> <span id="empleadoResumen">-</span><br>
+                    <strong>Monto Total:</strong> <span id="montoResumen" class="text-danger">-</span><br>
+                    <strong>Fecha de Salida:</strong> <span id="fechaResumen">-</span>
+                </small>
+            </div>
+        </div>
+
+        <br />
+        
+        <div class="alert alert-danger">
+            <small><i class="fas fa-exclamation-triangle"></i> <strong>ADVERTENCIA:</strong> La liquidación marcará automáticamente al empleado como INACTIVO. Esta acción NO SE PUEDE DESHACER.</small>
+        </div>
+        
+        <div class="alert alert-info">
+            <small><i class="fas fa-info-circle"></i> Los campos marcados con <span class="text-danger">*</span> son obligatorios</small>
+        </div>
+
+        <div class="d-flex justify-content-end gap-2 mt-4">
+            <button type="submit" class="btn-guardar">Guardar</button>
+            <a asp-action="Index" class="btn-cancelar">Cancelar</a>
+        </div>
+    </form>
 </div>
 
 @section Scripts {
+    <style>
+        .alert-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+        
+        .is-invalid {
+            border-color: #dc3545 !important;
+            box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: #80bdff;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+        
+        .focused {
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+    </style>
+    
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(document).ready(function() {
@@ -216,11 +129,15 @@
                 var idEmpleado = $(this).val();
                 var nombreEmpleado = $(this).find('option:selected').text();
 
-                if (idEmpleado) {
+                // Limpiar errores anteriores
+                $('.text-danger').text('');
+                $('#empleadoSelect').removeClass('is-invalid');
+
+                if (idEmpleado && idEmpleado !== '') {
                     // Obtener información del empleado
                     $.get('@Url.Action("GetEmpleadoSalario", "Liquidacion")', { idEmpleado: idEmpleado })
                         .done(function(data) {
-                            if (data) {
+                            if (data && !data.error) {
                                 $('#fechaIngreso').text(data.fechaIngreso);
                                 $('#antiguedad').text(data.antiguedad + ' años');
                                 $('#salarioBase').text('₡' + data.salario.toLocaleString('es-CR', {minimumFractionDigits: 2}));
@@ -233,18 +150,38 @@
                                 // Actualizar resumen
                                 $('#empleadoResumen').text(nombreEmpleado);
                                 actualizarResumen();
+                            } else if (data && data.error) {
+                                // Mostrar error específico del servidor
+                                $('span[data-valmsg-for="IdEmpleado"]').text(data.error);
+                                $('#empleadoSelect').addClass('is-invalid');
+                                ocultarInformacion();
+                            } else {
+                                // Respuesta vacía o inválida
+                                $('span[data-valmsg-for="IdEmpleado"]').text('No se pudo obtener información del empleado');
+                                $('#empleadoSelect').addClass('is-invalid');
+                                ocultarInformacion();
                             }
                         })
-                        .fail(function() {
-                            alert('Error al obtener información del empleado');
+                        .fail(function(xhr, status, error) {
+                            // Error de conexión o servidor
+                            $('span[data-valmsg-for="IdEmpleado"]').text('Error al conectar con el servidor: ' + error);
+                            $('#empleadoSelect').addClass('is-invalid');
+                            ocultarInformacion();
                         });
                 } else {
-                    $('#infoEmpleado').hide();
-                    $('#resumenLiquidacion').hide();
-                    $('#btnUsarSugerencia').prop('disabled', true);
-                    liquidacionSugerida = 0;
+                    // No hay empleado seleccionado
+                    ocultarInformacion();
                 }
             });
+
+            // Función para ocultar información cuando no hay empleado válido
+            function ocultarInformacion() {
+                $('#infoEmpleado').hide();
+                $('#resumenLiquidacion').hide();
+                $('#btnUsarSugerencia').prop('disabled', true);
+                $('#MontoLiquidacion').val('');
+                liquidacionSugerida = 0;
+            }
 
             // Usar liquidación sugerida
             $('#btnUsarSugerencia').click(function() {
@@ -254,6 +191,11 @@
 
             // Actualizar resumen cuando cambie el monto
             $('#MontoLiquidacion').on('input', function() {
+                // Validar que no sea negativo
+                var valor = parseFloat($(this).val());
+                if (valor < 0) {
+                    $(this).val('0');
+                }
                 actualizarResumen();
             });
 
@@ -276,26 +218,63 @@
                 }
             }
 
-            // Confirmación antes de enviar
-            $('#btnGuardar').click(function(e) {
+            // Validación y confirmación antes de enviar
+            $('form').submit(function(e) {
+                var idEmpleado = $('#empleadoSelect').val();
                 var empleadoNombre = $('#empleadoSelect option:selected').text();
                 var monto = $('#MontoLiquidacion').val();
                 var fecha = $('#FechaLiquidacion').val();
 
-                if (empleadoNombre && monto && fecha) {
-                    var confirmMessage = '⚠️ CONFIRMACIÓN DE LIQUIDACIÓN ⚠️\n\n' +
-                                       '¿Está COMPLETAMENTE SEGURO de liquidar a:\n' +
-                                       'Empleado: ' + empleadoNombre + '\n' +
-                                       'Monto: ₡' + parseFloat(monto).toLocaleString('es-CR', {minimumFractionDigits: 2}) + '\n' +
-                                       'Fecha de salida: ' + fecha + '\n\n' +
-                                       '⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER ⚠️\n' +
-                                       'El empleado será marcado como inactivo.\n\n' +
-                                       '¿Desea continuar?';
+                // Validaciones del lado del cliente
+                var errores = [];
 
-                    if (!confirm(confirmMessage)) {
-                        e.preventDefault();
-                    }
+                if (!idEmpleado || idEmpleado === '' || idEmpleado === '0') {
+                    errores.push('Debe seleccionar un empleado');
+                    $('#empleadoSelect').addClass('is-invalid');
                 }
+
+                if (!monto || parseFloat(monto) <= 0) {
+                    errores.push('El monto de liquidación debe ser mayor a 0');
+                    $('#MontoLiquidacion').addClass('is-invalid');
+                }
+
+                if (monto && parseFloat(monto) > 999999999.99) {
+                    errores.push('El monto de liquidación es demasiado alto (máximo: ₡999,999,999.99)');
+                    $('#MontoLiquidacion').addClass('is-invalid');
+                }
+
+                if (!fecha) {
+                    errores.push('Debe seleccionar la fecha de liquidación');
+                    $('#FechaLiquidacion').addClass('is-invalid');
+                }
+
+                if (errores.length > 0) {
+                    e.preventDefault();
+                    alert('Por favor corrija los siguientes errores:\n\n• ' + errores.join('\n• '));
+                    return false;
+                }
+
+                // Si no hay errores, mostrar confirmación
+                var confirmMessage = '⚠️ CONFIRMACIÓN DE LIQUIDACIÓN ⚠️\n\n' +
+                                   '¿Está COMPLETAMENTE SEGURO de liquidar a:\n' +
+                                   'Empleado: ' + empleadoNombre + '\n' +
+                                   'Monto: ₡' + parseFloat(monto).toLocaleString('es-CR', {minimumFractionDigits: 2}) + '\n' +
+                                   'Fecha de salida: ' + fecha + '\n\n' +
+                                   '⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER ⚠️\n' +
+                                   'El empleado será marcado como inactivo.\n\n' +
+                                   '¿Desea continuar?';
+
+                if (!confirm(confirmMessage)) {
+                    e.preventDefault();
+                    return false;
+                }
+
+                return true;
+            });
+
+            // Remover clases de error cuando el usuario corrija los campos
+            $('#empleadoSelect, #MontoLiquidacion, #FechaLiquidacion').on('change input', function() {
+                $(this).removeClass('is-invalid');
             });
 
             // Mostrar errores de validación
@@ -303,20 +282,11 @@
                 $('.alert-danger').show();
             }
 
-            // Mejorar la interacción con los elementos del formulario
-            $('.form-control, .form-select').on('focus', function() {
-                $(this).css('z-index', '20');
+            // Mejorar accesibilidad de campos
+            $('.form-control').on('focus', function() {
+                $(this).addClass('focused');
             }).on('blur', function() {
-                $(this).css('z-index', '10');
-            });
-
-            // Mejorar interacción con el botón de sugerencia
-            $('#btnUsarSugerencia').on('mouseenter', function() {
-                if (!$(this).prop('disabled')) {
-                    $(this).css('z-index', '21');
-                }
-            }).on('mouseleave', function() {
-                $(this).css('z-index', '11');
+                $(this).removeClass('focused');
             });
         });
     </script>

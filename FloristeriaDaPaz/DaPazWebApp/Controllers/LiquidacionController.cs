@@ -85,6 +85,39 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Liquidacion model)
         {
+            // Validación específica para empleado
+            if (model.IdEmpleado <= 0)
+            {
+                ModelState.AddModelError("IdEmpleado", "Debe seleccionar un empleado para crear la liquidación");
+            }
+
+            // Validación adicional para monto
+            if (model.MontoLiquidacion <= 0)
+            {
+                ModelState.AddModelError("MontoLiquidacion", "El monto de liquidación debe ser mayor a 0");
+            }
+
+            if (model.MontoLiquidacion > 999999999.99m)
+            {
+                ModelState.AddModelError("MontoLiquidacion", "El monto de liquidación es demasiado alto");
+            }
+
+            // Validación adicional: verificar que el empleado existe y está activo
+            if (model.IdEmpleado > 0)
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var empleadoExiste = connection.QueryFirstOrDefault<int>(
+                        "SELECT COUNT(*) FROM dbo.Empleado WHERE idEmpleado = @IdEmpleado AND fechaSalida IS NULL",
+                        new { IdEmpleado = model.IdEmpleado });
+
+                    if (empleadoExiste == 0)
+                    {
+                        ModelState.AddModelError("IdEmpleado", "El empleado seleccionado no existe o ya tiene fecha de salida");
+                    }
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
@@ -155,32 +188,51 @@ namespace DaPazWebApp.Controllers
         [HttpGet]
         public IActionResult GetEmpleadoSalario(int idEmpleado)
         {
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            try
             {
-                var sql = @"SELECT e.salario, e.fechaIngreso 
-                           FROM dbo.Empleado e 
-                           WHERE e.idEmpleado = @IdEmpleado";
-
-                var empleado = connection.QueryFirstOrDefault<dynamic>(sql, new { IdEmpleado = idEmpleado });
-
-                if (empleado != null)
+                if (idEmpleado <= 0)
                 {
-                    // Calcular antigüedad en años
-                    var antiguedad = DateTime.Now.Year - ((DateTime)empleado.fechaIngreso).Year;
-
-                    // Calcular liquidación sugerida (ejemplo: salario * años de antigüedad)
-                    var liquidacionSugerida = empleado.salario * antiguedad;
-
-                    return Json(new
-                    {
-                        salario = empleado.salario,
-                        antiguedad = antiguedad,
-                        liquidacionSugerida = liquidacionSugerida,
-                        fechaIngreso = ((DateTime)empleado.fechaIngreso).ToString("dd/MM/yyyy")
-                    });
+                    return Json(new { error = "ID de empleado inválido" });
                 }
 
-                return Json(null);
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var sql = @"SELECT e.salario, e.fechaIngreso 
+                               FROM dbo.Empleado e 
+                               WHERE e.idEmpleado = @IdEmpleado AND e.fechaSalida IS NULL";
+
+                    var empleado = connection.QueryFirstOrDefault<dynamic>(sql, new { IdEmpleado = idEmpleado });
+
+                    if (empleado != null)
+                    {
+                        // Calcular antigüedad en años
+                        var fechaIngreso = (DateTime)empleado.fechaIngreso;
+                        var antiguedad = DateTime.Now.Year - fechaIngreso.Year;
+                        
+                        // Ajustar si aún no ha cumplido años este año
+                        if (DateTime.Now.DayOfYear < fechaIngreso.DayOfYear)
+                        {
+                            antiguedad--;
+                        }
+
+                        // Calcular liquidación sugerida (ejemplo: salario * años de antigüedad)
+                        var liquidacionSugerida = (decimal)empleado.salario * Math.Max(antiguedad, 1);
+
+                        return Json(new
+                        {
+                            salario = empleado.salario,
+                            antiguedad = antiguedad,
+                            liquidacionSugerida = liquidacionSugerida,
+                            fechaIngreso = fechaIngreso.ToString("dd/MM/yyyy")
+                        });
+                    }
+
+                    return Json(new { error = "Empleado no encontrado o ya tiene fecha de salida" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = "Error al obtener información del empleado: " + ex.Message });
             }
         }
     }

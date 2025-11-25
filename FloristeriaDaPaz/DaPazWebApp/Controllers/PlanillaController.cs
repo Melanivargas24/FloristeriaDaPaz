@@ -116,8 +116,87 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Planilla model)
         {
-            if (ModelState.IsValid)
+            // Remover validaciones de propiedades de navegación que no vienen del formulario
+            ModelState.Remove("Empleado");
+            
+            // Remover validaciones de propiedades de navegación en DetallesHoras
+            var keysToRemove = ModelState.Keys.Where(k => k.Contains(".Planilla")).ToList();
+            foreach (var key in keysToRemove)
             {
+                ModelState.Remove(key);
+            }
+            
+
+
+            // Validación específica para empleado
+            if (model.IdEmpleado <= 0)
+            {
+                ModelState.AddModelError("IdEmpleado", "Debe seleccionar un empleado para crear la planilla");
+            }
+
+            if (model.DetallesHoras == null)
+            {
+                ModelState.AddModelError("", "No se recibieron datos de horas. Verifique que los campos estén completos.");
+            }
+            else if (!model.DetallesHoras.Any())
+            {
+                ModelState.AddModelError("", "Debe registrar al menos un día de trabajo");
+            }
+            else
+            {
+                // Validar que hay al menos algunas horas registradas
+                if (model.DetallesHoras.All(d => d.HorasRegulares == 0 && d.HorasExtra == 0))
+                {
+                    ModelState.AddModelError("", "Debe registrar al menos algunas horas (regulares o extra) en los días de la semana");
+                }
+            }
+            
+            // Validaciones adicionales solo si hay detalles de horas
+            if (model.DetallesHoras != null && model.DetallesHoras.Any())
+            {
+                // Validar horas regulares por día (máximo 12 horas)
+                for (int i = 0; i < model.DetallesHoras.Count; i++)
+                {
+                    var detalle = model.DetallesHoras[i];
+                    if (detalle.HorasRegulares > 12)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasRegulares", "Las horas regulares no pueden exceder 12 horas por día");
+                    }
+                    if (detalle.HorasRegulares < 0)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasRegulares", "Las horas regulares no pueden ser negativas");
+                    }
+                    if (detalle.HorasExtra > 4)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasExtra", "Las horas extra no pueden exceder 4 horas por día");
+                    }
+                    if (detalle.HorasExtra < 0)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasExtra", "Las horas extra no pueden ser negativas");
+                    }
+                }
+
+                // Validar total de horas regulares por semana (máximo 48 horas)
+                var totalHorasRegulares = model.DetallesHoras.Sum(d => d.HorasRegulares);
+                if (totalHorasRegulares > 48)
+                {
+                    ModelState.AddModelError("", $"El total de horas regulares por semana no puede exceder 48 horas. Total actual: {totalHorasRegulares} horas");
+                    ViewBag.WarningMessage = $"⚠️ Atención: Se detectó un exceso de {totalHorasRegulares - 48} horas sobre el límite legal de 48 horas semanales.";
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+
+                
+                // Recargar empleados si hay errores
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var empleados = connection.Query<EmpleadoModel>("SP_ConsultarEmpleados")
+                        .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido }).ToList();
+
+                    ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
+                }
                 return View(model);
             }
 
@@ -128,6 +207,7 @@ namespace DaPazWebApp.Controllers
                 {
                     try
                     {
+                        
                         var parameters = new DynamicParameters();
                         parameters.Add("@IdEmpleado", model.IdEmpleado);
                         parameters.Add("@FechaPlanilla", DateTime.Today);
@@ -139,10 +219,11 @@ namespace DaPazWebApp.Controllers
                         connection.Execute("SP_CrearPlanilla", parameters, transaction, commandType: CommandType.StoredProcedure);
 
                         int idPlanilla = parameters.Get<int>("@IdPlanilla");
-
-                        foreach (var detalle in model.DetallesHoras)
+                        if (model.DetallesHoras != null)
                         {
-                            connection.Execute("SP_AgregarDetalleHoras",
+                            foreach (var detalle in model.DetallesHoras)
+                            {
+                                connection.Execute("SP_AgregarDetalleHoras",
                                 new
                                 {
                                     IdPlanilla = idPlanilla,
@@ -153,6 +234,7 @@ namespace DaPazWebApp.Controllers
                                 },
                                 transaction,
                                 commandType: CommandType.StoredProcedure);
+                            }
                         }
 
                         connection.Execute("SP_CalcularSalarioPlanilla",
@@ -161,12 +243,23 @@ namespace DaPazWebApp.Controllers
                             commandType: CommandType.StoredProcedure);
 
                         transaction.Commit();
+                        
+                        TempData["SuccessMessage"] = "Planilla creada exitosamente";
                         return RedirectToAction("Index");
                     }
-                    catch
+                    catch (Exception ex)
                     {
                         transaction.Rollback();
-                        throw;
+                        
+                        // Log del error para debugging
+                        ModelState.AddModelError("", $"Error al crear la planilla: {ex.Message}");
+                        
+                        // Recargar empleados para mostrar la vista con error
+                        var empleados = connection.Query<EmpleadoModel>("SP_ConsultarEmpleados")
+                            .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido }).ToList();
+
+                        ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
+                        return View(model);
                     }
                 }
             }
