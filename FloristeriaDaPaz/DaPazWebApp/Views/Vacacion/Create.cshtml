@@ -37,14 +37,27 @@
             <span asp-validation-for="FechaFin" class="text-danger"></span>
         </div>
 
+        <!-- Información de Días Disponibles -->
+        <div class="form-group" id="infoVacaciones" style="display: none;">
+            <div class="alert alert-secondary">
+                <strong><i class="fas fa-calendar-alt"></i> Información de Vacaciones</strong><br>
+                <small>
+                    <strong>Empleado:</strong> <span id="empleadoSeleccionado">-</span><br>
+                    <strong>Año:</strong> <span id="anioVacacion">-</span><br>
+                    <strong>Días usados:</strong> <span id="diasUsados">-</span> / 12<br>
+                    <strong>Días disponibles:</strong> <span id="diasDisponibles">-</span>
+                </small>
+            </div>
+        </div>
+
         <!-- Resumen de Vacación -->
         <div class="form-group" id="resumenVacacion" style="display: none;">
             <div class="alert alert-info">
-                <strong><i class="fas fa-info-circle"></i> Resumen de Vacación</strong><br>
+                <strong><i class="fas fa-info-circle"></i> Resumen de Vacación Solicitada</strong><br>
                 <small>
-                    <strong>Empleado:</strong> <span id="empleadoSeleccionado">-</span><br>
                     <strong>Duración:</strong> <span id="duracionVacacion">-</span><br>
-                    <strong>Período:</strong> <span id="periodoVacacion">-</span>
+                    <strong>Período:</strong> <span id="periodoVacacion">-</span><br>
+                    <strong>Estado:</strong> <span id="estadoSolicitud">-</span>
                 </small>
             </div>
         </div>
@@ -104,6 +117,34 @@
                 return 0;
             }
 
+            // Función para obtener información de días disponibles
+            function obtenerDiasDisponibles() {
+                var empleado = $('#empleadoSelect').val();
+                var fechaInicio = $('#fechaInicio').val();
+                
+                if (empleado && fechaInicio) {
+                    var anio = new Date(fechaInicio).getFullYear();
+                    $('#anioVacacion').text(anio);
+                    
+                    $.ajax({
+                        url: '@Url.Action("ObtenerDiasDisponibles", "Vacacion")',
+                        type: 'GET',
+                        data: {
+                            idEmpleado: empleado,
+                            anio: anio
+                        },
+                        success: function(response) {
+                            $('#diasUsados').text(response.diasUsados);
+                            $('#diasDisponibles').text(response.diasDisponibles);
+                            $('#infoVacaciones').show();
+                        },
+                        error: function() {
+                            console.log('Error al obtener información de días disponibles');
+                        }
+                    });
+                }
+            }
+
             // Función para verificar disponibilidad de fechas
             function verificarDisponibilidad() {
                 var empleado = $('#empleadoSelect').val();
@@ -114,6 +155,8 @@
                 $('#alertaDisponibilidad').remove();
                 
                 if (empleado && fechaInicio && fechaFin) {
+                    var dias = calcularDias();
+                    
                     $.ajax({
                         url: '@Url.Action("VerificarDisponibilidadFechas", "Vacacion")',
                         type: 'POST',
@@ -123,8 +166,14 @@
                             fechaFin: fechaFin
                         },
                         success: function(response) {
+                            // Actualizar información de días disponibles
+                            if (response.diasUsados !== undefined) {
+                                $('#diasUsados').text(response.diasUsados);
+                                $('#diasDisponibles').text(response.diasDisponibles);
+                            }
+                            
                             if (!response.disponible) {
-                                var mensaje = '<div id="alertaDisponibilidad" class="alert alert-danger mt-3"><i class="fas fa-exclamation-triangle"></i> <strong>Fechas no disponibles:</strong> ' + response.mensaje;
+                                var mensaje = '<div id="alertaDisponibilidad" class="alert alert-danger mt-3"><i class="fas fa-exclamation-triangle"></i> <strong>Solicitud no válida:</strong> ' + response.mensaje;
                                 
                                 if (response.vacacionesExistentes && response.vacacionesExistentes.length > 0) {
                                     mensaje += '<br><small>Vacaciones existentes: ';
@@ -135,15 +184,21 @@
                                 }
                                 mensaje += '</div>';
                                 
+                                $('#estadoSolicitud').text('❌ No válida').css('color', 'red');
                                 $('#resumenVacacion').after(mensaje);
                             } else {
-                                var mensaje = '<div id="alertaDisponibilidad" class="alert alert-success mt-3"><i class="fas fa-check-circle"></i> <strong>Fechas disponibles</strong> - Puede proceder con el registro.</div>';
-                                $('#resumenVacacion').after(mensaje);
+                                $('#estadoSolicitud').text('✅ Válida').css('color', 'green');
                                 
-                                // Ocultar mensaje de éxito después de 3 segundos
-                                setTimeout(function() {
-                                    $('#alertaDisponibilidad').fadeOut();
-                                }, 3000);
+                                // Mostrar mensaje de éxito solo si es necesario
+                                if (dias <= response.diasDisponibles) {
+                                    var mensaje = '<div id="alertaDisponibilidad" class="alert alert-success mt-3"><i class="fas fa-check-circle"></i> <strong>Solicitud válida</strong> - Puede proceder con el registro.</div>';
+                                    $('#resumenVacacion').after(mensaje);
+                                    
+                                    // Ocultar mensaje de éxito después de 3 segundos
+                                    setTimeout(function() {
+                                        $('#alertaDisponibilidad').fadeOut();
+                                    }, 3000);
+                                }
                             }
                         },
                         error: function() {
@@ -166,6 +221,7 @@
                         $('#fechaFin').val('');
                     }
                 }
+                obtenerDiasDisponibles();
                 calcularDias();
                 mostrarResumen();
                 verificarDisponibilidad();
@@ -180,6 +236,7 @@
             $('#empleadoSelect').change(function() {
                 var empleadoTexto = $(this).find('option:selected').text();
                 $('#empleadoSeleccionado').text(empleadoTexto);
+                obtenerDiasDisponibles();
                 mostrarResumen();
                 verificarDisponibilidad();
             });
@@ -193,6 +250,7 @@
                     $('#resumenVacacion').show();
                 } else {
                     $('#resumenVacacion').hide();
+                    $('#estadoSolicitud').text('-');
                 }
             }
 

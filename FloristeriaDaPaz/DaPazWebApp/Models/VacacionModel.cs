@@ -18,9 +18,12 @@ namespace DaPazWebApp.Models
         [DataType(DataType.Date)]
         [Display(Name = "Fecha de Fin")]
         public DateTime FechaFin { get; set; }
+        
+        // Validación personalizada para el rango de días
+        public bool EsRangoValido => DiasVacacion <= 12 && DiasVacacion > 0;
 
         // Propiedades de navegación
-        public EmpleadoModel? Empleado { get; set; }
+        public EmpleadoModel Empleado { get; set; }
 
         // Propiedades calculadas
         public int DiasVacacion => (FechaFin - FechaInicio).Days + 1;

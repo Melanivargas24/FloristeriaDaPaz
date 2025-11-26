@@ -1,4 +1,6 @@
-﻿﻿namespace DaPazWebApp.Models
+﻿﻿using System.ComponentModel.DataAnnotations;
+
+namespace DaPazWebApp.Models
 {
     public class Arreglo
     {
@@ -8,6 +10,7 @@
 
         public string descripcion { get; set; }
 
+        [Range(1, int.MaxValue, ErrorMessage = "El precio debe ser mayor a 0")]
         public int precio { get; set; }
 
         public string? imagen { get; set; }

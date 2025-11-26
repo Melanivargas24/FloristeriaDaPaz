@@ -168,6 +168,12 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult EditarE(EmpleadoModel model)
         {
+            // Validación adicional para prevenir valores negativos
+            if (model.salario <= 0)
+            {
+                ModelState.AddModelError("salario", "El salario debe ser mayor a 0");
+            }
+            
             if (!ModelState.IsValid)
                 return View(model);
 

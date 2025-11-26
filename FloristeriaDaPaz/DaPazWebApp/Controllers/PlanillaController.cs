@@ -151,6 +151,22 @@ namespace DaPazWebApp.Controllers
                 }
             }
             
+            // Validaciones de montos negativos
+            if (model.SalarioBruto < 0)
+            {
+                ModelState.AddModelError("SalarioBruto", "El salario bruto no puede ser negativo");
+            }
+            
+            if (model.Deducciones < 0)
+            {
+                ModelState.AddModelError("Deducciones", "Las deducciones no pueden ser negativas");
+            }
+            
+            if (model.SalarioNeto < 0)
+            {
+                ModelState.AddModelError("SalarioNeto", "El salario neto no puede ser negativo");
+            }
+            
             // Validaciones adicionales solo si hay detalles de horas
             if (model.DetallesHoras != null && model.DetallesHoras.Any())
             {
@@ -158,18 +174,29 @@ namespace DaPazWebApp.Controllers
                 for (int i = 0; i < model.DetallesHoras.Count; i++)
                 {
                     var detalle = model.DetallesHoras[i];
-                    if (detalle.HorasRegulares > 12)
-                    {
-                        ModelState.AddModelError($"DetallesHoras[{i}].HorasRegulares", "Las horas regulares no pueden exceder 12 horas por día");
-                    }
+                    
+                    // Validar que las horas no sean negativas
                     if (detalle.HorasRegulares < 0)
                     {
                         ModelState.AddModelError($"DetallesHoras[{i}].HorasRegulares", "Las horas regulares no pueden ser negativas");
                     }
+                    
+                    if (detalle.HorasExtra < 0)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasExtra", "Las horas extra no pueden ser negativas");
+                    }
+                    
+                    // Validar límites máximos
+                    if (detalle.HorasRegulares > 12)
+                    {
+                        ModelState.AddModelError($"DetallesHoras[{i}].HorasRegulares", "Las horas regulares no pueden exceder 12 horas por día");
+                    }
+                    
                     if (detalle.HorasExtra > 4)
                     {
                         ModelState.AddModelError($"DetallesHoras[{i}].HorasExtra", "Las horas extra no pueden exceder 4 horas por día");
                     }
+                    
                     if (detalle.HorasExtra < 0)
                     {
                         ModelState.AddModelError($"DetallesHoras[{i}].HorasExtra", "Las horas extra no pueden ser negativas");
@@ -262,6 +289,40 @@ namespace DaPazWebApp.Controllers
                         return View(model);
                     }
                 }
+            }
+        }
+
+        [HttpGet]
+        public IActionResult GetEmpleadoSalario(int idEmpleado)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var sql = "SELECT salario FROM dbo.Empleado WHERE idEmpleado = @IdEmpleado AND fechaSalida IS NULL";
+                    var salario = connection.QueryFirstOrDefault<decimal?>(sql, new { IdEmpleado = idEmpleado });
+
+                    if (salario.HasValue)
+                    {
+                        // El salario ingresado es por hora
+                        var precioPorHora = salario.Value;
+                        var precioHoraExtra = Math.Round(precioPorHora * 1.5m, 2); // 50% de recargo
+                        
+                        return Json(new
+                        {
+                            salario = salario.Value,
+                            precioPorHora = precioPorHora,
+                            precioHoraExtra = precioHoraExtra,
+                            success = true
+                        });
+                    }
+                    
+                    return Json(new { success = false, message = "Empleado no encontrado" });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Error al obtener salario: " + ex.Message });
             }
         }
 

@@ -27,7 +27,7 @@
             <label asp-for="Precio" class="control-label">Precio</label>
             <div class="input-group">
                 <span class="input-group-text">₡</span>
-                <input asp-for="Precio" class="form-control" />
+                <input asp-for="Precio" type="number" class="form-control" min="1" onkeydown="prevenirNegativos(event)" oninput="validarPositivo(this)" />
             </div>
             <span asp-validation-for="Precio" class="text-danger"></span>
         </div>
@@ -36,7 +36,7 @@
             <label asp-for="PrecioCompra" class="control-label">Precio de Compra</label>
             <div class="input-group">
                 <span class="input-group-text">₡</span>
-                <input asp-for="PrecioCompra" class="form-control" />
+                <input asp-for="PrecioCompra" type="number" class="form-control" min="1" onkeydown="prevenirNegativos(event)" oninput="validarPositivo(this)" />
             </div>
             <span asp-validation-for="PrecioCompra" class="text-danger"></span>
         </div>
@@ -44,7 +44,7 @@
 
         <div class="form-group">
             <label asp-for="Stock" class="control-label">Stock</label>
-            <input asp-for="Stock" class="form-control" />
+            <input asp-for="Stock" type="number" class="form-control" min="0" onkeydown="prevenirNegativos(event)" oninput="validarPositivoOCero(this)" />
             <span asp-validation-for="Stock" class="text-danger"></span>
         </div>
 
@@ -117,6 +117,28 @@
                     $('#subcategoriaSelect').empty().append('<option value="">-- Seleccione una subcategoría --</option>');
                 }
             });
+        }
+
+        // Función para prevenir números negativos
+        function prevenirNegativos(event) {
+            if (event.key === '-' || event.key === 'e' || event.key === 'E' || event.key === '+') {
+                event.preventDefault();
+                return false;
+            }
+        }
+
+        // Función para validar que el número sea positivo
+        function validarPositivo(input) {
+            if (input.value < 0) {
+                input.value = '';
+            }
+        }
+
+        // Función para validar que el número sea positivo o cero (para stock)
+        function validarPositivoOCero(input) {
+            if (input.value < 0) {
+                input.value = '';
+            }
         }
 
         $(document).ready(function () {

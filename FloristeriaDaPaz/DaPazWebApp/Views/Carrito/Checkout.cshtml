@@ -64,8 +64,8 @@
                                     <label for="tipoEntrega" class="control-label fw-bold">Tipo de Entrega</label>
                                     <select id="tipoEntrega" name="tipoEntrega" class="form-control">
                                         <option value="">-- Seleccione el tipo de entrega --</option>
-                                        <option value="domicilio">Envío a domicilio</option>
-                                        <option value="retiro">Retiro en tienda</option>
+                                        <option value="domicilio" selected="@(ViewBag.TipoEntregaSeleccionado == "domicilio")">Envío a domicilio</option>
+                                        <option value="retiro" selected="@(ViewBag.TipoEntregaSeleccionado == "retiro")">Retiro en tienda</option>
                                     </select>
                                     <span class="text-danger" id="tipoEntregaError" style="display:none;">Seleccione el tipo de entrega.</span>
                                     <span class="text-danger" id="ubicacionError" style="display:none;">
@@ -79,8 +79,8 @@
                                     <label for="metodoPago" class="control-label fw-bold">Método de Pago</label>
                                     <select id="metodoPago" name="metodoPago" class="form-control">
                                         <option value="">-- Seleccione el método de pago --</option>
-                                        <option value="efectivo">Efectivo</option>
-                                        <option value="sinpe">SINPE Móvil</option>
+                                        <option value="efectivo" selected="@(ViewBag.MetodoPagoSeleccionado == "efectivo")">Efectivo</option>
+                                        <option value="sinpe" selected="@(ViewBag.MetodoPagoSeleccionado == "sinpe")">SINPE Móvil</option>
                                     </select>
                                     <span class="text-danger" id="metodoPagoError" style="display:none;">Seleccione el método de pago.</span>
                                 </div>

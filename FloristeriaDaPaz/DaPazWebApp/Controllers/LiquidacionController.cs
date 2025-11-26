@@ -205,25 +205,16 @@ namespace DaPazWebApp.Controllers
 
                     if (empleado != null)
                     {
-                        // Calcular antigüedad en años
                         var fechaIngreso = (DateTime)empleado.fechaIngreso;
-                        var antiguedad = DateTime.Now.Year - fechaIngreso.Year;
-                        
-                        // Ajustar si aún no ha cumplido años este año
-                        if (DateTime.Now.DayOfYear < fechaIngreso.DayOfYear)
-                        {
-                            antiguedad--;
-                        }
-
-                        // Calcular liquidación sugerida (ejemplo: salario * años de antigüedad)
-                        var liquidacionSugerida = (decimal)empleado.salario * Math.Max(antiguedad, 1);
+                        var diasTrabajados = (DateTime.Now - fechaIngreso).Days;
+                        var añosTrabajados = diasTrabajados / 365.25;
 
                         return Json(new
                         {
                             salario = empleado.salario,
-                            antiguedad = antiguedad,
-                            liquidacionSugerida = liquidacionSugerida,
-                            fechaIngreso = fechaIngreso.ToString("dd/MM/yyyy")
+                            fechaIngreso = fechaIngreso.ToString("dd/MM/yyyy"),
+                            diasTrabajados = diasTrabajados,
+                            añosTrabajados = Math.Round((decimal)añosTrabajados, 2)
                         });
                     }
 

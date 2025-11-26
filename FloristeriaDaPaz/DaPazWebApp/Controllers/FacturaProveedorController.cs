@@ -39,7 +39,9 @@ namespace DaPazWebApp.Controllers
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
-                var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores", commandType: CommandType.StoredProcedure).ToList();
+                var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores", commandType: CommandType.StoredProcedure)
+                    .Where(p => p.estado == "Activo")
+                    .ToList();
                 var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
                 ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
                 ViewBag.Productos = productos;
@@ -54,12 +56,45 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Crear(FacturaProveedorModel model)
         {
+            // Validar que el proveedor esté activo
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+            {
+                var proveedor = connection.QueryFirstOrDefault<ProveedorModel>(
+                    "SELECT * FROM Proveedor WHERE IdProveedor = @IdProveedor",
+                    new { IdProveedor = model.IdProveedor },
+                    commandType: CommandType.Text
+                );
+                
+                if (proveedor == null || proveedor.estado != "Activo")
+                {
+                    ModelState.AddModelError("IdProveedor", "El proveedor seleccionado no está activo o no existe");
+                }
+            }
+
+            // Validaciones adicionales para precios negativos
+            if (model.Detalles != null)
+            {
+                for (int i = 0; i < model.Detalles.Count; i++)
+                {
+                    if (model.Detalles[i].PrecioUnitario <= 0)
+                    {
+                        ModelState.AddModelError($"Detalles[{i}].PrecioUnitario", "El precio unitario debe ser mayor a 0");
+                    }
+                    if (model.Detalles[i].PrecioVenta <= 0)
+                    {
+                        ModelState.AddModelError($"Detalles[{i}].PrecioVenta", "El precio de venta debe ser mayor a 0");
+                    }
+                }
+            }
+
             // No forzar cultura, usar la que tenga el sistema o usuario
             if (!ModelState.IsValid || model.Detalles == null || model.Detalles.Count == 0)
             {
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
-                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores", commandType: CommandType.StoredProcedure).ToList();
+                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores", commandType: CommandType.StoredProcedure)
+                        .Where(p => p.estado == "Activo")
+                        .ToList();
                     var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
                     ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
                     ViewBag.Productos = productos;

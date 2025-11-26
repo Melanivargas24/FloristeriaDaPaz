@@ -33,7 +33,6 @@
                 <th>Productos</th>
                 <th>Precio</th>
                 <th>Imagen</th>
-                <th>Estado</th>
                 <th>Categoría</th>
                 <th>Acciones</th>
             </tr>
@@ -63,7 +62,6 @@
                     <td>
                         <img src="@arreglo.imagen" alt="Imagen" style="max-height: 80px; max-width: 80px;" />
                     </td>
-                    <td>@arreglo.estado</td>
                     <td>@arreglo.nombreCategoriaArreglo</td>
                     <td class="text-center">
                         <a asp-controller="Arreglo" asp-action="Edit" asp-route-id="@arreglo.idArreglo" class="btn btn-sm btn-edit">

@@ -31,14 +31,9 @@
                 <strong><i class="fas fa-user-circle"></i> Información del Empleado</strong><br>
                 <small>
                     <strong>Fecha de Ingreso:</strong> <span id="fechaIngreso">-</span><br>
-                    <strong>Años de Servicio:</strong> <span id="antiguedad">-</span><br>
-                    <strong>Salario Base:</strong> <span id="salarioBase">-</span><br>
-                    <strong>Liquidación Sugerida:</strong> <span id="liquidacionSugerida">-</span>
+                    <strong>Años de Servicio:</strong> <span id="antiguedad">-</span> años<br>
+                    <strong>Salario por Hora:</strong> ₡<span id="salarioBase">-</span>
                 </small>
-                <br>
-                <button type="button" class="btn btn-sm btn-outline-success" id="btnUsarSugerencia" disabled>
-                    <i class="fas fa-magic"></i> Usar Monto Sugerido
-                </button>
             </div>
         </div>
 
@@ -118,8 +113,6 @@
     <partial name="_ValidationScriptsPartial" />
     <script>
         $(document).ready(function() {
-            var liquidacionSugerida = 0;
-
             // Establecer fecha por defecto como hoy
             var today = new Date().toISOString().split('T')[0];
             $('#FechaLiquidacion').val(today);
@@ -139,12 +132,9 @@
                         .done(function(data) {
                             if (data && !data.error) {
                                 $('#fechaIngreso').text(data.fechaIngreso);
-                                $('#antiguedad').text(data.antiguedad + ' años');
-                                $('#salarioBase').text('₡' + data.salario.toLocaleString('es-CR', {minimumFractionDigits: 2}));
-                                $('#liquidacionSugerida').text('₡' + data.liquidacionSugerida.toLocaleString('es-CR', {minimumFractionDigits: 2}));
+                                $('#antiguedad').text(data.añosTrabajados);
+                                $('#salarioBase').text(data.salario.toLocaleString('es-CR', {minimumFractionDigits: 2}));
 
-                                liquidacionSugerida = data.liquidacionSugerida;
-                                $('#btnUsarSugerencia').prop('disabled', false);
                                 $('#infoEmpleado').show();
 
                                 // Actualizar resumen
@@ -178,25 +168,28 @@
             function ocultarInformacion() {
                 $('#infoEmpleado').hide();
                 $('#resumenLiquidacion').hide();
-                $('#btnUsarSugerencia').prop('disabled', true);
                 $('#MontoLiquidacion').val('');
-                liquidacionSugerida = 0;
             }
 
-            // Usar liquidación sugerida
-            $('#btnUsarSugerencia').click(function() {
-                $('#MontoLiquidacion').val(liquidacionSugerida.toFixed(2));
-                actualizarResumen();
-            });
+            // Código simplificado - sin sugerencias automáticas
 
             // Actualizar resumen cuando cambie el monto
             $('#MontoLiquidacion').on('input', function() {
                 // Validar que no sea negativo
                 var valor = parseFloat($(this).val());
-                if (valor < 0) {
-                    $(this).val('0');
+                if (valor < 0 || isNaN(valor)) {
+                    $(this).val('');
                 }
                 actualizarResumen();
+            });
+            
+            // Prevenir entrada de caracteres inválidos en monto
+            $('#MontoLiquidacion').on('keydown', function(e) {
+                var char = String.fromCharCode(e.which);
+                if (char === '-' || char === '+' || char === 'e' || char === 'E') {
+                    e.preventDefault();
+                    return false;
+                }
             });
 
             // Actualizar resumen cuando cambie la fecha

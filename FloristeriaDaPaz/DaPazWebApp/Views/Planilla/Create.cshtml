@@ -58,6 +58,7 @@
                     <th>Horas regulares <small class="text-muted">(0-12h)</small></th>
                     <th>Horas extra <small class="text-muted">(0-4h)</small></th>
                     <th>Porcentaje extra</th>
+                    <th>Total Día</th>
                 </tr>
             </thead>
             <tbody id="tabla-horas">
@@ -73,11 +74,11 @@
                             <input type="hidden" name="DetallesHoras[@i].Fecha" class="fecha-dia-hidden" />
                         </td>
                         <td>
-                            <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control horas-regulares" min="0" max="12" step="0.5" value="0" />
+                            <input type="number" name="DetallesHoras[@i].HorasRegulares" class="form-control horas-regulares" min="0" max="12" step="0.5" value="0" onkeydown="prevenirNegativos(event)" />
                             <small class="text-muted">Máx: 12h/día</small>
                         </td>
                         <td>
-                            <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control horas-extra" min="0" max="4" step="0.5" value="0" />
+                            <input type="number" name="DetallesHoras[@i].HorasExtra" class="form-control horas-extra" min="0" max="4" step="0.5" value="0" onkeydown="prevenirNegativos(event)" />
                             <small class="text-muted">Máx: 4h/día</small>
                         </td>
                         <td>
@@ -302,7 +303,7 @@
             }
         });
         
-        // Validación en tiempo real para horas regulares
+        // Validación en tiempo real para horas regulares (integrada con cálculos)
         $(document).on('input change blur', 'input[name*="HorasRegulares"]', function() {
             var valor = parseFloat($(this).val()) || 0;
             
@@ -316,12 +317,138 @@
                 $(this).siblings('.error-message').remove();
             }
             
-            // Actualizar el total semanal
+            // Actualizar el total semanal de horas
             if (window.validarTotalSemanal) {
                 window.validarTotalSemanal();
             }
+            
+            // Recalcular totales monetarios cuando cambien las horas
+            if (window.precioPorHora > 0) {
+                calcularTotalesDiarios();
+            }
         });
         
+            // Variables para precios por hora
+        window.precioPorHora = 0;
+        window.precioHoraExtra = 0;
+        
+        // Obtener salario cuando se selecciona empleado
+        $('#empleadoSelect').change(function() {
+            var idEmpleado = $(this).val();
+            if (idEmpleado) {
+                $.get('@Url.Action("GetEmpleadoSalario", "Planilla")', { idEmpleado: idEmpleado })
+                    .done(function(response) {
+                        if (response.success) {
+                            window.precioPorHora = response.precioPorHora;
+                            window.precioHoraExtra = response.precioHoraExtra;
+                            
+                            // Mostrar información de salario
+                            mostrarInfoSalario(response);
+                            
+                            // Recalcular totales existentes
+                            calcularTotalesDiarios();
+                        }
+                    })
+                    .fail(function() {
+                        console.error('Error al obtener salario del empleado');
+                    });
+            } else {
+                window.precioPorHora = 0;
+                window.precioHoraExtra = 0;
+                $('#info-salario').hide();
+                limpiarTotales();
+            }
+        });
+        
+        function mostrarInfoSalario(data) {
+            var infoHtml = `
+                <div id="info-salario" class="alert alert-info mt-3">
+                    <h6><i class="fas fa-calculator"></i> Información Salarial</h6>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <small><strong>Salario base:</strong> ₡${data.salario.toFixed(2)}</small>
+                        </div>
+                        <div class="col-md-4">
+                            <small><strong>Precio/hora regular:</strong> ₡${data.precioPorHora.toFixed(2)}</small>
+                        </div>
+                        <div class="col-md-4">
+                            <small><strong>Precio/hora extra (+50%):</strong> ₡${data.precioHoraExtra.toFixed(2)}</small>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            $('#info-salario').remove();
+            $('#empleadoSelect').closest('.mb-3').after(infoHtml);
+        }
+        
+        function calcularTotalesDiarios() {
+            var totalSemanal = 0;
+            
+            $('#tabla-horas tbody tr').each(function() {
+                var $row = $(this);
+                var horasRegulares = parseFloat($row.find('input[name*="HorasRegulares"]').val()) || 0;
+                var horasExtra = parseFloat($row.find('input[name*="HorasExtra"]').val()) || 0;
+                
+                var totalRegulares = horasRegulares * window.precioPorHora;
+                var totalExtras = horasExtra * window.precioHoraExtra;
+                var totalDia = totalRegulares + totalExtras;
+                
+                // Mostrar cálculos en la fila
+                var $totalCell = $row.find('.total-dia');
+                if ($totalCell.length === 0) {
+                    $row.append('<td class="total-dia"></td>');
+                    $totalCell = $row.find('.total-dia');
+                }
+                
+                if (totalDia > 0) {
+                    $totalCell.html(`
+                        <strong>₡${totalDia.toFixed(2)}</strong><br>
+                        <small class="text-muted">
+                            Reg: ₡${totalRegulares.toFixed(2)}<br>
+                            Extra: ₡${totalExtras.toFixed(2)}
+                        </small>
+                    `);
+                } else {
+                    $totalCell.html('<span class="text-muted">-</span>');
+                }
+                
+                totalSemanal += totalDia;
+            });
+            
+            // Mostrar total semanal
+            mostrarTotalSemanal(totalSemanal);
+        }
+        
+        function mostrarTotalSemanal(total) {
+            var $totalDiv = $('#total-semanal-dinero');
+            if ($totalDiv.length === 0) {
+                $('table').after('<div id="total-semanal-dinero" class="mt-3 text-center"></div>');
+                $totalDiv = $('#total-semanal-dinero');
+            }
+            
+            if (total > 0) {
+                $totalDiv.attr('class', 'mt-3 text-center alert alert-primary');
+                $totalDiv.html(`
+                    <h5><i class="fas fa-money-bill-wave"></i> Total Semanal: ₡${total.toFixed(2)}</h5>
+                    <small class="text-muted">Este es el cálculo preliminar basado en horas y salario base</small>
+                `);
+            } else {
+                $totalDiv.attr('class', 'mt-3 text-center alert alert-secondary');
+                $totalDiv.html('<span class="text-muted">Seleccione empleado y registre horas para ver el cálculo</span>');
+            }
+        }
+        
+        function limpiarTotales() {
+            $('.total-dia').html('<span class="text-muted">-</span>');
+            $('#total-semanal-dinero').hide();
+        }
+        
+        // Agregar encabezado de columna de total si no existe
+        if ($('#tabla-horas thead th:last').text() !== 'Total Día') {
+            $('#tabla-horas thead tr').append('<th>Total Día</th>');
+        }
+
         // Validación en tiempo real para horas extra
         $(document).on('input change blur', 'input[name*="HorasExtra"]', function() {
             var valor = parseFloat($(this).val()) || 0;
@@ -334,11 +461,25 @@
                 $(this).removeClass('is-invalid');
                 $(this).siblings('.error-message').remove();
             }
+            
+            // Recalcular totales cuando cambien las horas
+            if (window.precioPorHora > 0) {
+                calcularTotalesDiarios();
+            }
         });
         
         // Rehabilitar el botón si hay errores de servidor
         if ($('.alert-danger').length > 0) {
             $('button[type="submit"]').prop('disabled', false).text('Guardar');
+        }
+        
+        // Función para prevenir entrada de números negativos
+        function prevenirNegativos(event) {
+            var char = String.fromCharCode(event.which);
+            if (char === '-' || char === '+' || char === 'e' || char === 'E') {
+                event.preventDefault();
+                return false;
+            }
         }
     </script>
     

@@ -33,19 +33,6 @@ namespace DaPazWebApp.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-            {
-                // Obtener provincias para el dropdown
-                var provincias = connection.Query(
-                    "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
-                    commandType: CommandType.Text
-                ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
-
-                ViewBag.Provincias = new SelectList(provincias, "Value", "Text");
-                ViewBag.Cantones = new SelectList(new List<object>(), "Value", "Text");
-                ViewBag.Distritos = new SelectList(new List<object>(), "Value", "Text");
-            }
-            
             return View();
         }
 
@@ -55,18 +42,6 @@ namespace DaPazWebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                // Recargar dropdowns en caso de error
-                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-                {
-                    var provincias = connection.Query(
-                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
-                        commandType: CommandType.Text
-                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
-
-                    ViewBag.Provincias = new SelectList(provincias, "Value", "Text");
-                    ViewBag.Cantones = new SelectList(new List<object>(), "Value", "Text");
-                    ViewBag.Distritos = new SelectList(new List<object>(), "Value", "Text");
-                }
                 return View(model);
             }
 
@@ -82,7 +57,7 @@ namespace DaPazWebApp.Controllers
                             correoProveedor = model.correoProveedor,
                             direccionProveedor = model.direccionProveedor,
                             estado = model.estado ?? "Activo",
-                            idDistrito = model.IdDistrito ?? 1 // Valor por defecto si es null
+                            idDistrito = 1 // Valor por defecto
                         },
                         commandType: CommandType.StoredProcedure);
                 }
@@ -92,19 +67,6 @@ namespace DaPazWebApp.Controllers
             {
                 Console.WriteLine($"Error al crear proveedor: {ex.Message}");
                 ModelState.AddModelError("", $"Error al crear proveedor: {ex.Message}");
-                
-                // Recargar dropdowns en caso de error
-                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-                {
-                    var provincias = connection.Query(
-                        "SELECT idProvincia, nombreProvincia FROM Provincia ORDER BY nombreProvincia",
-                        commandType: CommandType.Text
-                    ).Select(p => new { Value = p.idProvincia, Text = p.nombreProvincia }).ToList();
-
-                    ViewBag.Provincias = new SelectList(provincias, "Value", "Text");
-                    ViewBag.Cantones = new SelectList(new List<object>(), "Value", "Text");
-                    ViewBag.Distritos = new SelectList(new List<object>(), "Value", "Text");
-                }
                 return View(model);
             }
         }
@@ -146,7 +108,7 @@ namespace DaPazWebApp.Controllers
                         correoProveedor = model.correoProveedor,
                         telefonoProveedor = model.telefonoProveedor,
                         estado = model.estado,
-                        idDistrito = model.IdDistrito ?? 1
+                        idDistrito = 1 // Valor por defecto
                     },
                     commandType: CommandType.StoredProcedure
                 );
@@ -155,34 +117,6 @@ namespace DaPazWebApp.Controllers
             return RedirectToAction("Index");
         }
 
-        [HttpGet]
-        public JsonResult GetCantonesByProvincia(int idProvincia)
-        {
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-            {
-                var cantones = connection.Query(
-                    "SELECT idCanton, nombreCanton FROM Canton WHERE idProvincia = @idProvincia ORDER BY nombreCanton",
-                    new { idProvincia },
-                    commandType: CommandType.Text
-                ).Select(c => new { value = c.idCanton, text = c.nombreCanton }).ToList();
 
-                return Json(cantones);
-            }
-        }
-
-        [HttpGet]
-        public JsonResult GetDistritosByCanton(int idCanton)
-        {
-            using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
-            {
-                var distritos = connection.Query(
-                    "SELECT idDistrito, nombreDistrito FROM Distrito WHERE idCanton = @idCanton ORDER BY nombreDistrito",
-                    new { idCanton },
-                    commandType: CommandType.Text
-                ).Select(d => new { value = d.idDistrito, text = d.nombreDistrito }).ToList();
-
-                return Json(distritos);
-            }
-        }
     }
 }

@@ -14,12 +14,15 @@ namespace DaPazWebApp.Models
         public string? Descripcion { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El precio debe ser mayor a 0")]
         public int? Precio { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [Range(1, int.MaxValue, ErrorMessage = "El precio de compra debe ser mayor a 0")]
         public int? PrecioCompra { get; set; }
 
         [Required(ErrorMessage = "Este campo es obligatorio.")]
+        [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo")]
         public int? Stock { get; set; }
 
         public string? Imagen { get; set; }

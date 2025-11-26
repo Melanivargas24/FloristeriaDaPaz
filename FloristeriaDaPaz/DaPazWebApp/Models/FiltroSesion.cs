@@ -7,15 +7,18 @@ namespace DaPazWebApp.Models
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var token = context.HttpContext.Session.GetString("Token");
+            var tokenSesion = context.HttpContext.Session.GetString("TokenSesion");
+            var idUsuario = context.HttpContext.Session.GetInt32("IdUsuario");
 
-            if (string.IsNullOrEmpty(token))
+            // Si no hay token de sesión o ID de usuario, redirigir al login
+            if (string.IsNullOrEmpty(tokenSesion) || idUsuario == null || idUsuario == 0)
             {
-                context.Result = new RedirectToRouteResult(new { controller = "Login", action = "IniciarSesion" });
+                context.HttpContext.Session.Clear();
+                context.Result = new RedirectToRouteResult(new { controller = "Login", action = "Login" });
+                return;
             }
 
             base.OnActionExecuting(context);
         }
-
     }
 }

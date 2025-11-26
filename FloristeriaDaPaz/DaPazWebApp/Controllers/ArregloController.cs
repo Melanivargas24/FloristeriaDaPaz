@@ -70,6 +70,12 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Arreglo model, IFormFile imagen)
         {
+            // Validación adicional para precio negativo
+            if (model.precio <= 0)
+            {
+                ModelState.AddModelError("precio", "El precio debe ser mayor a 0");
+            }
+
             if (imagen != null && imagen.Length > 0)
             {
                 var fileName = Path.GetFileName(imagen.FileName);
@@ -127,12 +133,12 @@ namespace DaPazWebApp.Controllers
                     "SP_RegistrarArreglo",
                     new
                     {
-                        model.nombreArreglo,
-                        model.descripcion,
-                        model.precio,
-                        model.imagen,
-                        model.estado,
-                        model.idCategoriaArreglo
+                        nombreArreglo = model.nombreArreglo,
+                        descripcion = model.descripcion,
+                        precio = model.precio,
+                        imagen = model.imagen,
+                        estado = true, // Estado siempre activo, disponibilidad basada en stock de productos
+                        idCategoriaArreglo = model.idCategoriaArreglo
                 },
                 commandType: CommandType.StoredProcedure
         );
@@ -213,6 +219,12 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Arreglo model, IFormFile imagen)
         {
+            // Validación adicional para precio negativo
+            if (model.precio <= 0)
+            {
+                ModelState.AddModelError("precio", "El precio debe ser mayor a 0");
+            }
+
             // Manejo de nueva imagen (si se sube)
             if (imagen != null && imagen.Length > 0)
             {
@@ -305,13 +317,13 @@ namespace DaPazWebApp.Controllers
                     "SP_ModificarArreglo",
                     new
                     {
-                        model.idArreglo,
-                        model.nombreArreglo,
-                        model.descripcion,
-                        model.precio,
-                        model.imagen,
-                        model.estado,
-                        model.idCategoriaArreglo
+                        idArreglo = model.idArreglo,
+                        nombreArreglo = model.nombreArreglo,
+                        descripcion = model.descripcion,
+                        precio = model.precio,
+                        imagen = model.imagen,
+                        estado = true, // Estado siempre activo, disponibilidad basada en stock de productos
+                        idCategoriaArreglo = model.idCategoriaArreglo
                     },
                     commandType: CommandType.StoredProcedure
                 );

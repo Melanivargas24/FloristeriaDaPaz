@@ -20,6 +20,26 @@
                         </div>
                     }
 
+                    <script>
+                        // Verificar si la sesión fue invalidada
+                        if (document.cookie.includes('SesionInvalidada=true')) {
+                            // Mostrar notificación
+                            const alertDiv = document.createElement('div');
+                            alertDiv.className = 'alert alert-warning alert-dismissible fade show';
+                            alertDiv.innerHTML = `
+                                <strong>Sesión cerrada:</strong> Su sesión anterior fue cerrada porque inició sesión en otro dispositivo o navegador.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            `;
+                            
+                            // Insertar antes del formulario
+                            const form = document.querySelector('form');
+                            form.parentNode.insertBefore(alertDiv, form);
+                            
+                            // Limpiar la cookie
+                            document.cookie = 'SesionInvalidada=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                        }
+                    </script>
+
                     <form asp-action="Login" method="post" novalidate>
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 

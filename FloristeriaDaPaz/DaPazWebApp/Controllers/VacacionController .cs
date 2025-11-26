@@ -113,9 +113,43 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
-            // Validación: verificar que no existan vacaciones superpuestas para el mismo empleado
+            // Validación: verificar límite anual de 12 días de vacaciones
             using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
             {
+                var añoVacacion = model.FechaInicio.Year;
+                var diasSolicitados = (model.FechaFin - model.FechaInicio).Days + 1;
+                
+                // Verificar días ya tomados en el año
+                var sqlDiasUsados = @"
+                    SELECT ISNULL(SUM(DATEDIFF(day, fechaInicio, fechaFin) + 1), 0) 
+                    FROM dbo.Vacacion 
+                    WHERE idEmpleado = @IdEmpleado 
+                    AND (YEAR(fechaInicio) = @Anio OR YEAR(fechaFin) = @Anio)";
+
+                var diasUsados = connection.QueryFirstOrDefault<int>(sqlDiasUsados, new
+                {
+                    IdEmpleado = model.IdEmpleado,
+                    Anio = añoVacacion
+                });
+
+                var totalDias = diasUsados + diasSolicitados;
+                
+                if (totalDias > 12)
+                {
+                    var diasDisponibles = Math.Max(0, 12 - diasUsados);
+                    ModelState.AddModelError("", $"No se pueden otorgar {diasSolicitados} días de vacaciones. El empleado ya ha utilizado {diasUsados} días en {añoVacacion}. Solo tiene {diasDisponibles} días disponibles (máximo 12 días por año).");
+
+                    var sql = "SELECT idEmpleado, nombre, apellido FROM dbo.Empleado WHERE fechaSalida IS NULL";
+
+                    var empleados = connection.Query<EmpleadoModel>(sql)
+                        .Select(e => new { e.idEmpleado, NombreCompleto = e.nombre + " " + e.apellido })
+                        .ToList();
+
+                    ViewBag.Empleados = new SelectList(empleados, "idEmpleado", "NombreCompleto");
+                    return View(model);
+                }
+                
+                // Validación: verificar que no existan vacaciones superpuestas para el mismo empleado
                 var sqlVerificacion = @"
                     SELECT COUNT(*) 
                     FROM dbo.Vacacion 
@@ -189,6 +223,40 @@ namespace DaPazWebApp.Controllers
             {
                 using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
                 {
+                    var añoVacacion = fechaInicio.Year;
+                    var diasSolicitados = (fechaFin - fechaInicio).Days + 1;
+                    
+                    // Verificar días ya utilizados en el año
+                    var sqlDiasUsados = @"
+                        SELECT ISNULL(SUM(DATEDIFF(day, fechaInicio, fechaFin) + 1), 0) 
+                        FROM dbo.Vacacion 
+                        WHERE idEmpleado = @IdEmpleado 
+                        AND (YEAR(fechaInicio) = @Anio OR YEAR(fechaFin) = @Anio)";
+
+                    var diasUsados = connection.QueryFirstOrDefault<int>(sqlDiasUsados, new
+                    {
+                        IdEmpleado = idEmpleado,
+                        Anio = añoVacacion
+                    });
+
+                    var totalDias = diasUsados + diasSolicitados;
+                    var diasDisponibles = Math.Max(0, 12 - diasUsados);
+                    
+                    // Verificar límite anual
+                    if (totalDias > 12)
+                    {
+                        return Json(new 
+                        { 
+                            disponible = false, 
+                            mensaje = $"Excede el límite anual. Días ya usados: {diasUsados}. Días solicitados: {diasSolicitados}. Días disponibles: {diasDisponibles}",
+                            diasUsados = diasUsados,
+                            diasSolicitados = diasSolicitados,
+                            diasDisponibles = diasDisponibles,
+                            limiteAnual = 12
+                        });
+                    }
+                    
+                    // Verificar fechas superpuestas
                     var sqlVerificacion = @"
                         SELECT COUNT(*) 
                         FROM dbo.Vacacion 
@@ -239,12 +307,55 @@ namespace DaPazWebApp.Controllers
                         });
                     }
 
-                    return Json(new { disponible = true, mensaje = "Fechas disponibles" });
+                    return Json(new 
+                    { 
+                        disponible = true, 
+                        mensaje = "Fechas disponibles",
+                        diasUsados = diasUsados,
+                        diasSolicitados = diasSolicitados,
+                        diasDisponibles = diasDisponibles,
+                        limiteAnual = 12
+                    });
                 }
             }
             catch (Exception ex)
             {
                 return Json(new { disponible = false, mensaje = "Error al verificar disponibilidad: " + ex.Message });
+            }
+        }
+        
+        [HttpGet]
+        public JsonResult ObtenerDiasDisponibles(int idEmpleado, int anio)
+        {
+            try
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var sqlDiasUsados = @"
+                        SELECT ISNULL(SUM(DATEDIFF(day, fechaInicio, fechaFin) + 1), 0) 
+                        FROM dbo.Vacacion 
+                        WHERE idEmpleado = @IdEmpleado 
+                        AND (YEAR(fechaInicio) = @Anio OR YEAR(fechaFin) = @Anio)";
+
+                    var diasUsados = connection.QueryFirstOrDefault<int>(sqlDiasUsados, new
+                    {
+                        IdEmpleado = idEmpleado,
+                        Anio = anio
+                    });
+
+                    var diasDisponibles = Math.Max(0, 12 - diasUsados);
+                    
+                    return Json(new 
+                    {
+                        diasUsados = diasUsados,
+                        diasDisponibles = diasDisponibles,
+                        limiteAnual = 12
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new { error = "Error al obtener días disponibles: " + ex.Message });
             }
         }
     }

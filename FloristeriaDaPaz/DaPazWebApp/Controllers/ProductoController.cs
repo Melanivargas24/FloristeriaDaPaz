@@ -41,8 +41,11 @@ namespace DaPazWebApp.Controllers
                 var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
                     commandType: CommandType.StoredProcedure).ToList();
 
+                // Filtrar solo proveedores activos
                 var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
-                    commandType: CommandType.StoredProcedure).ToList();
+                    commandType: CommandType.StoredProcedure)
+                    .Where(p => p.estado == "Activo")
+                    .ToList();
 
                 ViewBag.Categorias = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto");
                 ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
@@ -57,6 +60,41 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Producto model)
         {
+            // Validación adicional para precios negativos
+            if (model.Precio <= 0)
+            {
+                ModelState.AddModelError("Precio", "El precio debe ser mayor a 0");
+            }
+            
+            if (model.PrecioCompra <= 0)
+            {
+                ModelState.AddModelError("PrecioCompra", "El precio de compra debe ser mayor a 0");
+            }
+            
+            if (model.Stock < 0)
+            {
+                ModelState.AddModelError("Stock", "El stock no puede ser negativo");
+            }
+
+            // Si hay errores de validación, recargar datos para la vista
+            if (!ModelState.IsValid)
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
+                        commandType: CommandType.StoredProcedure).ToList();
+
+                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+                        commandType: CommandType.StoredProcedure)
+                        .Where(p => p.estado == "Activo")
+                        .ToList();
+
+                    ViewBag.Categorias = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto", model.IdCategoriaProducto);
+                    ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor", model.IdProveedor);
+                }
+                return View(model);
+            }
+
             var file = Request.Form.Files.GetFile("Imagen");
 
 
@@ -143,8 +181,11 @@ namespace DaPazWebApp.Controllers
                 var categorias = context.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
                    commandType: CommandType.StoredProcedure).ToList();
 
+                // Filtrar solo proveedores activos
                 var proveedores = context.Query<ProveedorModel>("SP_ObtenerProveedores",
-                    commandType: CommandType.StoredProcedure).ToList();
+                    commandType: CommandType.StoredProcedure)
+                    .Where(p => p.estado == "Activo")
+                    .ToList();
 
                 ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto");
                 ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor");
@@ -165,6 +206,41 @@ namespace DaPazWebApp.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Producto model)
         {
+            // Validación adicional para precios negativos
+            if (model.Precio <= 0)
+            {
+                ModelState.AddModelError("Precio", "El precio debe ser mayor a 0");
+            }
+            
+            if (model.PrecioCompra <= 0)
+            {
+                ModelState.AddModelError("PrecioCompra", "El precio de compra debe ser mayor a 0");
+            }
+            
+            if (model.Stock < 0)
+            {
+                ModelState.AddModelError("Stock", "El stock no puede ser negativo");
+            }
+
+            // Si hay errores de validación, recargar datos para la vista
+            if (!ModelState.IsValid)
+            {
+                using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+                {
+                    var categoriasP = connection.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto",
+                        commandType: CommandType.StoredProcedure).ToList();
+
+                    var proveedores = connection.Query<ProveedorModel>("SP_ObtenerProveedores",
+                        commandType: CommandType.StoredProcedure)
+                        .Where(p => p.estado == "Activo")
+                        .ToList();
+
+                    ViewBag.Categorias = new SelectList(categoriasP, "idCategoriaProducto", "nombreCategoriaProducto", model.IdCategoriaProducto);
+                    ViewBag.Proveedores = new SelectList(proveedores, "IdProveedor", "nombreProveedor", model.IdProveedor);
+                }
+                return View(model);
+            }
+
             // Manejo de nueva imagen (si se sube)
             var nuevaImagen = Request.Form.Files["ImagenNueva"];
             if (nuevaImagen != null && nuevaImagen.Length > 0)

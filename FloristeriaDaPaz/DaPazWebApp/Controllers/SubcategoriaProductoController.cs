@@ -41,8 +41,20 @@ namespace DaPazWebApp.Controllers
         [HttpPost]
         public IActionResult AgregarSubcategoriasP(SubcategoriaProductoModel model)
         {
+            // Validar que se haya seleccionado una categoría
+            if (model.idCategoriaProducto <= 0)
+            {
+                ModelState.AddModelError("idCategoriaProducto", "Debe seleccionar una categoría.");
+            }
+            
             if (!ModelState.IsValid)
+            {
+                // Recargar las categorías para el dropdown
+                using var contextValidation = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                var categorias = contextValidation.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto", commandType: CommandType.StoredProcedure).ToList();
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", model.idCategoriaProducto);
                 return View(model);
+            }
 
             using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             context.Execute("SP_RegistrarSubcategoriaProducto",
@@ -77,8 +89,20 @@ public IActionResult EditarSubcategoriasP(int id)
         [HttpPost]
         public IActionResult EditarSubcategoriasP(SubcategoriaProductoModel model)
         {
+            // Validar que se haya seleccionado una categoría
+            if (model.idCategoriaProducto <= 0)
+            {
+                ModelState.AddModelError("idCategoriaProducto", "Debe seleccionar una categoría.");
+            }
+            
             if (!ModelState.IsValid)
+            {
+                // Recargar las categorías para el dropdown
+                using var contextValidation = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                var categorias = contextValidation.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto", commandType: CommandType.StoredProcedure).ToList();
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", model.idCategoriaProducto);
                 return View(model);
+            }
 
             using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
             context.Execute("SP_ModificarSubcategoriaProducto",

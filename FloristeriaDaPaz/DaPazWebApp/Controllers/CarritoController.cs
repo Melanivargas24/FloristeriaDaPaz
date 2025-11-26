@@ -430,6 +430,10 @@ namespace DaPazWebApp.Controllers
                         viewModel.NombreDistrito = usuario.nombreDistrito ?? "";
                     }
                 }
+                
+                // Preservar las selecciones del usuario
+                ViewBag.TipoEntregaSeleccionado = tipoEntrega;
+                ViewBag.MetodoPagoSeleccionado = metodoPago;
                 ViewBag.Usuario = usuario;
                 return View("Checkout", viewModel);
             }
@@ -449,6 +453,10 @@ namespace DaPazWebApp.Controllers
                     {
                         ModelState.AddModelError("", "Debe configurar su ubicación completa (provincia, cantón y distrito) para solicitar envío a domicilio.");
                         var viewModel = new CarritoViewModel { Items = carrito };
+                        
+                        // Preservar las selecciones del usuario
+                        ViewBag.TipoEntregaSeleccionado = tipoEntrega;
+                        ViewBag.MetodoPagoSeleccionado = metodoPago;
                         ViewBag.Usuario = usuario;
                         return View("Checkout", viewModel);
                     }

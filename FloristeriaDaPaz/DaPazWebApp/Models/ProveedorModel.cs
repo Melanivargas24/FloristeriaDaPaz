@@ -17,8 +17,5 @@ namespace DaPazWebApp.Models
         [Required(ErrorMessage = "La dirección del proveedor es obligatoria.")]
         public string? direccionProveedor { get; set; }
         public string? estado { get; set; }
-        public int? IdDistrito { get; set; }
-        public int? IdCanton { get; set; }
-        public int? IdProvincia { get; set; }
     }
 }

@@ -339,22 +339,57 @@
                 </tr>
             </thead>
             <tbody>
+                @{
+                    decimal salarioPorHora = 0;
+                    if (Model.DetallesHoras.Any())
+                    {
+                        var primerDetalle = Model.DetallesHoras.First(d => d.HorasRegulares > 0);
+                        if (primerDetalle != null)
+                        {
+                            // Como el salario del empleado es por hora, el precio dividido por las horas nos da el salario por hora
+                            salarioPorHora = Math.Round(primerDetalle.Precio / primerDetalle.HorasRegulares, 2);
+                        }
+                    }
+                }
                 @foreach (var item in Model.DetallesHoras)
                 {
+                    var precioHorasRegulares = item.HorasRegulares * salarioPorHora;
+                    var precioHorasExtra = item.HorasExtra * salarioPorHora * 1.5m;
+                    var totalCalculado = precioHorasRegulares + precioHorasExtra;
+                    
                     <tr>
                         <td>@item.Fecha.ToString("dd-MM-yyyy")</td>
                         <td>@item.HorasRegulares.ToString("N0")</td>
-                        <td>@item.Precio.ToString("N0")</td>
+                        <td>@precioHorasRegulares.ToString("N0")</td>
                         <td>@item.HorasExtra.ToString("N0")</td>
                         <td>@item.Porcentaje</td>
-                        <td>@item.Total.ToString("N0")</td>
+                        <td>@totalCalculado.ToString("N0")</td>
                     </tr>
                 }
             </tbody>
         </table>
 
         <div class="totales">
-            Total Semana: @Model.SalarioBruto.ToString("N0")
+            @{
+                decimal totalSemanaCalculado = 0;
+                if (Model.DetallesHoras.Any())
+                {
+                    var primerDetalle = Model.DetallesHoras.First(d => d.HorasRegulares > 0);
+                    if (primerDetalle != null)
+                    {
+                        // Como el salario del empleado es por hora, calculamos el salario por hora basado en el precio
+                        decimal salarioPorHoraTotales = Math.Round(primerDetalle.Precio / primerDetalle.HorasRegulares, 2);
+                        
+                        foreach (var detalle in Model.DetallesHoras)
+                        {
+                            var precioRegulares = detalle.HorasRegulares * salarioPorHoraTotales;
+                            var precioExtras = detalle.HorasExtra * salarioPorHoraTotales * 1.5m;
+                            totalSemanaCalculado += precioRegulares + precioExtras;
+                        }
+                    }
+                }
+            }
+            Total Semana: @totalSemanaCalculado.ToString("N0")
         </div>
 
         <div style="margin-top: 30px;">

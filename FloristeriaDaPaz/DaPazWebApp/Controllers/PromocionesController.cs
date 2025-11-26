@@ -69,7 +69,9 @@ public class PromocionesController : Controller
     public IActionResult Create()
     {
         using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-        var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
+        var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure)
+            .Where(p => p.Estado == "Activo")
+            .ToList();
 
         ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto");
         ViewBag.Estados = new SelectList(new[] 
@@ -85,6 +87,21 @@ public class PromocionesController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Create(Promociones model)
     {
+        // Validar que el producto esté activo
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+        {
+            var producto = connection.QueryFirstOrDefault<Producto>(
+                "SP_ObtenerProductoPorId",
+                new { IdProducto = model.idProducto },
+                commandType: CommandType.StoredProcedure
+            );
+            
+            if (producto == null || producto.Estado != "Activo")
+            {
+                ModelState.AddModelError("idProducto", "El producto seleccionado no está activo o no existe");
+            }
+        }
+
         // Validaciones adicionales del servidor
         if (model.fechaInicio.HasValue && model.fechaFin.HasValue)
         {
@@ -102,7 +119,9 @@ public class PromocionesController : Controller
         if (!ModelState.IsValid)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
+            var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure)
+                .Where(p => p.Estado == "Activo")
+                .ToList();
             ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto");
             ViewBag.Estados = new SelectList(new[] 
             { 
@@ -135,7 +154,9 @@ public class PromocionesController : Controller
 
         if (promo == null) return NotFound();
 
-        var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
+        var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure)
+            .Where(p => p.Estado == "Activo")
+            .ToList();
         ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto", promo.idProducto);
         ViewBag.Estados = new SelectList(new[] 
         { 
@@ -150,6 +171,21 @@ public class PromocionesController : Controller
     [ValidateAntiForgeryToken]
     public IActionResult Edit(Promociones model)
     {
+        // Validar que el producto esté activo
+        using (var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection")))
+        {
+            var producto = connection.QueryFirstOrDefault<Producto>(
+                "SP_ObtenerProductoPorId",
+                new { IdProducto = model.idProducto },
+                commandType: CommandType.StoredProcedure
+            );
+            
+            if (producto == null || producto.Estado != "Activo")
+            {
+                ModelState.AddModelError("idProducto", "El producto seleccionado no está activo o no existe");
+            }
+        }
+
         // Validaciones adicionales del servidor
         if (model.fechaInicio.HasValue && model.fechaFin.HasValue)
         {
@@ -162,7 +198,9 @@ public class PromocionesController : Controller
         if (!ModelState.IsValid)
         {
             using var connection = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure).ToList();
+            var productos = connection.Query<Producto>("SP_ObtenerProductos", commandType: CommandType.StoredProcedure)
+                .Where(p => p.Estado == "Activo")
+                .ToList();
             ViewBag.Productos = new SelectList(productos, "IdProducto", "NombreProducto", model.idProducto);
             ViewBag.Estados = new SelectList(new[] 
             { 

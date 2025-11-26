@@ -44,30 +44,6 @@
             <span asp-validation-for="estado" class="text-danger"></span>
         </div>
 
-        <div class="form-group">
-            <label asp-for="IdProvincia" class="control-label">Provincia</label>
-            <select asp-for="IdProvincia" class="form-control" asp-items="ViewBag.Provincias" id="provinciaSelect">
-                <option value="">-- Seleccione Provincia --</option>
-            </select>
-            <span asp-validation-for="IdProvincia" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="IdCanton" class="control-label">Cantón</label>
-            <select asp-for="IdCanton" class="form-control" asp-items="ViewBag.Cantones" id="cantonSelect">
-                <option value="">-- Seleccione Cantón --</option>
-            </select>
-            <span asp-validation-for="IdCanton" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-            <label asp-for="IdDistrito" class="control-label">Distrito</label>
-            <select asp-for="IdDistrito" class="form-control" asp-items="ViewBag.Distritos" id="distritoSelect">
-                <option value="">-- Seleccione Distrito --</option>
-            </select>
-            <span asp-validation-for="IdDistrito" class="text-danger"></span>
-        </div>
-
         <br />
 
         <div class="d-flex justify-content-end gap-2 mt-4">
@@ -85,37 +61,4 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
-    
-    <script>
-        $(document).ready(function() {
-            // Cuando cambia la provincia, cargar cantones
-            $('#provinciaSelect').change(function() {
-                var provinciaId = $(this).val();
-                $('#cantonSelect').empty().append('<option value="">-- Seleccione Cantón --</option>');
-                $('#distritoSelect').empty().append('<option value="">-- Seleccione Distrito --</option>');
-                
-                if (provinciaId) {
-                    $.get('@Url.Action("GetCantonesByProvincia", "Proveedor")', { idProvincia: provinciaId }, function(data) {
-                        $.each(data, function(index, item) {
-                            $('#cantonSelect').append('<option value="' + item.value + '">' + item.text + '</option>');
-                        });
-                    });
-                }
-            });
-            
-            // Cuando cambia el cantón, cargar distritos
-            $('#cantonSelect').change(function() {
-                var cantonId = $(this).val();
-                $('#distritoSelect').empty().append('<option value="">-- Seleccione Distrito --</option>');
-                
-                if (cantonId) {
-                    $.get('@Url.Action("GetDistritosByCanton", "Proveedor")', { idCanton: cantonId }, function(data) {
-                        $.each(data, function(index, item) {
-                            $('#distritoSelect').append('<option value="' + item.value + '">' + item.text + '</option>');
-                        });
-                    });
-                }
-            });
-        });
-    </script>
 }

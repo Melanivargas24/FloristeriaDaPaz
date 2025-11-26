@@ -97,8 +97,8 @@
                             ${renderProductoOptions()}
                         </select>
                     </td>
-                    <td><input type="number" name="Detalles[${index}].PrecioVenta" class="form-control precio-venta" min="0" step="0.01" /></td>
-                    <td><input type="number" name="Detalles[${index}].PrecioUnitario" class="form-control precio-compra" min="0" step="0.01" /></td>
+                    <td><input type="number" name="Detalles[${index}].PrecioVenta" class="form-control precio-venta" min="0.01" step="0.01" onkeydown="prevenirNegativos(event)" oninput="validarPositivo(this)" /></td>
+                    <td><input type="number" name="Detalles[${index}].PrecioUnitario" class="form-control precio-compra" min="0.01" step="0.01" onkeydown="prevenirNegativos(event)" oninput="validarPositivo(this)" /></td>
                     <td><input type="number" name="Detalles[${index}].Cantidad" class="form-control cantidad" min="1" value="1" /></td>
                     <td><input type="number" name="Detalles[${index}].Subtotal" class="form-control subtotal" readonly /></td>
                     <td><button type="button" class="btn btn-danger btn-remove-producto">Quitar</button></td>
@@ -202,6 +202,21 @@
             });
             
         });
+
+        // Función para prevenir números negativos
+        function prevenirNegativos(event) {
+            if (event.key === '-' || event.key === 'e' || event.key === 'E' || event.key === '+') {
+                event.preventDefault();
+                return false;
+            }
+        }
+
+        // Función para validar que el número sea positivo
+        function validarPositivo(input) {
+            if (input.value <= 0) {
+                input.value = '';
+            }
+        }
     </script>
         @Html.RenderPartialAsync("_ValidationScriptsPartial");
 }

@@ -185,6 +185,9 @@ namespace DaPazWebApp.Controllers
 
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
+                    // Generar token de sesión simple para esta sesión
+                    var tokenSesion = GenerarTokenSesion();
+                    HttpContext.Session.SetString("TokenSesion", tokenSesion);
                     HttpContext.Session.SetString("Usuario", result.nombre!);
                     HttpContext.Session.SetString("Nombre", result.nombre!);
                     // Guardar rol y usuario con las claves que usa el layout
@@ -396,6 +399,11 @@ namespace DaPazWebApp.Controllers
                 res.Append(valid[rnd.Next(valid.Length)]);
             }
             return res.ToString();
+        }
+
+        private string GenerarTokenSesion()
+        {
+            return Guid.NewGuid().ToString() + "_" + DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
 
         private void EnviarCorreo(string destino, string asunto, string contenido)

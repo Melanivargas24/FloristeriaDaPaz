@@ -12,10 +12,13 @@ namespace DaPazWebApp.Models
 
         public DateTime FechaPlanilla { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "El salario bruto no puede ser negativo")]
         public decimal SalarioBruto { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "Las deducciones no pueden ser negativas")]
         public decimal Deducciones { get; set; }
 
+        [Range(0, double.MaxValue, ErrorMessage = "El salario neto no puede ser negativo")]
         public decimal SalarioNeto { get; set; }
 
      
