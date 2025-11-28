@@ -26,7 +26,7 @@
 <div class="container mb-4" style="margin-top: 80px;">
     <form asp-action="Index" method="get" class="search-container">
         <div class="search-box">
-            <input type="text" name="buscar" placeholder="Buscar" value="@Context.Request.Query["buscar"]">
+            <input type="text" name="buscar" placeholder="Buscar productos o arreglos..." value="@Context.Request.Query["buscar"]" class="form-control">
             <button type="submit" class="btn-search">
                 <i class="bi bi-search"></i>
             </button>
@@ -35,7 +35,8 @@
         <!-- Botón Filtrar -->
         <button type="button" class="btn-filter" data-bs-toggle="offcanvas" data-bs-target="#offcanvasFiltro" aria-controls="offcanvasFiltro">
             <i class="bi bi-funnel"></i>
-            Filtrar / Ordenar
+            <span class="d-none d-md-inline">Filtrar / Ordenar</span>
+            <span class="d-md-none">Filtros</span>
         </button>
     </form>
 </div>

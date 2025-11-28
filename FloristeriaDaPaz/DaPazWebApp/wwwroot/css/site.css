@@ -19,4 +19,74 @@ html {
 
 body {
   margin-bottom: 60px;
+  overflow-x: hidden; /* Prevenir scroll horizontal */
+}
+
+/* Responsive utilities */
+@media (max-width: 767px) {
+  /* Ajustes para móviles */
+  .container {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  /* Mejorar botones en móvil */
+  .btn-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .btn-group .btn {
+    margin-bottom: 5px;
+    border-radius: 0.25rem !important;
+  }
+  
+  /* Tablas responsive mejoradas */
+  .table-responsive {
+    border: none;
+    margin-bottom: 1rem;
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+  
+  .table th,
+  .table td {
+    padding: 0.5rem 0.25rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Móviles muy pequeños */
+  html {
+    font-size: 13px;
+  }
+  
+  .table {
+    font-size: 0.75rem;
+  }
+}
+
+/* Prevenir zoom en inputs de iOS */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select,
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="email"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    font-size: 16px !important;
+  }
 }
