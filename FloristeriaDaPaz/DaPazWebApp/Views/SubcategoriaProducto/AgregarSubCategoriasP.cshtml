@@ -10,17 +10,25 @@
         <h2>Agregar Subcategoría</h2>
     </div>
 
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle"></i> @ViewBag.Error
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <form asp-action="AgregarSubcategoriasP" method="post">
         <div class="form-group">
-            <label asp-for="nombreSubcategoriaProducto" class="control-label">Nombre de Subcategoría</label>
+            <label asp-for="nombreSubcategoriaProducto" class="control-label">Nombre de Subcategoría *</label>
             <input asp-for="nombreSubcategoriaProducto" class="form-control" />
             <span asp-validation-for="nombreSubcategoriaProducto" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-    <label asp-for="idCategoriaProducto" class="control-label">Categoría</label>
-    <select asp-for="idCategoriaProducto" class="form-control" asp-items="ViewBag.Categorias">
-        <option value="">-- Seleccione una categoría --</option>
+    <label asp-for="idCategoriaProducto" class="control-label">Categoría *</label>
+    <select asp-for="idCategoriaProducto" class="form-control" asp-items="ViewBag.Categorias" required>
+        <option value="0">-- Seleccione una categoría --</option>
     </select>
     <span asp-validation-for="idCategoriaProducto" class="text-danger"></span>
 </div>

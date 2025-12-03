@@ -56,34 +56,62 @@ namespace DaPazWebApp.Controllers
                 return View(model);
             }
 
-            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            context.Execute("SP_RegistrarSubcategoriaProducto",
-    new { model.nombreSubcategoriaProducto, model.idCategoriaProducto },
-    commandType: CommandType.StoredProcedure);
-
-            return RedirectToAction("ConsultarSubcategoriasP");
+            try
+            {
+                using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                context.Execute("SP_RegistrarSubcategoriaProducto",
+                    new { model.nombreSubcategoriaProducto, model.idCategoriaProducto },
+                    commandType: CommandType.StoredProcedure);
+                    
+                TempData["Success"] = "Subcategoría agregada exitosamente.";
+                return RedirectToAction("ConsultarSubcategoriasP");
+            }
+            catch (Exception ex)
+            {
+                // Recargar las categorías para el dropdown
+                using var contextValidation = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                var categorias = contextValidation.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto", commandType: CommandType.StoredProcedure).ToList();
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", model.idCategoriaProducto);
+                
+                ViewBag.Error = $"Error al agregar subcategoría: {ex.Message}";
+                return View(model);
+            }
         }
 
         [HttpGet]
-public IActionResult EditarSubcategoriasP(int id)
-{
-    using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+        public IActionResult EditarSubcategoriasP(int id)
+        {
+            try
+            {
+                using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
 
-    var subcategoria = context.QueryFirstOrDefault<SubcategoriaProductoModel>(
-        "SP_ObtenerSubcategoriaProductoPorId",
-        new { idSubcategoriaProducto = id },
-        commandType: CommandType.StoredProcedure
-    );
+                var subcategoria = context.QueryFirstOrDefault<SubcategoriaProductoModel>(
+                    "SP_ObtenerSubcategoriaProductoPorId",
+                    new { idSubcategoriaProducto = id },
+                    commandType: CommandType.StoredProcedure
+                );
+                
+                if (subcategoria == null)
+                {
+                    TempData["Error"] = "Subcategoría no encontrada.";
+                    return RedirectToAction("ConsultarSubcategoriasP");
+                }
 
-    var categorias = context.Query<CategoriaProductoModel>(
-        "SP_ObtenerCategoriaProducto",
-        commandType: CommandType.StoredProcedure
-    ).ToList();
+                var categorias = context.Query<CategoriaProductoModel>(
+                    "SP_ObtenerCategoriaProducto",
+                    commandType: CommandType.StoredProcedure
+                ).ToList();
 
-    ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", subcategoria?.idCategoriaProducto);
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", subcategoria.idCategoriaProducto);
 
-    return View(subcategoria);
-}
+                return View(subcategoria);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Error al cargar subcategoría: {ex.Message}";
+                return RedirectToAction("ConsultarSubcategoriasP");
+            }
+        }
 
 
         [HttpPost]
@@ -104,16 +132,30 @@ public IActionResult EditarSubcategoriasP(int id)
                 return View(model);
             }
 
-            using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
-            context.Execute("SP_ModificarSubcategoriaProducto",
-    new {
-        model.idSubcategoriaProducto,
-        model.nombreSubcategoriaProducto,
-        model.idCategoriaProducto
-    },
-    commandType: CommandType.StoredProcedure);
-
-            return RedirectToAction("ConsultarSubcategoriasP");
+            try
+            {
+                using var context = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                context.Execute("SP_ModificarSubcategoriaProducto",
+                    new {
+                        model.idSubcategoriaProducto,
+                        model.nombreSubcategoriaProducto,
+                        model.idCategoriaProducto
+                    },
+                    commandType: CommandType.StoredProcedure);
+                    
+                TempData["Success"] = "Subcategoría actualizada exitosamente.";
+                return RedirectToAction("ConsultarSubcategoriasP");
+            }
+            catch (Exception ex)
+            {
+                // Recargar las categorías para el dropdown
+                using var contextValidation = new SqlConnection(_configuration.GetConnectionString("BDConnection"));
+                var categorias = contextValidation.Query<CategoriaProductoModel>("SP_ObtenerCategoriaProducto", commandType: CommandType.StoredProcedure).ToList();
+                ViewBag.Categorias = new SelectList(categorias, "idCategoriaProducto", "nombreCategoriaProducto", model.idCategoriaProducto);
+                
+                ViewBag.Error = $"Error al actualizar subcategoría: {ex.Message}";
+                return View(model);
+            }
         }
     }
 }
